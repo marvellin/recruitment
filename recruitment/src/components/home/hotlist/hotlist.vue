@@ -1,0 +1,220 @@
+<template>
+	<div id="hotList">
+		<ul class="hot_pos reset" :style="{'display':hottabbingShow?'block':'none'}">
+			<li v-for="(item,index) in list" :class="index%2==0?'clearfix':'odd clearfix'" :key="index">
+				<hotlistl :job="item.job"></hotlistl>
+				<hotlistr :company="item.company"></hotlistr>
+			</li>
+			<router-link to="" class="btn fr">查看更多</router-link>
+		</ul>
+		<ul class="hot_pos hot_posHotPosition reset" :style="{'display':hottabbingShow?'none':'block'}" >
+			<li v-for="(item,index) in list2" :class="index%2==0?'clearfix':'odd clearfix'" :key="index">
+				<hotlistl :job="item.job"></hotlistl>
+				<hotlistr :company="item.company"></hotlistr>
+			</li>
+			<router-link to="" class="btn fr">查看更多</router-link>
+		</ul>
+	</div>
+</template>
+
+<script>
+	import hotlistl from './leftbox/hotlist_l'
+	import hotlistr from './rightbox/hotlist_r'
+	export default{
+		name:'hotList',
+		components:{hotlistl,hotlistr},
+		props:['hottabbingShow'],
+		watch:{
+			hottabbingShow:function(){
+				console.log(this.hottabbingShow)
+			}
+		},
+		data(){
+			return{
+				list:[
+					{
+						job:{
+							name:"1",
+							address:"1",
+							salary:"1",
+							education:'1',
+							benefits:'1',
+							releaseTime:'1'
+						},
+						company:{
+							name:'a',
+							field:'a',
+							founder:'a',
+							level:'a',
+							scale:'a',
+							tags:{
+								tag1:'a1',
+								tag2:'a2',
+								tag3:'a3'
+							}
+						}
+					},
+					{
+						job:{
+							name:"2",
+							address:"2",
+							salary:"2",
+							education:'2',
+							benefits:'2',
+							releaseTime:'2'
+						},
+						company:{
+							name:'b',
+							field:'b',
+							founder:'b',
+							level:'b',
+							scale:'b',
+							tags:{
+								tag1:'b1',
+								tag2:'b2',
+								tag3:'b3'
+							}
+						}
+					},
+					{
+						job:{
+							name:"3",
+							address:"3",
+							salary:"3",
+							education:'3',
+							benefits:'3',
+							releaseTime:'3'
+						},
+						company:{
+							name:'c',
+							field:'c',
+							founder:'c',
+							level:'c',
+							scale:'c',
+							tags:{
+								tag1:'c1',
+								tag2:'c2',
+								tag3:'c3'
+							}
+						}
+					},
+					{
+						job:{
+							name:"2",
+							address:"2",
+							salary:"2",
+							education:'2',
+							benefits:'2',
+							releaseTime:'2'
+						},
+						company:{
+							name:'b',
+							field:'b',
+							founder:'b',
+							level:'b',
+							scale:'b',
+							tags:{
+								tag1:'b1',
+								tag2:'b2',
+								tag3:'b3'
+							}
+						}
+					},
+				],
+				list2:[
+					{
+						job:{
+							name:"pp",
+							address:"pp",
+							salary:"pp",
+							education:'pp',
+							benefits:'pp',
+							releaseTime:'pp'
+						},
+						company:{
+							name:'pp',
+							field:'pp',
+							founder:'pp',
+							level:'pp',
+							scale:'pp',
+							tags:{
+								tag1:'pp',
+								tag2:'pp',
+								tag3:'pp'
+							}
+						}
+					},
+					{
+						job:{
+							name:"2",
+							address:"2",
+							salary:"2",
+							education:'2',
+							benefits:'2',
+							releaseTime:'2'
+						},
+						company:{
+							name:'b',
+							field:'b',
+							founder:'b',
+							level:'b',
+							scale:'b',
+							tags:{
+								tag1:'b1',
+								tag2:'b2',
+								tag3:'b3'
+							}
+						}
+					},
+					{
+						job:{
+							name:"3",
+							address:"3",
+							salary:"3",
+							education:'3',
+							benefits:'3',
+							releaseTime:'3'
+						},
+						company:{
+							name:'c',
+							field:'c',
+							founder:'c',
+							level:'c',
+							scale:'c',
+							tags:{
+								tag1:'c1',
+								tag2:'c2',
+								tag3:'c3'
+							}
+						}
+					},
+					{
+						job:{
+							name:"2",
+							address:"2",
+							salary:"2",
+							education:'2',
+							benefits:'2',
+							releaseTime:'2'
+						},
+						company:{
+							name:'b',
+							field:'b',
+							founder:'b',
+							level:'b',
+							scale:'b',
+							tags:{
+								tag1:'b1',
+								tag2:'b2',
+								tag3:'b3'
+							}
+						}
+					},
+				]
+			}
+		}
+	}
+</script>
+
+<style>
+</style>
