@@ -7,6 +7,7 @@ import register from '@/components/login&register/register/register'
 import myCompany from '@/components/company/myCompany'
 import logoUpload from '@/components/company/logoUpload/logoUpload'
 import resume from '@/components/resume/resume'
+import resumeupload from '@/components/resume/resumeupload'
 
 Vue.use(Router)
 
@@ -52,7 +53,14 @@ export default new Router({
     {
     	path:'/myresume',
     	name:'myresume',
-    	component:resume
+    	component:resume,
+    	children:[
+	    	{
+	    		path:'resumeupload',
+	    		name:'resumeupload',
+	    		component:resumeupload
+	    	}
+    	]
     }
     /*{
     	path:'/logoUpload',
