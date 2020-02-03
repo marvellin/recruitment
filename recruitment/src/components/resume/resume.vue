@@ -1496,6 +1496,7 @@
 								<span>添加自我描述</span>
 		            		</div><!--end .descriptionAdd-->
 		            	</div><!--end #selfDescription-->
+
 		
 		            	<!--<div class="profile_box" id="worksShow">
 		            		<h2>作品展示</h2>
@@ -1547,13 +1548,10 @@
 		
 						<div class="mycenterR" id="myResume">
 		            		<h2>我的附件简历 
-		            			<!--<a title="上传附件简历" href="#uploadFile" class="inline cboxElement">
-		            				上传附件简历-->
-		            			<!--</a>-->
-		            			<router-link title="上传附件简历" to="resumeupload" class="inline cboxElement">
+		            			<!--<a title="上传附件简历" href="#uploadFile" class="inline cboxElement">-->
+		            			<a title="上传附件简历" @click.prevent="uploadresume" class="inline cboxElement">
 		            				上传附件简历
-		            			</router-link>
-		            			<!--<router-view></router-view>-->
+		            			</a>
 		            		</h2>
 		            		<div class="resumeUploadDiv">
 			            		暂无附件简历
@@ -1701,15 +1699,15 @@
 			        </tbody></table>
 			    </div><!--/#deliverResumeConfirm--> 
 				</div>
-				<div class="popup" id="uploadFile">
+				<!--<div class="popup" id="uploadFile">
 					<div class="cloud">
 						<img width="134" height="134" src="">
 						<a class="close" href="javascript:;"></a>
 					</div>
-				</div>
-				<div class="clear"></div>
-				<input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken">
-		   	 	<a rel="nofollow" title="回到顶部" id="backtop" style="display: none;"></a>
+				</div>-->
+				<!--<div class="clear"></div>-->
+				<!--<input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken">-->
+		   	 	<a rel="nofollow" @click.prevent="" title="回到顶部" id="backtop" style="display: none;"></a>
 		    </div><!-- end #container -->
 		</div>
 		<div id="footer">
@@ -1718,30 +1716,32 @@
 				<!--<router-link to=""></router-link>-->
 			</div>
 		</div>
-		<div id="cboxOverlay" style="display: none;"></div>
-		<div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;">
-			<div id="cboxWrapper">
+		<div id="cboxOverlay" :style="{'display':uploadboxshow?'block':'none','opacity':uploadboxshow?'0.9':'1','cursor':uploadboxshow?'pointer':'auto'}" style="visibility: visible;"></div>
+		<div id="colorbox" class="" role="dialog" tabindex="-1" :style="{'display':uploadboxshow?'block':'none'}" style="visibility: visible;top: 307px;left: 370.8px;position: absolute;width: 528px;height: 308px;opacity: 1;cursor: suto;">
+			<div id="cboxWrapper" style="width: 528px;height: 308px;">
 				<div>
 					<div id="cboxTopLeft" style="float: left;"></div>
-					<div id="cboxTopCenter" style="float: left;"></div>
+					<div id="cboxTopCenter" style="float: left;width: 502px;"></div>
 					<div id="cboxTopRight" style="float: left;"></div>
 				</div>
 				<div style="clear: left;">
-					<div id="cboxMiddleLeft" style="float: left;"></div>
-					<div id="cboxContent" style="float: left;">
-						<div id="cboxTitle" style="float: left;"></div>
-						<div id="cboxCurrent" style="float: left;"></div>
-						<button type="button" id="cboxPrevious"></button>
-						<button type="button" id="cboxNext"></button>
-						<button id="cboxSlideshow"></button>
-						<div id="cboxLoadingOverlay" style="float: left;"></div>
-						<div id="cboxLoadingGraphic" style="float: left;"></div>
+					<div id="cboxMiddleLeft" style="float: left;height: 282px;"></div>
+					<div id="cboxContent" style="float: left;height: 282px;width: 502px;">
+						
+						<div id="cboxTitle" style="float: left;display: block;">上传附件简历</div>
+						<div id="cboxCurrent" style="float: left;display: none;"></div>
+						<button type="button" id="cboxPrevious" style="display: none;"></button>
+						<button type="button" id="cboxNext" style="display: none;"></button>
+						<button id="cboxSlideshow" style="display: none;"></button>
+						<div id="cboxLoadingOverlay" style="float: left;display: none;"></div>
+						<div id="cboxLoadingGraphic" style="float: left;display: none;"></div>
+						<button type="button" id="cboxClose" @click="uploadboxshow=false">close</button>
 					</div>
-					<div id="cboxMiddleRight" style="float: left;"></div>
+					<div id="cboxMiddleRight" style="float: left;height: 282px;"></div>
 				</div>
 				<div style="clear: left;">
 					<div id="cboxBottomLeft" style="float: left;"></div>
-					<div id="cboxBottomCenter" style="float: left;"></div>
+					<div id="cboxBottomCenter" style="float: left;width: 502px;"></div>
 					<div id="cboxBottomRight" style="float: left;"></div>
 				</div>
 			</div>
@@ -2076,6 +2076,9 @@
 			editdescription(){
 				this.descriptiontmp = JSON.parse(JSON.stringify(this.resume.selfdescription))
 				this.editdescriptionshow=true
+			},
+			uploadresume(){
+				this.uploadboxshow=true
 			}
 			/*printym(){
 				console.log(this.ym)
