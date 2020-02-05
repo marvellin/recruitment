@@ -1553,10 +1553,23 @@
 		            				上传附件简历
 		            			</a>
 		            		</h2>
-		            		<div class="resumeUploadDiv">
+		            		<div class="resumeUploadDiv" v-show="resume.resumefilelist.length==0">
 			            		暂无附件简历
 			            	</div>
+			            	<div class="resumefileDiv" v-show="resume.resumefilelist.length!=0">
+			            		<ul>
+			            			<li v-for="(item,index) in resume.resumefilelist" :key='index'>
+			            				<a :href="item" :download="item.name">{{item.name}}</a>
+			            			</li>
+			            		</ul>
+			            	</div>
 		            	</div><!--end #myResume-->
+		
+						<div class="mycenterR" style="padding: 0 0;" id="rightNav">
+							<ul style="list-style: none;">
+								<li class="divnav" :class="[currentdiv===index?'current':'']" v-for="(item,index) in divlist" :key='index' @click="todiv(index)">{{item.name}}</li>
+							</ul>
+						</div>
 		
 		            	<!--<div class="mycenterR" id="resumeSet">
 		            		<h2>投递简历设置  <span>修改设置</span></h2>-->
@@ -1705,9 +1718,9 @@
 						<a class="close" href="javascript:;"></a>
 					</div>
 				</div>-->
-				<!--<div class="clear"></div>-->
+				<div class="clear"></div>
 				<!--<input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken">-->
-		   	 	<a rel="nofollow" @click.prevent="" title="回到顶部" id="backtop" style="display: none;"></a>
+		   	 	<a rel="nofollow" @click.prevent="toTop" title="回到顶部" id="backtop" style="display: inline;"></a>
 		    </div><!-- end #container -->
 		</div>
 		<div id="footer">
@@ -1727,7 +1740,32 @@
 				<div style="clear: left;">
 					<div id="cboxMiddleLeft" style="float: left;height: 282px;"></div>
 					<div id="cboxContent" style="float: left;height: 282px;width: 502px;">
-						
+						<div id="cboxLoadedContent" style="width: 502px;height: 238px;overflow: auto;">
+							<div class="popup" id="uploadFile" style="width: 502px;height: 238px;">
+							    <table width="100%" style="height: 177px;"><tbody>
+							    	<tr>
+							        	<td align="center">
+							                <form>
+							                    <a class="btn_addPic" href="javascript:void(0);">
+							                    	<span>选择上传文件</span>
+							                        <!--<input type="file" onchange="file_check(this,'h/nearBy/updateMyResume.json','resumeUpload')" class="filePrew" id="resumeUpload" name="newResume" size="3" title="支持word、pdf、ppt、txt、wps格式文件，大小不超过10M" tabindex="3">-->
+							                        <input type="file" accept="application/msword,application/pdf,application/vnd.ms-powerpoint,application/vnd.ms-works" @change="getresumefile" class="filePrew" id="resumeUpload" name="newResume" size="3" title="支持word、pdf、ppt、txt、wps格式文件，大小不超过10M" tabindex="3"/>
+							                    </a>
+							                </form>
+							            </td>
+							        </tr>
+							    	<tr>
+							        	<td align="left" style="text-align: center;">支持word、pdf、ppt、txt、wps格式文件<br>文件大小需小于10M</td>
+							        </tr>
+							        <!--<tr>
+							        	<td align="left" style="color:#dd4a38; padding-top:10px;">注：若从其它网站下载的word简历，请将文件另存为.docx格式后上传</td>
+							        </tr>-->
+							    	<tr>
+							        	<td align="center"><img width="55" height="16" alt="loading" style="visibility: hidden;" id="loadingImg" src="style/images/loading.gif"></td>
+							        </tr>
+							    </tbody></table>
+							</div>
+						</div>
 						<div id="cboxTitle" style="float: left;display: block;">上传附件简历</div>
 						<div id="cboxCurrent" style="float: left;display: none;"></div>
 						<button type="button" id="cboxPrevious" style="display: none;"></button>
@@ -1766,10 +1804,6 @@
 				renameshow:false,
 				cityboxshow:false,
 				salaryboxshow:false,
-				/*startyearboxshow:false,
-				startmonthboxshow:false,
-				endyearboxshow:false,
-				endmonthboxshow:false,*/
 				editexperienceshow:false,
 				addexperienceshow:false,
 				editprojectshow:false,
@@ -1791,17 +1825,11 @@
 						img:'../../../static/images/default_headpic.png'
 					},
 					expectjob:null,
-//					experience:null,
 					experiencelist:[],
 					projectlist:[],
 					educationlist:[],
+					resumefilelist:[],
 					selfdescription:null,
-					/*expectjob:{
-						city:'',
-						type:'',
-						post:'',
-						salary:'',
-					}*/
 				},
 				degreelist:['大专','本科','硕士','博士','其他'],
 				workyearlist:['应届毕业生','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年','10年以上'],
@@ -1818,17 +1846,32 @@
 				},
 				salarylist:['2k以下','2k-5k','5k-10k','10k-15k','15k-25k','25k-50k','50k以上'],
 				ranklist:['10%','20%','30%','50%','其他'],
-				/*gendertmp:'',
-				degreetmp:'',*/
-				/*basicinfotmp:{
-					username:'person',
-					tel:'15813359',
-					email:'1021478@qq.com',
-					gender:'女',
-					degree:'大专',
-					workyear:'',
-					currentstate:''
-				}*/
+				divlist:[
+					{
+						name:'基本信息',
+						div:'basicInfo'
+					},
+					{
+						name:'期望工作',
+						div:'expectJob'
+					},
+					{
+						name:'工作经历',
+						div:'workExperience'
+					},
+					{
+						name:'项目经历',
+						div:'workExperience'
+					},
+					{
+						name:'教育背景',
+						div:'projectExperience'
+					},
+					{
+						name:'自我描述',
+						div:'selfDescription'
+					},
+				],
 				basicinfotmp:null,
 				expectjobtmp:null,
 				experiencetmp:null,
@@ -1838,6 +1881,7 @@
 				currentexperience:null,
 				currentproject:null,
 				currenteducation:null,
+				currentdiv:null,
 			}
 		},
 		beforeMount(){
@@ -1848,15 +1892,6 @@
 			lastlength_des(){
 				return 500-this.descriptiontmp.length
 			}
-			/*onmale(){
-				return this.basicinfotmp.gender=="男"||this.basicinfotmp.gender==""||this.basicinfotmp.gender==null?true:false
-			},
-			currentdegree(){
-				return this.degreetmp==''?this.resume.basicinfo.degree:this.degreetmp
-			}*/
-			/*hasexpectjob(){
-				return this.resume.expectjob!=null?true:false
-			},*/
 		},
 		methods:{
 			entercollapsible(){
@@ -2079,10 +2114,22 @@
 			},
 			uploadresume(){
 				this.uploadboxshow=true
+			},
+			getresumefile(e){
+				let file = e.target.files[0]
+				this.resume.resumefilelist.push(file)
+				let length = this.resume.resumefilelist.length
+				console.log(this.resume.resumefilelist[length - 1])
+				this.uploadboxshow=false
+			},
+			todiv(index){
+				this.currentdiv = index
+				let el = document.getElementById(this.divlist[index].div)
+				window.scrollTo({"behavior":"smooth","top":el.offsetTop})
+			},
+			toTop(){
+				body.scrollIntoView({behavior:'smooth'})
 			}
-			/*printym(){
-				console.log(this.ym)
-			}*/
 		},
 		watch:{
 			
@@ -2090,14 +2137,5 @@
 	}
 </script>
 
-<style scoped>
-	/*.edudate{
-		.el-input_inner{
-			width: 139px;
-			height: 46px;
-		}
-	}*/
-	/*.profile_box{
-		margin-bottom: 15px;
-	}*/
+<style>
 </style>

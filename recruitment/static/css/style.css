@@ -203,7 +203,7 @@ ul.hot_pos i{width: 12px;height: 14px;position:absolute;background:url(img/hot.p
 .companyTags li{font-size:12px;float:left; padding:0 5px; background:#fff; border:1px solid #a9a9a9;color:#a9a9a9;margin:5px 15px 0 0; line-height:18px;}
 .btn{font-size:16px;color:#fff;background:#0d9572 url(img/arrow.png) 88px center no-repeat;padding:5px 40px 5px 15px;margin:10px 0 0 0;}
 .btn:hover{background-color:#00694e; color:#fff;}
-#backtop{display:none;background:url(img/backtop.png) left top no-repeat;width:28px;height:64px;position:fixed;bottom:80px;margin-left:1060px; cursor:pointer;}
+#backtop{display:inline;background:url(img/backtop.png) left top no-repeat;width:28px;height:64px;position:fixed;bottom:80px;margin-left:1060px; cursor:pointer;}
 #backtop:hover{background-position:right top !important;}
 #qrSide{ background:url(img/qr_index.jpg) no-repeat; width:108px; height:132px; position:fixed; right:0; bottom:160px; z-index:3;}
 #qrSide a{ background:#cfd0d2 url(img/x.png) no-repeat; position:absolute; right:0; top:-15px; width:15px; height:15px;}
@@ -1366,7 +1366,7 @@ ul.my_delivery{margin:20px 48px;}
 #resumeScore div.which span{cursor:pointer;margin: 0 0 0 150px;text-align: center;background: #019875; color: #fff;float:left;-webkit-transition: .2s;-moz-transition: .2s;transition: .2s;}
 #resumeScore div.which span:hover{background: #00694e; }
 #resumeScore div.which a{color:#fff;display:block;padding: 8px 40px;}
-.profile_box{clear:both;background: #fafafa;border:2px solid #fafafa;word-wrap:break-word; padding:18px; margin-bottom: 20px; position: relative;}
+.profile_box{clear:both;background: #fafafa;border:2px solid #fafafa;word-wrap:break-word; padding:18px;margin-top: 20px; margin-bottom: 20px; position: relative;}
 .profile_box td{vertical-align: top;}
 .profile_box span.error{margin:3px 0 0 0;}
 .profile_box h2{font-size: 18px;font-weight: 600;margin:0 0 10px 0; background: url('img/profile_square.png') 0 3px no-repeat; padding-left: 20px;}
@@ -1441,7 +1441,7 @@ ul.my_delivery{margin:20px 48px;}
 #worksShow .workShow li a{color: #019875; text-decoration: underline;}
 #worksShow .workShow p{margin:5px 0 0 0;}
 #selfDescription .descriptionShow{color:#777;padding: 0 20px; position: relative;}
-.mycenterR{background:#fafafa;padding:15px 20px;margin-bottom:8px}
+.mycenterR{background:#fafafa;padding:15px 20px;margin:20px 0px}
 .mycenterR h2{font-weight:600;font-size:18px;margin:0 0 8px 0}
 .mycenterR h2 a,.mycenterR h2 span{cursor:pointer;font-size:14px;line-height:26px;float:right;color:#019875;text-decoration:none;*margin-top:-25px;}
 .mycenterR h2 a:hover,.mycenterR h2 span:hover{color:#019875}
@@ -1451,6 +1451,27 @@ ul.my_delivery{margin:20px 48px;}
 .mycenterR a:hover{color:#019875}
 .mycenterR .resumeUploadDiv a.fr{color:#019875; text-decoration:none;}
 .mycenterR .resumeUploadDiv a.fr:hover{text-decoration:underline;}
+.divnav{
+	text-align: center;
+	font-size:20px;
+	padding: 10px 0;
+	cursor: pointer;
+	line-height: 40px;
+	color: #cdd8d0;
+	border-left: 5px solid transparent;
+}
+#rightNav .current{
+	border-left: 5px solid;
+	border-left-color: #019875;
+	color: #019875;
+}
+.divnav:hover{
+	background-color: #cef2d7;
+}
+#rightNav{
+	/*position: fixed;
+	top: 5px;*/
+}
 #resumeSet{overflow:hidden}
 #resumeSet .noSet span{color:#333;font-weight:600;padding:0 5px}
 #resumeSet label{display:block;color:#555;margin:3px 0}
