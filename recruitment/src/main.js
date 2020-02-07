@@ -9,6 +9,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
+import VCharts from 'v-charts'
 
 import '../static/css/colorbox.min.css';
 import '../static/css/external.min.css';
@@ -24,6 +25,7 @@ Vue.prototype.$axios = axios
 Vue.use(VueAxios,axios)
 Vue.use(ElementUI)
 Vue.use(ViewUI)
+Vue.use(VCharts)
 
 /* eslint-disable no-new */
 new Vue({

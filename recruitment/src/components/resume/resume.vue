@@ -62,12 +62,14 @@
 		            	<!--<div class="fr c5" id="lastChangedTime">最后一次更新：<span>2014-07-01 15:14 </span></div><!--end #lastChangedTime-->
 		            	<div id="resumeScore">
 		            		<div class="score fl">
-		            			<canvas height="120" width="120" id="doughnutChartCanvas" style="width: 120px; height: 120px;"></canvas>
-		           				<div style="" class="scoreVal"><span>15</span>分</div>
+		            			<!--<canvas height="120" width="120" id="doughnutChartCanvas" style="width: 120px; height: 120px;"></canvas>-->
+		            			<ve-ring :data="chartdata" :settings="chartsettings" width="120px" height="120px" :tooltip='tooltip' :extend='chartextend' style="margin-left: 49px;margin-top: 19px;"></ve-ring><!--style="margin-left: 49px;margin-top: 19px;"-->
+		           				<div class="scoreVal"><span>{{chartdata.rows[0].precent}}</span>分</div>
 		            		</div>
 		            		<div class="which fl">
 		            			<div>工作经历最能体现自己的工作能力，且完善后才可投递简历哦！</div>
 		            			<span rel="workExperience" @click="toworkexperience"><a>马上去完善</a></span>
+		            			<!--<button value="自增" @click="addcount">自增</button>-->
 							</div>
 		            	</div><!--end #resumeScore-->
 		
@@ -1792,6 +1794,18 @@
 	export default{
 		name:'resume',
 		data(){
+			this.chartsettings = {
+					dimension:'mode',
+					metrics:'precent',
+					label:{
+						show:false
+					},
+					offsetY:55,
+					radius:[
+						'45','55'
+					],
+					limitShowNum:this.showNum
+			}
 			return{
 				collapsibleshow:false,
 				editbasicshow:false,
@@ -1831,6 +1845,7 @@
 					resumefilelist:[],
 					selfdescription:null,
 				},
+				watcher:[false,false,false,false,false],
 				degreelist:['大专','本科','硕士','博士','其他'],
 				workyearlist:['应届毕业生','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年','10年以上'],
 				currentstatelist:['我目前已离职，可快速到岗','我目前正在职，正考虑换个新环境','我暂时不想找工作','我是应届毕业生'],
@@ -1872,6 +1887,23 @@
 						div:'selfDescription'
 					},
 				],
+				chartdata:{
+					columns:['mode','precent'],
+					rows:[
+						{'mode':'已完成','precent':0},
+						{'mode':'未完成','precent':100}
+					]
+				},
+				chartextend:{
+					legend:{
+						show:false
+					},
+					animation:false,
+					color:['#019875','#fff'],
+				},
+				tooltip:{
+					trigger:'none'
+				},
 				basicinfotmp:null,
 				expectjobtmp:null,
 				experiencetmp:null,
@@ -1888,12 +1920,57 @@
 			this.basicinfotmp = JSON.parse(JSON.stringify(this.resume.basicinfo))
 			this.expectjobtmp = JSON.parse(JSON.stringify(this.resume.expectjob))
 		},
+		mounted(){
+			console.log('inside mounted')
+			this.initchartdata()
+		},
 		computed:{
 			lastlength_des(){
 				return 500-this.descriptiontmp.length
+			},
+			resume_precent(){
+				let num = 0
+				for(item in this.chartdata.rows){
+					num += parseInt(item.precent)
+				}
+				return num
+			},
+			showNum(){
+				return 1
 			}
 		},
 		methods:{
+			chartdata_inc(index){
+				this.chartdata.rows[0].precent += index
+				this.chartdata.rows[1].precent -= index
+			},
+			chartdata_dec(index){
+				this.chartdata.rows[0].precent -= index
+				this.chartdata.rows[1].precent += index
+			},
+			initchartdata(){
+				console.log('inside init')
+				console.log(this.chartdata.rows[0].precent)
+				if(this.resume.basicinfo !== undefined && this.resume.basicinfo !== null){
+					this.chartdata_inc(15)
+				}
+				if(this.resume.expectJob !== undefined && this.resume.expectJob !== null){
+					this.chartdata_inc(20)
+				}
+				if(this.resume.experiencelist !== undefined && this.resume.experiencelist !== null && this.resume.experiencelist.length !== 0){
+					this.chartdata_inc(30)
+				}
+				if(this.resume.projectlist !== undefined && this.resume.projectlist !== null && this.resume.projectlist.length !== 0){
+					this.chartdata_inc(20)
+				}
+				if(this.resume.educationlist !== undefined && this.resume.educationlist !== null && this.resume.educationlist.length !== 0){
+					this.chartdata_inc(10)
+				}
+				if(this.resume.selfdescription !== undefined && this.resume.selfdescription !== null && this.resume.selfdescription !== ''){
+					this.chartdata_inc(5)
+				}
+				console.log(this.chartdata.rows[0].precent)
+			},
 			entercollapsible(){
 				this.collapsibleshow = true
 			},
@@ -2132,7 +2209,62 @@
 			}
 		},
 		watch:{
-			
+			'resume.expectjob':{
+				handler(newval){
+					if(newval !== undefined && newval !== null && !this.watcher[0]){
+						this.chartdata_inc(20)
+						this.watcher[0] = true
+					}
+				}
+			},
+			'resume.experiencelist':{
+				handler(){
+					if(this.resume.experiencelist !== undefined && this.resume.experiencelist !== null && this.resume.experiencelist.length !== 0 && !this.watcher[1]){
+						this.chartdata_inc(30)
+						this.watcher[1] = true
+					}
+					else if((this.resume.experiencelist === undefined || this.resume.experiencelist === null || this.resume.experiencelist.length === 0) && this.watcher[1]){
+						this.chartdata_dec(30)
+						this.watcher[1] = false
+					}
+				}
+			},
+			'resume.projectlist':{
+				handler(){
+					if(this.resume.projectlist !== undefined && this.resume.projectlist !== null && this.resume.projectlist.length !== 0 && !this.watcher[2]){
+						this.chartdata_inc(20)
+						this.watcher[2] = true
+					}
+					else if((this.resume.projectlist === undefined || this.resume.projectlist === null || this.resume.projectlist.length === 0) && this.watcher[2]){
+						this.chartdata_dec(20)
+						this.watcher[2] = false
+					}
+				}
+			},
+			'resume.educationlist':{
+				handler(){
+					if(this.resume.educationlist !== undefined && this.resume.educationlist !== null && this.resume.educationlist.length !== 0 && !this.watcher[3]){
+						this.chartdata_inc(10)
+						this.watcher[3] = true
+					}
+					else if((this.resume.educationlist === undefined || this.resume.educationlist === null || this.resume.educationlist.length === 0) && this.watcher[3]){
+						this.chartdata_dec(10)
+						this.watcher[3] = false
+					}
+				}
+			},
+			'resume.selfdescription':{
+				handler(){
+					if(this.resume.selfdescription !== undefined && this.resume.selfdescription !== null && !this.watcher[4]){
+						this.chartdata_inc(5)
+						this.watcher[4] = true
+					}
+					else if((this.resume.selfdescription === undefined || this.resume.selfdescription === null || this.resume.selfdescription === '') && this.watcher[4]){
+						this.chartdata_dec(5)
+						this.watcher[4] = false
+					}
+				}
+			}
 		}
 	}
 </script>
