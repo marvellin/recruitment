@@ -2262,6 +2262,7 @@
 					else if((this.resume.selfdescription === undefined || this.resume.selfdescription === null || this.resume.selfdescription === '') && this.watcher[4]){
 						this.chartdata_dec(5)
 						this.watcher[4] = false
+						
 					}
 				}
 			}
