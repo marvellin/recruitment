@@ -8,6 +8,7 @@ import myCompany from '@/components/company/myCompany'
 import logoUpload from '@/components/company/logoUpload/logoUpload'
 import resume from '@/components/resume/resume'
 import resumeupload from '@/components/resume/resumeupload'
+import preview from'@/components/resume/preview'
 
 Vue.use(Router)
 
@@ -51,16 +52,15 @@ export default new Router({
     	component:hotlist
     },
     {
+    	path:'/resumepreview',
+    	name:'resumepreview',
+    	component:preview,
+    	props:true
+    },
+    {
     	path:'/myresume',
     	name:'myresume',
     	component:resume,
-    	children:[
-	    	{
-	    		path:'resumeupload',
-	    		name:'resumeupload',
-	    		component:resumeupload
-	    	}
-    	]
     }
     /*{
     	path:'/logoUpload',

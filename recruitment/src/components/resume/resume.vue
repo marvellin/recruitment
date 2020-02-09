@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<!--<keep-alive>-->
 		<div id="body">
 			<div id="header">
 				<div class="wrapper">
@@ -50,7 +51,9 @@
 		            	<div class="fl" id="resume_name">
 			            	<div class="nameShow fl" :class="[renameshow?'dn':'']">
 			            		<h1 :title="resume.name">{{resume.name}}</h1>
-			            		<span class="rename" @click="rename">重命名</span> | <a target="_blank" href="h/resume/preview.html">预览</a>
+			            		<span class="rename" @click="rename">重命名</span> | 
+			            		<!--<a @click.prevent="topreview" target="_blank" >预览</a>-->
+			            		<router-link :to="{name:'resumepreview'}" @click.native="topreview" target="_blank">预览</router-link>
 		            		</div>
 		            		<form class="fl" :class="[renameshow?'':'dn']" id="resumeNameForm">
 		            			<input type="text" ref="newresumename" :value="resume.name" name="resumeName" class="nameEdit c9">	
@@ -88,7 +91,7 @@
 			                    </div>
 		            		</div><!--end .basicShow-->
 		
-		            		<div class="basicEdit" v-show="editbasicshow">
+		            		<div class="basicEdit" v-if="editbasicshow">
 		            			<form id="profileForm">
 								  	<table>
 								    	<tbody>
@@ -611,7 +614,7 @@
 		            		    			<h3>{{item.post}}</h3><h4>{{item.comname}}</h4>
 		            		    			<h4>{{item.startym}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endym}}</h4>
 		            					</div>
-		            					<form class="experienceForm" v-show="index==currentexperience&&editexperienceshow">
+		            					<form class="experienceForm" v-if="index==currentexperience&&editexperienceshow">
 		            						编辑工作经历
 					            			<table>
 					            				<tbody>
@@ -860,7 +863,7 @@
 		            		    			{{item.startym}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endym}}<br />
 		            		    			{{item.intro}}
 		            		    		</div>
-		            		    		<form class="projectForm" v-show="index==currentproject&&editprojectshow">
+		            		    		<form class="projectForm" v-if="index==currentproject&&editprojectshow">
 					            			<table><tbody>
 					            				<tr>
 					            					<td valign="top">
@@ -1109,172 +1112,8 @@
 		
 		            	<div class="profile_box" id="educationalBackground">
 		            		<h2>教育背景<!--<span>（投递简历时必填）</span>--></h2>
-		            		<span class="c_add" @click="addeducation" title="添加教育经历" v-show="resume.educationlist.length!=0&&!addedushow&&!editedushow"></span>
+		            		<span class="c_add" @click="addeducation" title="添加教育经历" v-if="resume.educationlist.length!=0&&!addedushow&&!editedushow"></span>
 		            		<div class="educationalShow" v-if="resume.educationlist.length!=0">
-		            		    <!--<form class="educationalForm borderBtm dn">
-			            			<table>
-			            				<tbody><tr>
-									      	<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-									      	<td>
-									        	<input type="text" placeholder="学校名称" name="schoolName" class="schoolName">
-									      	</td>
-									      	<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-									      	<td>
-									      		<input type="hidden" class="degree" value="" name="degree">
-									        	<input type="button" value="学历" class="profile_select_287 profile_select_normal select_degree">
-												<div class="box_degree boxUpDown boxUpDown_287 dn" style="display: none;">
-										            <ul>
-										        										        			<li>大专</li>
-										        										        			<li>本科</li>
-										        										        			<li>硕士</li>
-										        										        			<li>博士</li>
-										        										        			<li>其他</li>
-										        										        	</ul>
-										        </div>
-									        </td>
-									    </tr>
-			            				<tr>
-			            					<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-			            					<td>
-			            						<input type="text" placeholder="专业名称" name="professionalName" class="professionalName">
-			            					</td>
-			            					<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-			            					<td>
-				            					<div class="fl">
-				            						<input type="hidden" class="schoolYearStart" value="" name="schoolYearStart">
-										        	<input type="button" value="开始年份" class="profile_select_139 profile_select_normal select_schoolYearStart">
-													<div class="box_schoolYearStart boxUpDown boxUpDown_139 dn" style="display: none;">
-											            <ul>
-											        											        			<li>2014</li>
-											        											        			<li>2013</li>
-											        											        			<li>2012</li>
-											        											        			<li>2011</li>
-											        											        			<li>2010</li>
-											        											        			<li>2009</li>
-											        											        			<li>2008</li>
-											        											        			<li>2007</li>
-											        											        			<li>2006</li>
-											        											        			<li>2005</li>
-											        											        			<li>2004</li>
-											        											        			<li>2003</li>
-											        											        			<li>2002</li>
-											        											        			<li>2001</li>
-											        											        			<li>2000</li>
-											        											        			<li>1999</li>
-											        											        			<li>1998</li>
-											        											        			<li>1997</li>
-											        											        			<li>1996</li>
-											        											        			<li>1995</li>
-											        											        			<li>1994</li>
-											        											        			<li>1993</li>
-											        											        			<li>1992</li>
-											        											        			<li>1991</li>
-											        											        			<li>1990</li>
-											        											        			<li>1989</li>
-											        											        			<li>1988</li>
-											        											        			<li>1987</li>
-											        											        			<li>1986</li>
-											        											        			<li>1985</li>
-											        											        			<li>1984</li>
-											        											        			<li>1983</li>
-											        											        			<li>1982</li>
-											        											        			<li>1981</li>
-											        											        			<li>1980</li>
-											        											        			<li>1979</li>
-											        											        			<li>1978</li>
-											        											        			<li>1977</li>
-											        											        			<li>1976</li>
-											        											        			<li>1975</li>
-											        											        			<li>1974</li>
-											        											        			<li>1973</li>
-											        											        			<li>1972</li>
-											        											        			<li>1971</li>
-											        											        			<li>1970</li>
-											        											        	</ul>
-											        </div>
-												</div>
-												<div class="fl">
-				            						<input type="hidden" class="schoolYearEnd" value="" name="schoolYearEnd">
-										        	<input type="button" value="结束年份" class="profile_select_139 profile_select_normal select_schoolYearEnd">
-													<div style="display: none;" class="box_schoolYearEnd  boxUpDown boxUpDown_139 dn">
-											            <ul>
-											        											        			<li>2021</li>
-											        											        			<li>2020</li>
-											        											        			<li>2019</li>
-											        											        			<li>2018</li>
-											        											        			<li>2017</li>
-											        											        			<li>2016</li>
-											        											        			<li>2015</li>
-											        											        			<li>2014</li>
-											        											        			<li>2013</li>
-											        											        			<li>2012</li>
-											        											        			<li>2011</li>
-											        											        			<li>2010</li>
-											        											        			<li>2009</li>
-											        											        			<li>2008</li>
-											        											        			<li>2007</li>
-											        											        			<li>2006</li>
-											        											        			<li>2005</li>
-											        											        			<li>2004</li>
-											        											        			<li>2003</li>
-											        											        			<li>2002</li>
-											        											        			<li>2001</li>
-											        											        			<li>2000</li>
-											        											        			<li>1999</li>
-											        											        			<li>1998</li>
-											        											        			<li>1997</li>
-											        											        			<li>1996</li>
-											        											        			<li>1995</li>
-											        											        			<li>1994</li>
-											        											        			<li>1993</li>
-											        											        			<li>1992</li>
-											        											        			<li>1991</li>
-											        											        			<li>1990</li>
-											        											        			<li>1989</li>
-											        											        			<li>1988</li>
-											        											        			<li>1987</li>
-											        											        			<li>1986</li>
-											        											        			<li>1985</li>
-											        											        			<li>1984</li>
-											        											        			<li>1983</li>
-											        											        			<li>1982</li>
-											        											        			<li>1981</li>
-											        											        			<li>1980</li>
-											        											        			<li>1979</li>
-											        											        			<li>1978</li>
-											        											        			<li>1977</li>
-											        											        			<li>1976</li>
-											        											        			<li>1975</li>
-											        											        			<li>1974</li>
-											        											        			<li>1973</li>
-											        											        			<li>1972</li>
-											        											        			<li>1971</li>
-											        											        			<li>1970</li>
-											        											        	</ul>
-											        </div>
-			            						</div>
-			            						<div class="clear"></div>
-			            					</td>
-			            				</tr>
-			            				<tr>
-			            					<td></td>
-			            					<td colspan="3">
-												<input type="submit" value="保 存" class="btn_profile_save">
-								          		<a class="btn_profile_cancel" href="javascript:;">取 消</a>
-			            					</td>
-			            				</tr>
-			            			</tbody></table>
-			            			<input type="hidden" class="eduId" value="">
-		            			</form>--><!--end .educationalForm-->
-	
 		            			<ul class="elist clearfix">
 		            				<li v-for="(item,index) in resume.educationlist" :key='index'>
 		            					<a class="c_edit fr" v-show="(index!=currenteducation||!editedushow)&&!addedushow" @click="editeducation(index)"></a>
@@ -1283,7 +1122,7 @@
 		            		    			<h4>{{item.profession}}&nbsp;&nbsp;|&nbsp;&nbsp;{{item.rank}}<br />{{item.startyear}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endyear}}</h4>
 		            		    			<!--<h4>{{item.startyear}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endyear}}</h4>-->
 		            					</div>
-		            					<form class="educationalForm" v-show="index==currenteducation&&editedushow">
+		            					<form class="educationalForm" v-if="index==currenteducation&&editedushow">
 					            			<table><tbody>
 					            				<tr>
 											      	<td valign="top">
@@ -1371,7 +1210,7 @@
 		            				</li>
 		            			</ul>
 		            		</div><!--end .educationalShow-->
-		            		<div class="educationalEdit" :class="[addedushow?'':'dn']" v-if="educationtmp!=null">
+		            		<div class="educationalEdit" v-if="educationtmp!=null" :class="[addedushow?'':'dn']">
 		            			<form class="educationalForm">
 			            			<table><tbody>
 			            				<tr>
@@ -1461,7 +1300,7 @@
 			            			<!--<input type="hidden" class="eduId" value="">-->
 		            			</form><!--end .educationalForm-->
 		            		</div><!--end .educationalEdit-->
-		            		<div class="educationalAdd pAdd" v-show="resume.educationlist.length==0&&!addedushow" @click="addeducation">
+		            		<div class="educationalAdd pAdd" v-if="resume.educationlist.length==0&&!addedushow" @click="addeducation">
 		            		        教育背景可以充分体现你的学习和专业能力，<br>
 								且完善后才可投递简历哦！
 								<span>添加教育经历</span>
@@ -1568,6 +1407,7 @@
 		            	</div><!--end #myResume-->
 		
 						<div class="mycenterR" style="padding: 0 0;" id="rightNav">
+							<li style="height: 5px;background-color: #019875;list-style: none;"></li>
 							<ul style="list-style: none;">
 								<li class="divnav" :class="[currentdiv===index?'current':'']" v-for="(item,index) in divlist" :key='index' @click="todiv(index)">{{item.name}}</li>
 							</ul>
@@ -1787,12 +1627,24 @@
 			</div>
 			<div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div>
 		</div>
+		<!--</keep-alive>-->
 	</div>
 </template>
 
 <script> 
 	export default{
 		name:'resume',
+		beforeCreate(){
+//			console.log('bc' + JSON.stringify(this.resume))
+		},
+		created(){
+//			sessionStorage.removeItem('myresume')
+//			console.log('c' + JSON.stringify(this.resume))
+			/*if(sessionStorage.getItem('myresume') != null){
+				this.resume = JSON.parse(sessionStorage.getItem('myresume'))
+				sessionStorage.removeItem('myresume')
+			}*/
+		},
 		data(){
 			this.chartsettings = {
 					dimension:'mode',
@@ -1803,8 +1655,7 @@
 					offsetY:55,
 					radius:[
 						'45','55'
-					],
-					limitShowNum:this.showNum
+					]
 			}
 			return{
 				collapsibleshow:false,
@@ -1917,12 +1768,12 @@
 			}
 		},
 		beforeMount(){
-			this.basicinfotmp = JSON.parse(JSON.stringify(this.resume.basicinfo))
-			this.expectjobtmp = JSON.parse(JSON.stringify(this.resume.expectjob))
+			this.initchartdata()
+//			console.log('bm' + JSON.stringify(this.resume))
 		},
 		mounted(){
-			console.log('inside mounted')
-			this.initchartdata()
+//			console.log('m' + JSON.stringify(this.resume))
+//			console.log(this.resume.educationlist[0].school)
 		},
 		computed:{
 			lastlength_des(){
@@ -1935,8 +1786,8 @@
 				}
 				return num
 			},
-			showNum(){
-				return 1
+			resumetostring(){
+				return JSON.stringify(this.resume)
 			}
 		},
 		methods:{
@@ -1949,8 +1800,8 @@
 				this.chartdata.rows[1].precent += index
 			},
 			initchartdata(){
-				console.log('inside init')
-				console.log(this.chartdata.rows[0].precent)
+//				console.log('inside init')
+//				console.log(this.chartdata.rows[0].precent)
 				if(this.resume.basicinfo !== undefined && this.resume.basicinfo !== null){
 					this.chartdata_inc(15)
 				}
@@ -1969,7 +1820,7 @@
 				if(this.resume.selfdescription !== undefined && this.resume.selfdescription !== null && this.resume.selfdescription !== ''){
 					this.chartdata_inc(5)
 				}
-				console.log(this.chartdata.rows[0].precent)
+//				console.log(this.chartdata.rows[0].precent)
 			},
 			entercollapsible(){
 				this.collapsibleshow = true
@@ -2206,6 +2057,11 @@
 			},
 			toTop(){
 				body.scrollIntoView({behavior:'smooth'})
+			},
+			topreview(){
+//				this.$router.push({name:'resumepreview',params:{resume:this.resume}})
+				sessionStorage.removeItem('myresume')
+				sessionStorage.setItem('myresume',JSON.stringify(this.resume))
 			}
 		},
 		watch:{

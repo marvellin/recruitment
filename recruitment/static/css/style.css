@@ -1493,13 +1493,15 @@ ul.my_delivery{margin:20px 48px;}
 .recommend_list .hot_pos_r{width:310px;margin-left:0;}
 
 /*preview.html*/
-#previewWrapper{width:726px;border:12px solid #a3a3a3;margin:0 auto}
-#previewWrapper .preview_header{height:26px;background:#019875;padding:9px 20px;color:#fff;overflow:hidden}
+#previewWrapper{width:800px;border:12px solid #a3a3a3;margin:0 auto;height: auto;}
+#previewWrapper .preview_header{height:44px;background:#019875;padding:9px 20px;color:#fff;overflow:hidden}
 #previewWrapper .preview_header h1{margin:0;font-size:18px;font-weight:600;line-height:26px;float:left}
 #previewWrapper .preview_header a{float:right;background:#006b52;color:#fff;padding:2px 12px}
 #previewWrapper .preview_content{padding:32px 20px 2px 20px}
-#previewWrapper .preview_content .expectShow{padding:0 10px 0 20px}
+#previewWrapper .preview_content .expectShow{padding:0 10px 0 0px}
 #previewWrapper .projectList .f16,#previewWrapper .workList .f16{*margin-top:0}
+#previewWrapper .projectShow{padding-left: 20px;}
+#previewWrapper .educationalShow{padding-left: 10px;}
 #downloadOnlineResume a{margin:20px 10px 0 0px;background-color:#91cebe;}
 #downloadOnlineResume a:hover{background-color:#019875;}
 
