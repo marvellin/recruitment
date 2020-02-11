@@ -1,7 +1,7 @@
 <template>
 	<div>
 	<div id="body">
-		<div id="header">
+		<!--<div id="header">
 			<div class="wrapper">
 				<router-link class="logo" to="/">
 					<img width="229" height="60" alt="全国招聘第一站" src="../../../build/logo.png"/>
@@ -37,7 +37,8 @@
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
 				</dl>
 			</div>
-		</div>
+		</div>-->
+		<headert :navlist='2' :isCompany='true'></headert>
 		<div id="container">
 			<div class="clearfix">
 				<div class="content_l">
@@ -620,21 +621,29 @@
 			<a title="回到顶部" id="backtop" style="display: inline;" @click="toTop"></a>
 		</div>
 	</div>
-	<div id="footer">
+	<!--<div id="footer">
 		<div class="wrapper">
-			<!--<router-link to="" target="_blank">联系我们</router-link>-->
-			<!--<router-link to=""></router-link>-->
 		</div>
-	</div>
+	</div>-->
+	<footert></footert>
 	</div>
 </template>
 
 <script>
 	import Product from './product/Product'
+	import footert from '../footer/footer'
+	import headert from '../header/header'
 	export default{
 		name:'myCompany',
+		created(){
+			/*console.log(
+				this.$route
+			)*/
+		},
 		components:{
-			Product
+			Product,
+			footert,
+			headert
 		},
 		mounted(){
 			this.isMounted = true
@@ -642,6 +651,24 @@
 		data(){
 			return{
 				isMounted:null,
+				navlist:[
+					{
+						name:'公司',
+						path:'/mycompany'
+					},
+					{
+						name:'论坛',
+						path:''
+					},
+					{
+						name:'简历管理',
+						path:''
+					},
+					{
+						name:'发布职位',
+						path:''
+					},
+				],
 				vashow:false,
 				editintroshow:false,
 				editdetailshow:false,

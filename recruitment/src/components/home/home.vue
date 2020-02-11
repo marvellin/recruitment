@@ -1,7 +1,7 @@
 <template>
 	<div>
 	<div id="body">
-		<div id="header">
+		<!--<div id="header">
 			<div class="wrapper">
 				<router-link to="/home" class="logo">
 					<img src="../../../build/logo.png" width="229" height="60" alt="全国招聘第一站"/>
@@ -32,8 +32,9 @@
 						<router-link to='/register'>注册</router-link>
 					</li>
 				</ul>
-			</div><!--end of wrapper-->
-		</div><!--end of header-->
+			</div>
+		</div>-->
+		<headert :navlist='0'></headert>
 		<div id="container">
 			<div id="sidebar"><!--finish-->
 				<!--<div class="mainNavs">
@@ -1639,6 +1640,7 @@
 	import searchbox from './searchbox/searchbox.vue'
 	import homebanner from './homebanner/homebanner.vue'
 	import thumbs from './thumbs/thumbs.vue'
+	import headert from '../header/header'
 	
 	export default{
 		name:'home',
@@ -1647,11 +1649,30 @@
 			mainNavs,
 			searchbox,
 			homebanner,
-			thumbs
+			thumbs,
+			headert
 		},
 		data(){
 			return{
-				hottabbingShow:true
+				hottabbingShow:true,
+				navlist:[
+					{
+						name:'公司',
+						path:'/mycompany'
+					},
+					{
+						name:'论坛',
+						path:''
+					},
+					{
+						name:'我的简历',
+						path:'/myresume'
+					},
+					{
+						name:'发布职位',
+						path:''
+					},
+				],
 			}
 		},
 		methods:{

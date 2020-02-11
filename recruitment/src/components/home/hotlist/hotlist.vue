@@ -26,7 +26,7 @@
 		props:['hottabbingShow'],
 		watch:{
 			hottabbingShow:function(){
-				console.log(this.hottabbingShow)
+//				console.log(this.hottabbingShow)
 			}
 		},
 		data(){

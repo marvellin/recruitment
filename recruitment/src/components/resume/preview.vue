@@ -31,7 +31,7 @@
 						
 			<div class="profile_box" id="workExperience">
 	            <h2>工作经历</h2>
-	            <div class="experienceShow" v-if="resume.experiencelist">
+	            <div class="experienceShow" v-if="resume.experiencelist.length !== 0">
 	                <ul class="wlist clearfix">
 	                  	<li class="clear" v-for="(item,index) in resume.experiencelist" :key='index'>
             				<span style="margin-left: 10px;font-size: 20px;" class="c9">{{item.startym}} —— {{item.endym}}</span>
@@ -47,7 +47,7 @@
 			
 			<div class="profile_box" id="projectExperience">
 	            <h2>项目经验</h2>
-	            <div class="projectShow" v-if="resume.projectlist">
+	            <div class="projectShow" v-if="resume.projectlist.length !== 0">
 	                <ul class="plist clearfix">
 	                  	<li class="noborder" v-for="(item,index) in resume.projectlist" :key='index'>
 		            		<div class="projectList" style="border-bottom: solid 0.5px rgb(229, 229, 229);">
@@ -68,7 +68,7 @@
 						
 			<div class="profile_box" id="educationalBackground">
 	            <h2>教育背景</h2>
-	            <div class="educationalShow" v-if="resume.educationlist">
+	            <div class="educationalShow" v-if="resume.educationlist.length !== 0">
 	                <ul class="elist clearfix">
 	                  	<li class="clear" v-for="(item,index) in resume.educationlist" :key='index'>
             				<span class="c9" style="font-size: 20px;">{{item.startyear}} —— {{item.endyear}}</span>

@@ -2,7 +2,7 @@
 	<div>
 		<!--<keep-alive>-->
 		<div id="body">
-			<div id="header">
+			<!--<div id="header">
 				<div class="wrapper">
 					<router-link class="logo" to="/">
 						<img width="229" @mouseover="showgender" height="60" alt="全国招聘第一站" src="../../../build/logo.png"/>
@@ -20,9 +20,6 @@
 						<li class="current">
 							<router-link to="/resumeHome">我的简历</router-link>
 						</li>
-						<!--<li>
-							<router-link to="/postHome">发布职位</router-link>
-						</li>-->
 					</ul>
 					<dl class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
 						<dt>
@@ -44,7 +41,8 @@
 						<a class="closeNT" href="javascript:;"></a>
 	            	</div>
 				</div>
-			</div>
+			</div>-->
+			<headert :navlist='1' :isCompany="false"></headert>
 			<div id="container">       
 	  			<div class="clearfix">
 	            	<div class="content_l">
@@ -1562,15 +1560,15 @@
 				</div>-->
 				<div class="clear"></div>
 				<!--<input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken">-->
-		   	 	<a rel="nofollow" @click.prevent="toTop" title="回到顶部" id="backtop" style="display: inline;"></a>
+		   	 	<!--<a rel="nofollow" @click.prevent="toTop" title="回到顶部" id="backtop" style="display: inline;"></a>-->
+		   	 	<toTop></toTop>
 		    </div><!-- end #container -->
 		</div>
-		<div id="footer">
+		<!--<div id="footer">
 			<div class="wrapper">
-				<!--<router-link to="" target="_blank">联系我们</router-link>-->
-				<!--<router-link to=""></router-link>-->
 			</div>
-		</div>
+		</div>-->
+		<footert></footert>
 		<div id="cboxOverlay" :style="{'display':uploadboxshow?'block':'none','opacity':uploadboxshow?'0.9':'1','cursor':uploadboxshow?'pointer':'auto'}" style="visibility: visible;"></div>
 		<div id="colorbox" class="" role="dialog" tabindex="-1" :style="{'display':uploadboxshow?'block':'none'}" style="visibility: visible;top: 307px;left: 370.8px;position: absolute;width: 528px;height: 308px;opacity: 1;cursor: suto;">
 			<div id="cboxWrapper" style="width: 528px;height: 308px;">
@@ -1632,8 +1630,16 @@
 </template>
 
 <script> 
+	import toTop from '../totop/totop'
+	import footert from '../footer/footer'
+	import headert from '../header/header'
 	export default{
 		name:'resume',
+		components:{
+			toTop,
+			footert,
+			headert
+		},
 		beforeCreate(){
 //			console.log('bc' + JSON.stringify(this.resume))
 		},
@@ -1658,6 +1664,20 @@
 					]
 			}
 			return{
+				navlist:[
+					{
+						name:'公司',
+						path:'/mycompany'
+					},
+					{
+						name:'论坛',
+						path:''
+					},
+					{
+						name:'我的简历',
+						path:'/myresume'
+					},
+				],
 				collapsibleshow:false,
 				editbasicshow:false,
 				editexpectjobshow:false,

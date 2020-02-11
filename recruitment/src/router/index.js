@@ -38,13 +38,6 @@ export default new Router({
     	path:'/mycompany',
     	name:'mycompany',
     	component:myCompany,
-    	/*children:[
-    		{
-    			path:'/logoUpload',
-    			name:'logoUpload',
-    			component:logoUpload
-    		}
-    	]*/
     },
     {
     	path:'/hotlist',
@@ -55,17 +48,11 @@ export default new Router({
     	path:'/resumepreview',
     	name:'resumepreview',
     	component:preview,
-    	props:true
     },
     {
     	path:'/myresume',
     	name:'myresume',
     	component:resume,
     }
-    /*{
-    	path:'/logoUpload',
-    	name:'logoUpload',
-    	component:logoUpload
-    },*/
   ]
 })
