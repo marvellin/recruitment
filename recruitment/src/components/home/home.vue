@@ -34,7 +34,7 @@
 				</ul>
 			</div>
 		</div>-->
-		<headert :navlist='0'></headert>
+		<headert :navlist='0' :isCompany='true'></headert>
 		<div id="container">
 			<div id="sidebar"><!--finish-->
 				<!--<div class="mainNavs">
@@ -1644,6 +1644,12 @@
 	
 	export default{
 		name:'home',
+		created(){
+			/*this.$axios.get('/static/data/companylist.json').then((res) => {
+				this.companylist = res.data.companylist
+				console.log(this.companylist[0].name)
+			})*/
+		},
 		components:{
 			hotlist,
 			mainNavs,

@@ -6,9 +6,10 @@ import hotlist from '@/components/home/hotlist/hotlist'
 import register from '@/components/login&register/register/register'
 import myCompany from '@/components/company/myCompany'
 import logoUpload from '@/components/company/logoUpload/logoUpload'
-import resume from '@/components/resume/resume'
-import resumeupload from '@/components/resume/resumeupload'
+import myresume from '@/components/resume/resume'
+//import resumeupload from '@/components/resume/resumeupload'
 import preview from'@/components/resume/preview'
+import companylist from '@/components/companylist/companylist'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
     	component:myCompany,
     },
     {
+    	path:'/companylist',
+    	name:'companylist',
+    	component:companylist
+    },
+    {
     	path:'/hotlist',
     	name:'hotlist',
     	component:hotlist
@@ -52,7 +58,7 @@ export default new Router({
     {
     	path:'/myresume',
     	name:'myresume',
-    	component:resume,
+    	component:myresume,
     }
   ]
 })

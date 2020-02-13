@@ -293,8 +293,66 @@
 									<tbody>
 										<tr>
 		                            		<td>地点</td>
-		                            		<td>
-		                            			<input type="text" placeholder="请输入地点" v-model="comtags.city" name="city" id="city">	
+		                            		<td @mouseleave="cityboxshow=false">
+		                            		<!--<td>-->
+		                            			<!--<input type="text" placeholder="请输入地点" v-model="comtags.city" name="city" id="city">-->	
+		                            			<input type="text" placeholder="请输入地点" readonly="readonly" @click="cityboxshow=true" :value="comtags.city" name="city" id="city">
+		                            			<div class="boxUpDown_s boxUpDown_596" id="box_expectCity_s" :style="{'display':cityboxshow?'block':'none'}">
+										          		<dl>
+										        			<dt>热门城市</dt>
+										        			<dd>
+										        				<span v-for="(item,index) in citylist.hotcities" :key='index' @click="pickcity(item)">
+										        					{{item}}
+										        				</span>
+											        		</dd>
+										        	  	</dl>
+										        		<dl>
+										        			<dt>ABCDEF</dt>
+										        			<dd>
+										        				<span v-for="(item,index) in citylist.list1" :key='index' @click="pickcity(item)">
+										        					{{item}}
+										        				</span>
+											        		</dd>
+										        	  	</dl>
+										        		<dl>
+										        			<dt>GHIJ</dt>
+										        			<dd>
+										        				<span v-for="(item,index) in citylist.list2" :key='index' @click="pickcity(item)">
+										        					{{item}}
+										        				</span>
+											        		</dd>
+										        	  	</dl>
+										        		<dl>
+										        			<dt>KLMN</dt>
+										        			<dd>
+										        				<span v-for="(item,index) in citylist.list3" :key='index' @click="pickcity(item)">
+										        					{{item}}
+										        				</span>
+											        		</dd>
+										        	  	</dl>
+										        		<dl>
+										        			<dt>OPQR</dt>
+										        			<dd>
+										        				<span v-for="(item,index) in citylist.list4" :key='index' @click="pickcity(item)">
+										        					{{item}}
+										        				</span>
+											        		</dd>
+										        	  	</dl>
+										        		<dl>
+										        			<dt>STUV</dt>
+										        			<dd><span v-for="(item,index) in citylist.list5" :key='index' @click="pickcity(item)">
+										        				{{item}}
+										        			</span>
+											        		</dd>
+										        	  	</dl>
+										        		<dl>
+										        			<dt>WXYZ</dt>
+										        			<dd><span v-for="(item,index) in citylist.list6" :key='index' @click="pickcity(item)">
+										        				{{item}}
+										        			</span>
+											        		</dd>
+										        	  	</dl>
+										        	</div>
 		                            		</td>
 		                        		</tr>
 		                        		<tr>
@@ -651,7 +709,16 @@
 		data(){
 			return{
 				isMounted:null,
-				navlist:[
+				citylist:{
+					hotcities:['北京','上海','广州','深圳','成都','杭州'],
+					list1:['北京','长春','成都','重庆','长沙','常州','东莞','大连','佛山','福州'],
+					list2:['贵阳','广州','哈尔滨','合肥','海口','杭州','惠州','金华','济南','嘉兴'],
+					list3:['昆明','廊坊','宁波','南昌','南京','南宁','南通'],
+					list4:['青岛','泉州'],
+					list5:['上海','石家庄','绍兴','沈阳','深圳','苏州','天津','太原','台州'],
+					list6:['武汉','无锡','温州','西安','厦门','烟台','珠海','中山','郑州']
+				},
+				/*navlist:[
 					{
 						name:'公司',
 						path:'/mycompany'
@@ -668,8 +735,9 @@
 						name:'发布职位',
 						path:''
 					},
-				],
+				],*/
 				vashow:false,
+				cityboxshow:false,
 				editintroshow:false,
 				editdetailshow:false,
 				edittagshow:false,
@@ -950,6 +1018,10 @@
 			toTop(){
 				body.scrollIntoView({behavior:'smooth'})
 			},
+			pickcity(item){
+				this.comtags.city = item
+				this.cityboxshow = false
+			},
 			hascomintro(){
 				if(this.comintrotmp.length==0){
 					return false
@@ -985,4 +1057,12 @@
 </script>
 
 <style>
+	.boxUpDown_s{position:absolute;z-index:20;border:2px solid #c8e6de;margin-top:-2px;background:#fff;margin-left: -421px;}
+	#box_expectCity_s{padding:5px 0;width: 605px;}
+	#box_expectCity_s dl{min-height:30px;margin:3px 0;padding:0;clear:both;overflow:hidden;line-height:28px;}
+	/*#box_expectCity dt{width:68px;color:#019875;font-weight:normal;margin:3px 0;*margin-left:-80px;padding-left:12px;position:absolute;float:left;}*/
+	#box_expectCity_s dt{color:#019875;font-weight:normal;margin:3px 0;*margin-left:-80px;padding-left:12px;position:absolute;float:left;}
+	#box_expectCity_s dd{margin-left:80px;overflow:hidden;}
+	#box_expectCity_s dd span{width:66px;height:28px;font-size:14px;text-align:center;float:left;margin:3px 3px;background-color:#fafafa;}
+	#box_expectCity_s dd span:hover{background-color:#91cebe;color:#fff;cursor:pointer;}
 </style>

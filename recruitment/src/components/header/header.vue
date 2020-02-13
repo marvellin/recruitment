@@ -44,7 +44,7 @@
 					</dt>
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我发布的职位</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我收到的简历</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="">我的公司主页</router-link></dd>
+					<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/mycompany">我的公司主页</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要找工作</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
@@ -86,10 +86,10 @@
 			}
 		},
 		created(){
-			console.log(this.currentnav)
-			console.log(this.isCompany)
-			console.log(this.navlist)
-			console.log(this.$route)
+//			console.log(this.currentnav)
+//			console.log(this.isCompany)
+//			console.log(this.navlist)
+//			console.log(this.$route)
 			if(this.navlist == '0'){//代表首页
 				this.varnavlist = [{path:'/myresume',name:'我的简历'},{path:'',name:'发布职位'}]
 			}
@@ -99,7 +99,7 @@
 			else if(this.navlist == '2'){//代表公司用户
 				this.varnavlist = [{path:'',name:'简历管理'},{path:'',name:'发布职位'}]
 			}
-			console.log(this.varnavlist)
+//			console.log(this.varnavlist)
 		},
 		mounted(){
 		},
@@ -113,7 +113,7 @@
 						name:'首页'
 					},
 					{
-						path:'/mycompany',
+						path:'/companylist',
 						name:'公司'
 					},
 					{
