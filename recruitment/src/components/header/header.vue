@@ -55,7 +55,7 @@
 							<span class="red dn" id="noticeDot-1"></span>
 							<i></i>
 						</dt>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我的简历</router-link></dd>
+						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/myresume">我的简历</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我的收藏</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="">我的订阅</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>
@@ -65,7 +65,7 @@
 			</div>
 		</div>
 </template>
-
+ 
 <script>
 	export default{
 		name:'headert',

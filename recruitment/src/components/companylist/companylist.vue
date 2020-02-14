@@ -12,6 +12,12 @@
 		                        <!--  <h2 class="fl">热门公司</h2> -->
 		                        <ul class="workplace reset fr" id="workplaceSelect">
 		                        	<li>
+		                        		<a href="javascript:void(0)"  :class="" class="current">全国</a> |
+		                        	</li>
+		                        	<li v-for="(item,index) in citylist.hotcities" :key='index'>
+		                        		<a href="javascript:void(0)" @click="pickcity(item)" :class="">{{item}}</a> |
+		                        	</li>
+		                        	<!--<li>
 	                                	<a href="javascript:void(0)"  class="current" >全国</a> |
 	                                </li>
 		                            <li >
@@ -37,9 +43,9 @@
 	                                </li>
 		                            <li >
 	                                	<a href="javascript:void(0)" >南京</a> |
-	                                </li>
+	                                </li>-->
 		                            <li  class="more" :class="[cityboxshow?'open':'']">
-	                                	<a href="javascript:void(0)" @click.prevent="cityboxshow=true">其他</a> 
+	                                	<a href="javascript:void(0)" @click.stop="cityboxshow=true">其他</a> 
 	                                	<div class="triangle citymore_arrow" :class="[cityboxshow?'transform':'']"></div>
 	                                </li>
 		                         	<li id="box_expectCity" class="searchlist_expectCity" @mouseleave="cityboxshow=false" :style="{'display':cityboxshow?'list-item':'none'}">
@@ -651,7 +657,7 @@
 					pagegroup:5//页数导航条显示的页数
 				},
 				citylist:{
-//					hotcities:['北京','上海','广州','深圳','成都','杭州'],
+					hotcities:['北京','上海','广州','深圳','成都','杭州','武汉','南京'],
 					list1:['北京','长春','成都','重庆','长沙','常州','东莞','大连','佛山','福州'],
 					list2:['贵阳','广州','哈尔滨','合肥','海口','杭州','惠州','金华','济南','嘉兴'],
 					list3:['昆明','廊坊','宁波','南昌','南京','南宁','南通'],
@@ -760,6 +766,12 @@
 		},
 		created(){
 			this.getcurrentlist()
+			document.addEventListener('click',e => {
+				let citybox = document.getElementById('box_expectCity')
+				if(!citybox.contains(e.target)){
+					this.cityboxshow = false
+				}
+			})
 		}
 	}
 </script>
