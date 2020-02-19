@@ -11,6 +11,7 @@ import myresume from '@/components/resume/resume'
 import preview from'@/components/resume/preview'
 import companylist from '@/components/companylist/companylist'
 import postjob from '@/components/mycompany/postjob/create'
+import management from '@/components/mycompany/management/index'
 
 Vue.use(Router)
 
@@ -65,6 +66,11 @@ export default new Router({
     	path:'/postjob',
     	name:'postjob',
     	component:postjob
+    },
+    {
+    	path:'/management',
+    	name:'management',
+    	component:management
     }
   ]
 })
