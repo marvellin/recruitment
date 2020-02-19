@@ -377,7 +377,7 @@
 		created(){
 			this.$axios.get('/static/data/postlist.json').then(res => {
 				this.postlist = res.data.postlist
-				console.log(this.postlist)
+//				console.log(this.postlist)
 			}).catch(err =>{
 				console.log(err)
 			})

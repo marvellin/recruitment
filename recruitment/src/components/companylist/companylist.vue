@@ -705,7 +705,7 @@
 				else{
 					this.$axios.get('/static/data/companylist.json').then(res => {
 						this.companylist = res.data.companylist
-						console.log('in getcurrentlist')
+//						console.log('in getcurrentlist')
 						this.pagination.total = Math.ceil(this.companylist.length / this.pagination.limit)
 						this.currentlist = this.companylist.slice(
 							(this.pagination.currentpage - 1) * this.pagination.limit,

@@ -58,7 +58,7 @@
 			navlist:{},
 			isCompany:{//用于决定用户类型
 				type:Boolean,
-				default:false
+				default:true
 			}
 		},
 		computed:{
