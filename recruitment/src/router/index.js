@@ -10,9 +10,9 @@ import myresume from '@/components/resume/resume'
 //import resumeupload from '@/components/resume/resumeupload'
 import preview from'@/components/resume/preview'
 import companylist from '@/components/companylist/companylist'
-import postjob from '@/components/mycompany/postjob/create'
-import management from '@/components/mycompany/management/index'
-import expiredposition from '@/components/mycompany/management/exporedposition/exporedposition'
+//import postjob from '@/components/mycompany/postjob/create'
+import management from '@/components/mycompany/management/index.vue'
+import expiredposition from '@/components/mycompany/management/expiredposition/expiredposition'
 import notifiedresume from '@/components/mycompany/management/notifiedresume/notifiedresume'
 import pendingresume from '@/components/mycompany/management/pendingresume/pendingresume'
 import postposition from '@/components/mycompany/management/postposition/postposition'
@@ -68,15 +68,16 @@ export default new Router({
     	name:'myresume',
     	component:myresume,
     },
-    {
+    /*{
     	path:'/postjob',
     	name:'postjob',
     	component:postjob
-    },
+    },*/
     {
     	path:'/management',
     	name:'management',
     	component:management,
+    	redirect:'/management/pendingresume',
     	children:[
     		{path:'expiredposition',name:'expiredposition',component:expiredposition},
     		{path:'notifiedresume',name:'notifiedresume',component:notifiedresume},

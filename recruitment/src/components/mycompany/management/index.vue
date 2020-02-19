@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div id="body">
-			<headert :navlist='2' :isCompanylist='true'></headert>
+			<headert :navlist='2' :isCompany='true'></headert>
 			<div id="container">
 				<sidebar>
 					<div class="subscribe_side mt20" slot='slot1'>
