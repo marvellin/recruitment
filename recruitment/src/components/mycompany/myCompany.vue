@@ -250,13 +250,13 @@
 						<dd style="height: 200px;">
 							<div class="addnew">
 								发布需要的人才信息，让伯乐和千里马尽快相遇......<br />
-								<router-link to="">+发布招聘职位</router-link>
+								<router-link to="/postjob">+发布招聘职位</router-link>
 							</div>
 						</dd>
 					</dl>
-					<input type="hidden" value="" name="hasNextPage" id="hasNextPage"/>
+					<!--<input type="hidden" value="" name="hasNextPage" id="hasNextPage"/>
 					<input type="hidden" value="" name="pageNo" id="pageNo"/>
-					<input type="hidden" value="" name="pageSize" id="pageSize"/>
+					<input type="hidden" value="" name="pageSize" id="pageSize"/>-->
 					<div id="flag"></div>
 				</div>
 				<div class="content_r">

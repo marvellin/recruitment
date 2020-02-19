@@ -10,6 +10,7 @@ import myresume from '@/components/resume/resume'
 //import resumeupload from '@/components/resume/resumeupload'
 import preview from'@/components/resume/preview'
 import companylist from '@/components/companylist/companylist'
+import postjob from '@/components/mycompany/postjob/create'
 
 Vue.use(Router)
 
@@ -59,6 +60,11 @@ export default new Router({
     	path:'/myresume',
     	name:'myresume',
     	component:myresume,
+    },
+    {
+    	path:'/postjob',
+    	name:'postjob',
+    	component:postjob
     }
   ]
 })

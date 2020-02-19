@@ -10,10 +10,17 @@
 	import menubox from './menubox.vue'
 	export default{
 		name:'mainNavs',
+		created(){
+			this.$axios.get('/static/data/postlist.json').then(res => {
+				this.menulist = res.data.postlist
+//				console.log(this.menulist)
+			})
+		},
 		components:{menubox},
 		data(){
 			return{
-				menulist:[
+				menulist:null
+				/*menulist:[
 					{
 						main:{
 							type:'技术',
@@ -359,7 +366,7 @@
 							}
 						]
 					},
-				]
+				]*/
 			}
 		}
 	}

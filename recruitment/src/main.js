@@ -10,6 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
 import VCharts from 'v-charts'
+import VueQuillEditor from 'vue-quill-editor'
 
 import '../static/css/colorbox.min.css';
 import '../static/css/external.min.css';
@@ -19,6 +20,10 @@ import '../static/css/style.css';
 import '../static/css/ui.css';
 import '../static/css/window.css';
 
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 Vue.config.productionTip = false
 
 Vue.prototype.$axios = axios
@@ -26,6 +31,7 @@ Vue.use(VueAxios,axios)
 Vue.use(ElementUI)
 Vue.use(ViewUI)
 Vue.use(VCharts)
+Vue.use(VueQuillEditor)
 
 /* eslint-disable no-new */
 new Vue({

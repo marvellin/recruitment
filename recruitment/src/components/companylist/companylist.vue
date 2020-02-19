@@ -48,7 +48,7 @@
 	                                	<a href="javascript:void(0)" @click.stop="cityboxshow=true">其他</a> 
 	                                	<div class="triangle citymore_arrow" :class="[cityboxshow?'transform':'']"></div>
 	                                </li>
-		                         	<li id="box_expectCity" class="searchlist_expectCity" @mouseleave="cityboxshow=false" :style="{'display':cityboxshow?'list-item':'none'}">
+		                         	<li id="box_expectCity" class="searchlist_expectCity" :style="{'display':cityboxshow?'list-item':'none'}">
 							            	<span class="bot"></span>
 							            	<span class="top"></span>
 								    		
@@ -768,7 +768,7 @@
 			this.getcurrentlist()
 			document.addEventListener('click',e => {
 				let citybox = document.getElementById('box_expectCity')
-				if(!citybox.contains(e.target)){
+				if(citybox && !citybox.contains(e.target)){
 					this.cityboxshow = false
 				}
 			})
