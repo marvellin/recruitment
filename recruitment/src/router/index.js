@@ -12,6 +12,12 @@ import preview from'@/components/resume/preview'
 import companylist from '@/components/companylist/companylist'
 import postjob from '@/components/mycompany/postjob/create'
 import management from '@/components/mycompany/management/index'
+import expiredposition from '@/components/mycompany/management/exporedposition/exporedposition'
+import notifiedresume from '@/components/mycompany/management/notifiedresume/notifiedresume'
+import pendingresume from '@/components/mycompany/management/pendingresume/pendingresume'
+import postposition from '@/components/mycompany/management/postposition/postposition'
+import unsuitableresume from '@/components/mycompany/management/unsuitableresume/unsuitableresume'
+import validposition from '@/components/mycompany/management/validposition/validposition'
 
 Vue.use(Router)
 
@@ -70,7 +76,15 @@ export default new Router({
     {
     	path:'/management',
     	name:'management',
-    	component:management
+    	component:management,
+    	children:[
+    		{path:'expiredposition',name:'expiredposition',component:expiredposition},
+    		{path:'notifiedresume',name:'notifiedresume',component:notifiedresume},
+    		{path:'pendingresume',name:'pendingresume',component:pendingresume},
+    		{path:'postposition',name:'postposition',component:postposition},
+    		{path:'unsuitableresume',name:'unsuitableresume',component:unsuitableresume},
+    		{path:'validposition',name:'validposition',component:validposition}
+    	]
     }
   ]
 })

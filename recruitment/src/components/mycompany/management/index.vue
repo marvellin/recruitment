@@ -31,10 +31,12 @@
 	import headert from '../../header/header'
 	import footert from '../../footer/footer'
 	import totop from '../../totop/totop'
-	import sidebar from '../sidebar/sidebar'
+	import sidebar from './sidebar/sidebar'
 	export default{
 		name:'postjob',
-		created(){},
+		created(){
+			
+		},
 		components:{
 			headert,
 			footert,

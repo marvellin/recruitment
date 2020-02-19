@@ -769,7 +769,7 @@
 	import headert from '../../header/header'
 	import footert from '../../footer/footer'
 	import totop from '../../totop/totop'
-	import sidebar from '../sidebar/sidebar'
+	import sidebar from '../management/sidebar/sidebar'
 	import jobbox from './jobbox'
 	import editor from '../../editor/editor'
 	export default{
