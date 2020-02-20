@@ -87,13 +87,7 @@
 			},
 			showarr(){
 				console.log(this.checkmodel)
-			}
-		},
-		created(){
-			//获取resume2positionlist
-			this.$axios()
-		},
-		computed:{
+			},
 			showlabel(index){
 				if(this.checkmodel.indexOf(index) > -1){
 					return true
@@ -101,6 +95,16 @@
 					return false
 				}
 			}
+		},
+		created(){
+			//获取resume2positionlist
+			this.$axios.get('/static/data/resume2positionlist.json').then(res => {
+				this.resume2positionlist = res.data.resume2positionlist
+				console.log(this.resume2positionlist)
+			});
+		},
+		computed:{
+			
 		},
 		watch:{
 			checkmodel(){
