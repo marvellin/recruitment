@@ -1698,6 +1698,7 @@ ul.resumeLists li.fileResume .resumeIntro span{	margin-top:-30px;}
 .filter_actions{background:#f2f2f2;padding:15px 20px;position:relative}
 .btm{border-bottom:1px solid #e0e0e0}
 .checkbox{float:left;width:13px;height:13px;border:2px solid #e0e0e0;background:#fff;position:relative;margin-top:3px}
+.checkbox:hover{border:2px solid #91cebe;}
 .checkhover{border:2px solid #91cebe;}
 .checkbox i{display:none;width:17px;height:14px;background:url(img/checkbox.png) 0 -14px no-repeat;position:absolute;left:1px;top:-1px}
 .checkbox input[type="checkbox"]{width:17px;height:17px;margin:0;border:0;position:absolute;left:-2px;top:-2px;filter:alpha(Opacity=0);-moz-opacity:0;opacity:0}
