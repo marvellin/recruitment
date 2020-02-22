@@ -2,13 +2,15 @@
 	"resume2positionlist":[
 		{
 			"resume":{
+				"id":"0",
 				"basicinfo":{
 					"username":"林彬",
 					"tel":"15813359257",
 					"email":"1021478667@qq.com",
 					"gender":"男",
 					"degree":"本科",
-					"workyear":"0"
+					"workyear":"0",
+					"img":"../../../../../static/images/default_headpic.png"
 				},
 				"experiencelist":[
 					{
@@ -30,13 +32,15 @@
 		},
 		{
 			"resume":{
+				"id":"1",
 				"basicinfo":{
 					"username":"关妹",
 					"tel":"18718766575",
 					"email":"65995582@qq.com",
 					"gender":"女",
 					"degree":"高中",
-					"workyear":"10年"
+					"workyear":"10年",
+					"img":"../../../../../static/images/default_headpic.png"
 				},
 				"experiencelist":[
 					{
@@ -58,13 +62,15 @@
 		},
 		{
 			"resume":{
+				"id":"2",
 				"basicinfo":{
 					"username":"林佐",
 					"tel":"13556677508",
 					"email":"1010223687@qq.com",
 					"gender":"男",
 					"degree":"小学",
-					"workyear":"10年"
+					"workyear":"10年",
+					"img":"../../../../../static/images/default_headpic.png"
 				},
 				"experiencelist":[
 					{

@@ -4,7 +4,7 @@
             <dt>
                 <h1>
                     <em></em>
-                                                    待定简历  <span>（共1份）
+                    待处理简历  <span>（共{{resume2positionlist.length}}份）
                     </span>                        
                 </h1>
             </dt>
@@ -16,15 +16,19 @@
 		                    <i :style="{'display':allcheck?'inline':'none'}"></i>
 		                </label>
 		                <span>全选</span>
+		                <a id="resumeRefuseAll" href="javascript:void(0);">通知面试</a>
 		                <a id="resumeRefuseAll" href="javascript:void(0);">不合适</a>
 		            </div><!-- end .filter_actions -->
                     <ul class="reset resumeLists">
 		                <li class="onlineResume" v-for="(item,index) in resume2positionlist" :key='index'>
 			                <label class="checkbox">
-			                    <input type="checkbox" :value="index" v-model="checkmodel" @click="showarr">
+			                    <input type="checkbox" :value="index" v-model="checkmodel">
 			                    <i :style="{'display':showlabel(index)?'inline':'none'}"></i>
 			                </label>
-			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'></resumebox>
+			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'>
+			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>通知面试</a>
+			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2'>不合适</a>	
+			                </resumebox>
 			                <!--<div class="resumeShow">
 			                    <a title="预览在线简历" target="_blank" class="resumeImg" href="resumeView.html?deliverId=1686182">
 			                        <img src="../../../../../static/images/default_headpic.png">
@@ -69,7 +73,7 @@
 	import resumebox from '../resumebox/resumebox'
 	export default{
 		name:'pendingresume',
-		component:{
+		components:{
 			resumebox
 		},
 		data(){
@@ -81,8 +85,14 @@
 		},
 		methods:{
 			checkall(){
-				if(false){
-					
+				if(this.allcheck){
+					this.checkmodel = []
+				}else{
+					this.resume2positionlist.forEach((item,index) => {
+						if(this.checkmodel.indexOf(index) === -1){
+							this.checkmodel.push(index)
+						}
+					})
 				}
 			},
 			showarr(){
@@ -100,7 +110,7 @@
 			//获取resume2positionlist
 			this.$axios.get('/static/data/resume2positionlist.json').then(res => {
 				this.resume2positionlist = res.data.resume2positionlist
-				console.log(this.resume2positionlist)
+//				console.log(this.resume2positionlist)
 			});
 		},
 		computed:{
