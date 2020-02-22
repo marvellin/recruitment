@@ -2,10 +2,12 @@
 	<div class="content">
         <dl class="company_center_content">
             <dt>
-                <h1>
+                <h1 @click='show'>
                     <em></em>
-                                                    不适合简历  <span>（共{{resume2positionlist.length}}份）
-                    </span>                        
+                        	不适合简历 
+                        	<span>
+                        		（共{{resume2positionlist.length}}份）
+                    		</span>                        
                 </h1>
             </dt>
             <dd>
@@ -84,6 +86,9 @@
 			}
 		},
 		methods:{
+			show(){
+				console.log(this.checkmodel)
+			},
 			checkall(){
 				if(this.allcheck){
 					this.checkmodel = []
@@ -106,17 +111,14 @@
 				for(let i = 0; i < this.resume2positionlist.length; i++){
 					if(this.resume2positionlist[i].resume.id == id){
 						this.resume2positionlist.splice(i,1)
+						if(this.checkmodel.indexOf(id) > -1){
+							this.checkmodel.splice(this.checkmodel.indexOf(id),1)
+						}
 						break
 					}
 				}
 			},
 			deletemul(){
-				/*for(let i = 0; i < this.resume2positionlist.length; i++){
-					if(this.checkmodel.indexOf(this.resume2positionlist[i].resume.id)){
-						this.resume2positionlist.splice(i,1)
-						i--
-					}
-				}*/
 				for(let i = this.checkmodel.length - 1; i >= 0; i--){
 					let index = this.resume2positionlist.findIndex((item) => item.resume.id === this.checkmodel[i])
 					this.resume2positionlist.splice(index,1)

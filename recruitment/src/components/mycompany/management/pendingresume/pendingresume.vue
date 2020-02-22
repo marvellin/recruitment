@@ -97,9 +97,6 @@
 					})
 				}
 			},
-			showarr(){
-				console.log(this.checkmodel)
-			},
 			showlabel(index){
 				if(this.checkmodel.indexOf(index) > -1){
 					return true
