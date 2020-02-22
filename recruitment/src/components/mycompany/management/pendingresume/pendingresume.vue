@@ -17,6 +17,7 @@
 		                </label>
 		                <span>全选</span>
 		                <a id="resumeRefuseAll" href="javascript:void(0);">通知面试</a>
+		                <a id="resumeRefuseAll" href="javascript:void(0);">待定</a>
 		                <a id="resumeRefuseAll" href="javascript:void(0);">不合适</a>
 		            </div><!-- end .filter_actions -->
                     <ul class="reset resumeLists">
@@ -27,6 +28,7 @@
 			                </label>
 			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'>
 			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>通知面试</a>
+			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>待定</a>
 			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2'>不合适</a>	
 			                </resumebox>
 			                <!--<div class="resumeShow">

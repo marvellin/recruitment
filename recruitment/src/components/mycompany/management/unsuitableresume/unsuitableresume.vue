@@ -16,7 +16,7 @@
 		                    <i :style="{'display':allcheck?'inline':'none'}"></i>
 		                </label>
 		                <span>全选</span>
-		                <a id="resumeRefuseAll" href="javascript:void(0);">通知面试</a>
+		                <!--<a id="resumeRefuseAll" href="javascript:void(0);">通知面试</a>-->
 		                <a id="resumeRefuseAll" @click.stop="deletemul" href="javascript:void(0);">删除</a>
 		            </div><!-- end .filter_actions -->
                     <ul class="reset resumeLists">
@@ -26,7 +26,7 @@
 			                    <i :style="{'display':showlabel(item.resume.id)?'inline':'none'}"></i>
 			                </label>
 			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'>
-			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>通知面试</a>
+			                	<!--<a class="resume_notice" href="javascript:void(0)" slot='slot1'>通知面试</a>-->
 			                	<a class="resume_notice" @click.stop="deleteone(item.resume.id)" href="javascript:void(0)" slot='slot2'>删除</a>
 			                </resumebox>
 			                <!--<div class="resumeShow">

@@ -18,6 +18,7 @@ import pendingresume from '@/components/mycompany/management/pendingresume/pendi
 import postposition from '@/components/mycompany/management/postposition/postposition'
 import unsuitableresume from '@/components/mycompany/management/unsuitableresume/unsuitableresume'
 import validposition from '@/components/mycompany/management/validposition/validposition'
+import undeterminedresume from '@/components/mycompany/management/undeterminedresume/undeterminedresume'
 
 Vue.use(Router)
 
@@ -84,7 +85,8 @@ export default new Router({
     		{path:'pendingresume',name:'pendingresume',component:pendingresume},
     		{path:'postposition',name:'postposition',component:postposition},
     		{path:'unsuitableresume',name:'unsuitableresume',component:unsuitableresume},
-    		{path:'validposition',name:'validposition',component:validposition}
+    		{path:'validposition',name:'validposition',component:validposition},
+    		{path:'undeterminedresume',name:'undeterminedresume',component:undeterminedresume}
     	]
     }
   ]

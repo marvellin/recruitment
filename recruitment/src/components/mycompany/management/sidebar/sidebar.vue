@@ -8,13 +8,13 @@
 							<!--<a href="">待处理简历</a>--> 
 							<router-link to="pendingresume">待处理简历</router-link>
 						</dd>
-						<!--<dd>
-							<a href="">待定简历</a>
-							<router-link to="">待定简历</router-link>
-						</dd>-->
 						<dd :class="[currentroute=='notifiedresume'?'current':'']">
 							<!--<a href="">已通知面试简历</a>-->
 							<router-link to="notifiedresume">已通知面试简历</router-link>
+						</dd>
+						<dd :class="[currentroute=='undeterminedresume'?'current':'']">
+							<!--<a href="">已通知面试简历</a>-->
+							<router-link to="undeterminedresume">待定简历</router-link>
 						</dd>
 						<dd :class="[currentroute=='unsuitableresume'?'current':'']">
 							<!--<a href="">不合适简历</a>-->
