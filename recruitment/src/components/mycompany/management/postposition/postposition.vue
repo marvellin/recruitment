@@ -358,7 +358,7 @@
 			                                	<td width="25"></td>
 			                                	<td colspan="2">
 			                                    	<input type="button" value="预览" id="jobPreview" class="btn_32 fl">
-			                                    	<input type="button" @click="showjob" value="发布" id="formSubmit" class="btn_32 fr">
+			                                    	<input type="button" @click="postposition" value="发布" id="formSubmit" class="btn_32 fr">
 			                                    </td>
 			                                </tr>
 		                         		</tbody>
@@ -438,6 +438,15 @@
 			}
 		},
 		methods:{
+			postposition(){
+				if(this.job){
+					this.$axios.post('http://127.0.0.1:3000/position',this.job).then(res => {
+						console.log(res)
+					}).catch(err => {
+						console.log(err)
+					})
+				}
+			},
 			getdetail(v){
 //				console.log(v)
 				this.job.detail = v
