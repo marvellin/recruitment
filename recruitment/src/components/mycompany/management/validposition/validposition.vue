@@ -20,20 +20,6 @@
 								</span>
 								<a class="job_offline" href="javascript:void(0)" slot="slot2">下线</a> 
 				        	</positionbox>
-		                    <!--<h3>
-		                        <router-link target="_blank" title="" to="">{{position.name}}</router-link>
-		                        <span>[{{position.city}}]</span>
-		                    </h3>
-		                    <span class="receivedResumeNo">
-		                    	<a href="unHandleResumes.html?positionId=149594">应聘简历（{{1}}）</a>
-		                    </span>
-		                    <div>{{position.type}} / {{position.salarymin}}k-{{position.salarymax}}k / {{position.experience}} / {{position.degree}}及以上</div>
-		                    <div class="c9">发布时间： {{time}}</div>
-			                <div class="links">
-		                        <router-link target = "_blank" class="job_edit" to="">编辑</router-link>
-		                        <a class="job_offline" href="javascript:void(0)">下线</a>                      
-		                        <a class="job_del" href="javascript:void(0)">删除</a>
-		                    </div>-->
 		                </li>
 	                </ul>
 			    </form>

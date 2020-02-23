@@ -1,10 +1,10 @@
 <template>
-<div class="content">
+	<div class="content">
         <dl class="company_center_content">
             <dt>
                 <h1>
                     <em></em>
-                                                    已下线职位                     
+                                                     已下线职位                     
                 </h1>
             </dt>
             <dd>
@@ -13,6 +13,7 @@
 				        <li v-for="(item,index) in position2resumelist" :key='index'>
 				        	<positionbox :time='item.time' :position='item.position'>
 								<a class="job_offline" href="javascript:void(0)" slot="slot2">上线</a> 
+								<a class="job_del" href="javascript:void(0)" slot="slot3">删除</a>
 				        	</positionbox>
 		                </li>
 	                </ul>

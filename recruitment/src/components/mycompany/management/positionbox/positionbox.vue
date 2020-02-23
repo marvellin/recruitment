@@ -11,7 +11,7 @@
 		<div class="links">
 		    <router-link target = "_blank" class="job_edit" to="">编辑</router-link>
 		    <slot name="slot2"></slot>                     
-		    <a class="job_del" href="javascript:void(0)">删除</a>
+		    <slot name="slot3"></slot>
 		</div>
 	</div>
 </template>
