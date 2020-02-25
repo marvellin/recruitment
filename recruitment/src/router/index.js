@@ -5,12 +5,9 @@ import login from '@/components/login&register/login/login'
 import hotlist from '@/components/home/hotlist/hotlist'
 import register from '@/components/login&register/register/register'
 import myCompany from '@/components/mycompany/myCompany'
-//import logoUpload from '@/components/mycompany/logoUpload/logoUpload'
 import myresume from '@/components/resume/resume'
-//import resumeupload from '@/components/resume/resumeupload'
 import preview from'@/components/resume/preview'
 import companylist from '@/components/companylist/companylist'
-//import postjob from '@/components/mycompany/postjob/create'
 import management from '@/components/mycompany/management/index.vue'
 import expiredposition from '@/components/mycompany/management/expiredposition/expiredposition'
 import notifiedresume from '@/components/mycompany/management/notifiedresume/notifiedresume'
@@ -19,6 +16,7 @@ import postposition from '@/components/mycompany/management/postposition/postpos
 import unsuitableresume from '@/components/mycompany/management/unsuitableresume/unsuitableresume'
 import validposition from '@/components/mycompany/management/validposition/validposition'
 import undeterminedresume from '@/components/mycompany/management/undeterminedresume/undeterminedresume'
+import positiondetail from '@/components/positiondetail/positiondetail'
 
 Vue.use(Router)
 
@@ -88,6 +86,11 @@ export default new Router({
     		{path:'validposition',name:'validposition',component:validposition},
     		{path:'undeterminedresume',name:'undeterminedresume',component:undeterminedresume}
     	]
+    },
+    {
+    	path:'/positiondetail',
+    	name:'positiondetail',
+    	component:positiondetail
     }
   ]
 })
