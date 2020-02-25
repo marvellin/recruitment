@@ -41,7 +41,7 @@
 							<i></i>
 						</dt>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/myresume">我的简历</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我的收藏</router-link></dd>
+						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/collection">我的收藏</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="">我的订阅</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>

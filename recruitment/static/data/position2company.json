@@ -1,0 +1,32 @@
+{
+	"position2companylist":[
+		{
+			"position":{
+				"name":"酒店业务助理",
+				"city":"北京",
+				"experience":"1-3年",
+				"degree":"本科",
+				"advantage":"出勤福利"
+			},
+			"time":"2014-06-07 09:37",
+			"company":{
+				"name":"携程旅行网",
+				"img":"../../../static/images/ff808081441c19bf01441f9a47190b3a.png"
+			}
+		},
+		{
+			"position":{
+				"name":"PHP",
+				"city":"杭州",
+				"experience":"不限",
+				"degree":"本科",
+				"advantage":"技术挑战"
+			},
+			"time":"2014-07-01 09:41",
+			"company":{
+				"name":"蘑菇街",
+				"img":"../../../static/images/ff80808142a8df050142b1674c596676.jpg"
+			}
+		}
+	]
+}
