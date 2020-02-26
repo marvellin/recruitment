@@ -1,10 +1,10 @@
 <template>
 	<div>
-		<div id="body" style="min-height: 835px;">
+		<div id="body">
 			<headert :isCompany="false" :navlist="1"></headert>
 			<div id="container">
 				<div class="clearfix">
-		            <div class="content_l">
+		            <div class="content_l" style="min-height: 835px;">
 		            	<dl class="c_collections">
 		                    <dt>
 		                        <h1><em></em>我收藏的职位</h1>
@@ -12,7 +12,7 @@
 		                    <dd>
 		                    	<form id="collectionsForm">
 		                            <ul class="reset my_collections">
-		                            	<li v-for="(item,index) in position2companylist">
+		                            	<li v-for="(item,index) in position2companylist" :key="index">
 		                            		<positionbox :position="item.position" :time="item.time" :company="item.company"></positionbox>
 		                            	</li>
 		                               	<!--<li data-id="133340">
