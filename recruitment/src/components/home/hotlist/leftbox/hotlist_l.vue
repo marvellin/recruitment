@@ -5,7 +5,7 @@
 				&nbsp;
 			<span class="c9">[{{job.address}}]</span>
 		</div>
-		<span><em class="c7">月薪：</em>{{job.salary}}</span>
+		<span><em class="c7">月薪：</em>{{job.salarymin}}K-{{job.salarymax}}K</span>
 		<span><em class="c7">经验：</em>{{job.experience}}</span>
 		<span><em class="c7">最低学历：</em>{{job.education}}</span>
 		<br />

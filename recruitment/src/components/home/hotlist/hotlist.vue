@@ -36,7 +36,8 @@
 						job:{
 							name:"1",
 							address:"1",
-							salary:"1",
+							salarymin:"1",
+							salarymax:"100",
 							education:'1',
 							benefits:'1',
 							releaseTime:'1'
@@ -58,7 +59,8 @@
 						job:{
 							name:"2",
 							address:"2",
-							salary:"2",
+							salarymin:"2",
+							salarymax:"100",
 							education:'2',
 							benefits:'2',
 							releaseTime:'2'
@@ -80,7 +82,8 @@
 						job:{
 							name:"3",
 							address:"3",
-							salary:"3",
+							salarymin:"3",
+							salarymax:"100",
 							education:'3',
 							benefits:'3',
 							releaseTime:'3'
@@ -102,7 +105,8 @@
 						job:{
 							name:"2",
 							address:"2",
-							salary:"2",
+							salarymin:"2",
+							salarymax:"100",
 							education:'2',
 							benefits:'2',
 							releaseTime:'2'
@@ -126,7 +130,8 @@
 						job:{
 							name:"pp",
 							address:"pp",
-							salary:"pp",
+							salarymin:"pp",
+							salarymax:"100",
 							education:'pp',
 							benefits:'pp',
 							releaseTime:'pp'
@@ -148,7 +153,8 @@
 						job:{
 							name:"2",
 							address:"2",
-							salary:"2",
+							salarymin:"2",
+							salarymax:"100",
 							education:'2',
 							benefits:'2',
 							releaseTime:'2'
@@ -170,7 +176,8 @@
 						job:{
 							name:"3",
 							address:"3",
-							salary:"3",
+							salarymin:"3",
+							salarymax:"100",
 							education:'3',
 							benefits:'3',
 							releaseTime:'3'
@@ -192,7 +199,8 @@
 						job:{
 							name:"2",
 							address:"2",
-							salary:"2",
+							salarymin:"2",
+							salarymax:"100",
 							education:'2',
 							benefits:'2',
 							releaseTime:'2'

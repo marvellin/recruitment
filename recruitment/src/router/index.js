@@ -18,6 +18,7 @@ import validposition from '@/components/mycompany/management/validposition/valid
 import undeterminedresume from '@/components/mycompany/management/undeterminedresume/undeterminedresume'
 import positiondetail from '@/components/positiondetail/positiondetail'
 import collection from '@/components/collection/collection'
+import positionlist from '@/components/positionlist/positionlist'
 
 Vue.use(Router)
 
@@ -97,6 +98,11 @@ export default new Router({
     	path:'/collection',
     	name:'collection',
     	component:collection
+    },
+    {
+    	path:'/positionlist',
+    	name:'positionlist',
+    	component:positionlist
     }
   ]
 })

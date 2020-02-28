@@ -1,5 +1,6 @@
 <template>
 	<div class="hot_pos_r">
+		<slot name="slot1"></slot>
 		<div class="mb10 recompany">
 			<router-link to="" target="_blank">{{company.name}}</router-link>
 		</div>

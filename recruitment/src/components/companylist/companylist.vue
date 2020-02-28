@@ -17,33 +17,7 @@
 		                        	<li v-for="(item,index) in citylist.hotcities" :key='index'>
 		                        		<a href="javascript:void(0)" @click="pickcity(item)" :class="">{{item}}</a> |
 		                        	</li>
-		                        	<!--<li>
-	                                	<a href="javascript:void(0)"  class="current" >全国</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >北京</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >上海</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >广州</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >深圳</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >成都</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >杭州</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >武汉</a> |
-	                                </li>
-		                            <li >
-	                                	<a href="javascript:void(0)" >南京</a> |
-	                                </li>-->
+		                        	
 		                            <li  class="more" :class="[cityboxshow?'open':'']">
 	                                	<a href="javascript:void(0)" @click.stop="cityboxshow=true">其他</a> 
 	                                	<div class="triangle citymore_arrow" :class="[cityboxshow?'transform':'']"></div>
@@ -58,16 +32,6 @@
 									    			<span v-for="(item,index) in citylist.list1" :key='index' @click="pickcity(item)">
 									    				{{item}}
 									    			</span>
-									     										     				<!--<span>北京</span>
-									     										     				<span>长春</span>
-									     										     				<span>成都</span>
-									     										     				<span>重庆</span>
-									     										     				<span>长沙</span>
-									     										     				<span>常州</span>
-									     										     				<span>东莞</span>
-									     										     				<span>大连</span>
-									     										     				<span>佛山</span>
-									     										     				<span>福州</span>-->
 									     		</dd>
 									     	</dl>
 									    	<dl>
@@ -76,16 +40,6 @@
 									    			<span v-for="(item,index) in citylist.list2" :key='index' @click="pickcity(item)">
 									    				{{item}}
 									    			</span>
-									     										     				<!--<span>贵阳</span>
-									     										     				<span>广州</span>
-									     										     				<span>哈尔滨</span>
-									     										     				<span>合肥</span>
-									     										     				<span>海口</span>
-									     										     				<span>杭州</span>
-									     										     				<span>惠州</span>
-									     										     				<span>金华</span>
-									     										     				<span>济南</span>
-									     										     				<span>嘉兴</span>-->
 									     		</dd>
 									    	</dl>
 									    	<dl>
@@ -94,13 +48,6 @@
 									    				<span v-for="(item,index) in citylist.list3" :key='index' @click="pickcity(item)">
 									    					{{item}}
 									    				</span>
-									     										     				<!--<span>昆明</span>
-									     										     				<span>廊坊</span>
-									     										     				<span>宁波</span>
-									     										     				<span>南昌</span>
-									     										     				<span>南京</span>
-									     										     				<span>南宁</span>
-									     										     				<span>南通</span>-->
 									     			</dd>
 									    	</dl>
 									    	<dl>
@@ -109,8 +56,6 @@
 									    				<span v-for="(item,index) in citylist.list4" :key='index' @click="pickcity(item)">
 									    					{{item}}
 									    				</span>
-									     										     				<!--<span>青岛</span>
-									     										     				<span>泉州</span>-->
 									     			</dd>
 									    	</dl>
 									    	<dl>
@@ -119,15 +64,6 @@
 									    				<span v-for="(item,index) in citylist.list5" :key='index' @click="pickcity(item)">
 									    					{{item}}
 									    				</span>
-									     										     				<!--<span>上海</span>
-									     										     				<span>石家庄</span>
-									     										     				<span>绍兴</span>
-									     										     				<span>沈阳</span>
-									     										     				<span>深圳</span>
-									     										     				<span>苏州</span>
-									     										     				<span>天津</span>
-									     										     				<span>太原</span>
-									     										     				<span>台州</span>-->
 									     			</dd>
 									    	</dl>
 									    	<dl>
@@ -136,15 +72,6 @@
 									    				<span v-for="(item,index) in citylist.list6" :key='index' @click="pickcity(item)">
 									    					{{item}}
 									    				</span>
-									     										     				<!--<span>武汉</span>
-									     										     				<span>无锡</span>
-									     										     				<span>温州</span>
-									     										     				<span>西安</span>
-									     										     				<span>厦门</span>
-									     										     				<span>烟台</span>
-									     										     				<span>珠海</span>
-									     										     				<span>中山</span>
-									     										     				<span>郑州</span>-->
 									     			</dd>
 									    	</dl>
 								    	</li>
@@ -612,17 +539,7 @@
 	               	</a>
 	            </div>
 	       	</div>
-			<!--<script>
-				$(function(){
-			 	 	 				 		$('.Pagination').pager({
-				      currPage: 1,
-				      pageNOName: "pn",
-				      form: "companyListForm",
-				      pageCount: 20,
-				      pageSize: 5
-				});	
-				})
-			</script> -->      	
+			     	
 			<div class="clear"></div>
 	    	<totop></totop>
 	    </div>

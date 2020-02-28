@@ -15,7 +15,7 @@
 			</ul>
 			<div :class="[searchtype_arrow,show?'transform':'']"></div>
 			<input type="text" id="search_input" name="kd" tabindex="1" value="" :placeholder="placeholder"/>
-			<input type="hidden" name="spc" id="spcInput" value=""/>
+			<!--<input type="hidden" name="spc" id="spcInput" value=""/>
 			<input type="hidden" name="pl" id="plInput" value=""/>
 			<input type="hidden" name="gj" id="gjInput" value=""/>
 			<input type="hidden" name="xl" id="xlInput" value=""/>
@@ -25,8 +25,8 @@
 			<input type="hidden" name="labelWords" id="labelWords" value=""/>
 			<input type="hidden" name="lc" id="lc" value=""/>
 			<input type="hidden" name="workAddress" id="workAddress" value=""/>
-			<input type="hidden" name="city" id="cityInput" value=""/>
-			<input type="submit" id="search_button" value="搜索"/>
+			<input type="hidden" name="city" id="cityInput" value=""/>-->
+			<input type="submit" @click="topositionlist" id="search_button" value="搜索"/>
 		</form>
 	</div>
 </template>
@@ -58,6 +58,9 @@
 //				console.log("click company")
 				this.comshow=true
 				this.placeholder='  请输入公司名称'
+			},
+			topositionlist(){
+				this.$router.push({path:"/positionlist"})
 			}
 		}
 	}
