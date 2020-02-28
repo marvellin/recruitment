@@ -48,25 +48,12 @@
 			                                    			{{item}}<em></em>
 			                                    			<input type="radio" name="jobNature" :value="item"/>
 			                                    		</li>
-			                                    		<!--<li>
-			                                                                                                                             全职<em></em>
-			                                                <input type="radio" name="jobNature" value="全职"> 
-			                                            </li>
-			                                            <li>
-			                                                                                                                             兼职<em></em>
-			                                                <input type="radio" name="jobNature" value="兼职"> 
-			                                            </li>
-			                                            <li>
-			                                                                                                                             实习<em></em>
-			                                                <input type="radio" name="jobNature" value="实习"> 
-			                                            </li>-->
 			                                        </ul>
 			                                    </td>
 			                                </tr>
 			                            	<tr>
 			                                	<td><span class="redstar">*</span></td>
 			                                	<td>月薪范围</td>
-			                                    <!--<h3><span>(最高月薪不能大于最低月薪的2倍)</span></h3> -->
 			                                	<td>
 			                                    	<div class="salary_range">
 			                                            <div>
@@ -85,8 +72,60 @@
 			                            	<tr>
 			                                	<td><span class="redstar">*</span></td>
 			                                	<td>工作城市</td>
-			                                	<td>
-			                                    	<input type="text" style="width: 380px;height: 46px;" placeholder="请输入工作城市，如：北京" v-model="job.city" name="workAddress" id="workAddress">
+			                                	<td style="position: relative;">
+			                                    	<input type="text" @click="cityboxshow=true" readonly="readonly" style="width: 380px;height: 46px;" placeholder="请输入工作城市，如：北京" v-model="job.city" name="workAddress" id="workAddress">
+			                                    	<dd style="top:-400px;position: absolute;background-color: white;border: solid #019875 2px;overflow: hidden;z-index: 110;" id="box_expectCity" class="searchlist_expectCity" :style="{'display':cityboxshow?'block':'none'}">
+									            		<span class="bot"></span>
+									            		<span class="top"></span>
+										    			<dl>
+											    			<dt>ABCDEF</dt>
+											    			<dd>
+											    				<span @click="pickcity(item)" v-for="(item,index) in citylist.list1" :key="index">
+											    					{{item}}
+											    				</span>
+											     			</dd>
+											    	  	</dl>
+											    	  	<dl>
+											    			<dt>GHIJ</dt>
+											    			<dd>
+											    				<span @click="pickcity(item)" v-for="(item,index) in citylist.list2" :key="index">
+											    					{{item}}
+											    				</span>
+											     			</dd>
+											    	  	</dl>
+											    	  	<dl>
+											    			<dt>KLMN</dt>
+											    			<dd>
+											    				<span @click="pickcity(item)" v-for="(item,index) in citylist.list3" :key="index">
+											    					{{item}}
+											    				</span>
+											     			</dd>
+											    	  	</dl>
+											    	  	<dl>
+											    			<dt>OPQR</dt>
+											    			<dd>
+											    				<span @click="pickcity(item)" v-for="(item,index) in citylist.list4" :key="index">
+											    					{{item}}
+											    				</span>
+											     			</dd>
+											    	  	</dl>
+											    	  	<dl>
+											    			<dt>STUV</dt>
+											    			<dd>
+											    				<span @click="pickcity(item)" v-for="(item,index) in citylist.list5" :key="index">
+											    					{{item}}
+											    				</span>
+											     			</dd>
+											    	  	</dl>
+											    	  	<dl>
+											    			<dt>WXYZ</dt>
+											    			<dd>
+											    				<span @click="pickcity(item)" v-for="(item,index) in citylist.list6" :key="index">
+											    					{{item}}
+											    				</span>
+											     			</dd>
+											    	  	</dl>
+										    		</dd>
 			                                    </td>
 			                                </tr>
 		                            	</tbody>
@@ -366,33 +405,7 @@
 		</form>
 		</dd>
 		</dl>
-	</div><!-- end .content -->
-
-<!------------------------------------- 弹窗lightbox ----------------------------------------->
-				<!--联系方式弹窗-->	
-				<!--<div style="display:none;">
-				        <div style="height:180px;" class="popup" id="telTip">
-					        <form id="telForm">
-					        	<table width="100%">
-					            	<tbody><tr>
-					            		<td align="center" class="f18">留个联系方式方便我们联系你吧！</td>
-					            	</tr>
-					            	<tr>
-					                	<td align="center">
-											<input type="text" maxlength="49" placeholder="请输入你的手机号码或座机号码" name="tel">
-											<span style="display:none;" class="error" id="telError"></span>
-										</td>
-					                </tr>
-					                <tr>
-					                	<td align="center">
-					                		<input type="submit" value="提交" class="btn">
-					                	</td>
-					                </tr>
-					            </tbody></table>
-				            </form>
-				        </div>
-				</div>-->
-<!------------------------------------- end ----------------------------------------->
+	</div>
 
 </template>
 
@@ -416,9 +429,19 @@
 		data(){
 			return{
 				jobboxshow:false,
+				cityboxshow:false,
 				experienceboxshow:false,
 				degreeboxshow:false,
 				jobtypelist:['全职','兼职','实习'],
+				citylist:{
+					hotcities:['北京','上海','广州','深圳','成都','杭州','武汉','南京'],
+					list1:['北京','长春','成都','重庆','长沙','常州','东莞','大连','佛山','福州'],
+					list2:['贵阳','广州','哈尔滨','合肥','海口','杭州','惠州','金华','济南','嘉兴'],
+					list3:['昆明','廊坊','宁波','南昌','南京','南宁','南通'],
+					list4:['青岛','泉州'],
+					list5:['上海','石家庄','绍兴','沈阳','深圳','苏州','天津','太原','台州'],
+					list6:['武汉','无锡','温州','西安','厦门','烟台','珠海','中山','郑州']
+				},
 				experiencelist:['不限','应届毕业生','1年以下','1-3年','3-5年','5-10年'],
 				degreelist:['不限','大专','本科','硕士','博士'],
 				job:{
@@ -462,6 +485,11 @@
 			},
 			showjob(){
 				console.log(this.job)
+			},
+			pickcity(city){
+				this.job.city = city
+				this.cityboxshow = false
+				console.log(this.job.city)
 			}
 		}
 	}
