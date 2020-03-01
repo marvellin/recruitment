@@ -73,7 +73,7 @@
 			                                	<td><span class="redstar">*</span></td>
 			                                	<td>工作城市</td>
 			                                	<td style="position: relative;">
-			                                    	<input type="text" @click="cityboxshow=true" readonly="readonly" style="width: 380px;height: 46px;" placeholder="请输入工作城市，如：北京" v-model="job.city" name="workAddress" id="workAddress">
+			                                    	<input type="text" @click.stop="cityboxshow=true" readonly="readonly" style="width: 380px;height: 46px;" placeholder="请输入工作城市，如：北京" v-model="job.city" name="workAddress" id="workAddress">
 			                                    	<dd style="top:-400px;position: absolute;background-color: white;border: solid #019875 2px;overflow: hidden;z-index: 110;" id="box_expectCity" class="searchlist_expectCity" :style="{'display':cityboxshow?'block':'none'}">
 									            		<span class="bot"></span>
 									            		<span class="top"></span>
@@ -416,9 +416,9 @@
 		name:'postposition',
 		created(){
 			document.addEventListener('click',e => {
-				let jobbox = document.getElementById("box_job")
+				let jobbox = document.getElementById("box_expectCity")
 				if(jobbox && !jobbox.contains(e.target)){
-					this.jobboxshow=false
+					this.cityboxshow=false
 				}
 			})
 		},
@@ -489,7 +489,6 @@
 			pickcity(city){
 				this.job.city = city
 				this.cityboxshow = false
-				console.log(this.job.city)
 			}
 		}
 	}

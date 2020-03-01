@@ -1383,6 +1383,10 @@
 		            		<br>
 		            		<!--<a target="_blank" href="subscribe.html">我订阅的职位</a>-->
 		            		<router-link to="" target="_blank">我订阅的职位</router-link>
+		            		<br />
+		            		<router-link to="" target="_blank">我投递的职位<!--<span id="noticeNoPage" class="red dn">&nbsp;(0)</span>--></router-link>
+		            		<br />
+		            		<router-link to="">我的简历</router-link>
 		            	</div><!--end #myInfo-->
 		
 						<div class="mycenterR" id="myResume">

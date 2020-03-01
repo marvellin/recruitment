@@ -19,6 +19,8 @@ import undeterminedresume from '@/components/mycompany/management/undeterminedre
 import positiondetail from '@/components/positiondetail/positiondetail'
 import collection from '@/components/collection/collection'
 import positionlist from '@/components/positionlist/positionlist'
+import delivery from '@/components/delivery/delivery'
+import deliveryform from '@/components/delivery/deliveryform/deliveryform'
 
 Vue.use(Router)
 
@@ -103,6 +105,29 @@ export default new Router({
     	path:'/positionlist',
     	name:'positionlist',
     	component:positionlist
+    },
+    {
+    	path:'/delivery',
+    	name:'delivery',
+    	component:delivery,
+    	redirect:'/delivery/all',
+    	children:[
+    		{
+    			path:'all',
+    			name:'all',
+    			component:deliveryform
+    		},
+    		{
+    			path:'interview',
+    			name:'interview',
+    			component:deliveryform
+    		},
+    		{
+    			path:'improper',
+    			name:'improper',
+    			component:deliveryform
+    		}
+    	]
     }
   ]
 })

@@ -1128,8 +1128,8 @@ a.greylink{ color:#555;font-size:18px; margin-right:60px;text-decoration:underli
 .c_delivery > dd{color:#555; padding:55px 0 20px 0;clear:both; }
 .d_refresh{font-size:18px;color:#555;background:url(img/refresh.png) left center no-repeat; padding-left:20px; position:absolute;right:50px;top:16px;}
 .delivery_tabs{	background:#e9f2ee;	padding:10px 0;}
-.delivery_tabs ul{background:#fff;margin:0 48px;border-bottom:1px solid #d8d8d8;font-size: 0;}
-.delivery_tabs li{padding:9px 0 5px 0;*padding:9px 0 9px 0;display:inline-block;*display:inline;*zoom:1;}
+.delivery_tabs ul{text-align:center;background:#fff;margin:0 48px;border-bottom:1px solid #d8d8d8;font-size: 0;}
+.delivery_tabs li{width:33%;padding:9px 0 5px 0;*padding:9px 0 9px 0;display:inline-block;*display:inline;*zoom:1;}
 .delivery_tabs li a{display:block;*display:inline;padding:3px 21px;font-size:16px;line-height:22px;color:#777;border-right:1px solid #d8d8d8;}
 .delivery_tabs li.last a{width:55px;border-right:none;}
 .delivery_tabs li.current{border-bottom:4px solid #019875;}
@@ -1170,12 +1170,12 @@ ul.my_delivery{margin:20px 48px;}
 .status_steps .status_done{width:28px;height:28px;background:url(img/status_bg.png) left top no-repeat;}
 .status_steps .status_grey{width:28px;height:28px;background:url(img/status_bg.png) left bottom no-repeat;}
 .status_steps .status_1{margin-left:20px;}
-.status_steps .status_line{width:120px;margin-top:12px;}
+.status_steps .status_line{width:200px;margin-top:12px;}
 .status_steps .status_line_done span{display:block; height:4px;background:#019875;}
 .status_steps .status_line_grey span{display:block; height:4px;background:#dadada;}
 .status_text li{float:left;color:#333;font-size:16px;line-height:28px;margin:5px 0 30px 0;}
-.status_text li.status_text_2{margin-left:80px;}
-.status_text li.status_text_3{margin-left:60px;}
+.status_text li.status_text_2{margin-left:158px;}
+.status_text li.status_text_3{margin-left:148px;}
 .status_text li.status_text_4{margin-left:82px;}
 .status_list li{margin:0;}
 .status_list .list_time{font-size:12.5px;color:#999;padding-left:20px;position:relative;}

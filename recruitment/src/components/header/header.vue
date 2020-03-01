@@ -30,7 +30,7 @@
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/management/validposition">我发布的职位</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/management">我收到的简历</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/mycompany">我的公司主页</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要找工作</router-link></dd>
+					<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要找工作</router-link></dd>-->
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
 				</dl>
@@ -42,11 +42,11 @@
 						</dt>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/myresume">我的简历</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/collection">我的收藏</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="">我的订阅</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>
+						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/delivery">我的投递</router-link></dd>
+						<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>-->
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
-					</dl>
+				</dl>
 			</div>
 		</div>
 </template>
@@ -70,7 +70,7 @@
 			}
 		},
 		created(){
-			if(this.navlist == '0'){//代表首页
+			if(this.navlist == '0'){//代表用户未登录时
 				this.varnavlist = [{path:'/myresume',name:'我的简历'},{path:'/management/postposition',name:'发布职位'}]
 			}
 			else if(this.navlist == '1'){//代表个人用户页面
