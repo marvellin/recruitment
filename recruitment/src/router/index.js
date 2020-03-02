@@ -25,6 +25,7 @@ import deliveryform from '@/components/delivery/deliveryform/deliveryform'
 Vue.use(Router)
 
 export default new Router({
+	mode:"history",
   routes: [
     {
       path: '/',

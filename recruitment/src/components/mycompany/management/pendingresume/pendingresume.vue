@@ -16,7 +16,7 @@
 		                    <i :style="{'display':allcheck?'inline':'none'}"></i>
 		                </label>
 		                <span>全选</span>
-		                <a id="resumeRefuseAll" href="javascript:void(0);">通知面试</a>
+		                <a id="resumeRefuseAll" @click.prevent="inform" href="javascript:void(0);">通知面试</a>
 		                <a id="resumeRefuseAll" href="javascript:void(0);">待定</a>
 		                <a id="resumeRefuseAll" href="javascript:void(0);">不合适</a>
 		            </div><!-- end .filter_actions -->
@@ -86,6 +86,9 @@
 			}
 		},
 		methods:{
+			inform(){
+				this.$emit("inform",'')
+			},
 			checkall(){
 				if(this.allcheck){
 					this.checkmodel = []

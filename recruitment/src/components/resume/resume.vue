@@ -2,46 +2,7 @@
 	<div>
 		<!--<keep-alive>-->
 		<div id="body">
-			<!--<div id="header">
-				<div class="wrapper">
-					<router-link class="logo" to="/">
-						<img width="229" @mouseover="showgender" height="60" alt="全国招聘第一站" src="../../../build/logo.png"/>
-					</router-link>
-					<ul id="navheader" class="reset">
-						<li>
-							<router-link to="/home">首页</router-link>
-						</li>
-						<li>
-							<router-link to="/mycompany">公司</router-link>
-						</li>
-						<li>
-							<router-link to="/forumHome" target="_blank">论坛</router-link>
-						</li>
-						<li class="current">
-							<router-link to="/resumeHome">我的简历</router-link>
-						</li>
-					</ul>
-					<dl class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
-						<dt>
-							<span>person&nbsp;</span>
-							<span class="red dn" id="noticeDot-1"></span>
-							<i></i>
-						</dt>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我的简历</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我的收藏</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="">我的订阅</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
-					</dl>
-					<div class="dn" id="noticeTip">
-		            	<span class="bot"></span>
-						<span class="top"></span>
-						<a target="_blank" href="delivery.html"><strong>0</strong>条新投递反馈</a>
-						<a class="closeNT" href="javascript:;"></a>
-	            	</div>
-				</div>
-			</div>-->
+			
 			<headert :navlist='1' :isCompany="false"></headert>
 			<div id="container">       
 	  			<div class="clearfix">
