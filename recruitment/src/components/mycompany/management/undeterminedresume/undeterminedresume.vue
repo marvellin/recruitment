@@ -26,7 +26,7 @@
 			                    <i :style="{'display':showlabel(index)?'inline':'none'}"></i>
 			                </label>
 			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'>
-			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>通知面试</a>
+			                	<a class="resume_notice" @click.prevent="informperson(item)" href="javascript:void(0)" slot='slot1'>通知面试</a>
 			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2'>不合适</a>	
 			                </resumebox>
 			                <!--<div class="resumeShow">
@@ -95,8 +95,18 @@
 					})
 				}
 			},
+			informperson(item){
+				this.$emit("informperson",item)
+			},
 			inform(){
-				this.$emit("inform",'')
+				let informlist = []
+				if(this.checkmodel){
+					for(let i = 0; i < this.checkmodel.length; i++){
+						let index = this.checkmodel[i]
+						informlist.push(this.resume2positionlist[index])
+					}
+				}
+				this.$emit("inform",informlist)
 			},
 			showlabel(index){
 				if(this.checkmodel.indexOf(index) > -1){

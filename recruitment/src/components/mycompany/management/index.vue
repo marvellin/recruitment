@@ -4,7 +4,7 @@
 			<headert :navlist='2' :isCompany='true'></headert>
 			<div id="container">
 				<sidebar>
-					<div @mouseover="showcheckmodel" class="subscribe_side mt20" slot='slot1'>
+					<div class="subscribe_side mt20" slot='slot1'>
 						    <div class="f14">想收到更多更好的简历？</div>
 						    <div class="f18 mb10">就用招聘加速助手 </div>
 						    <div>咨询：<a class="f16" href="javascript:void(0)">1021478667@qq.com</a></div>
@@ -17,14 +17,14 @@
 					</div>
 				</sidebar>
         		
-		        <router-view @inform="showcolorbox"/>
+		        <router-view @informperson="informperson" @inform="showcolorbox"/>
 
 				<div class="clear"></div>
 			    <totop></totop>
 			</div>
 		</div>
 		<footert></footert>
-		<colorbox id="colorbox" :show="colorboxshow" title="面试信息" @closebox="closecolorbox">
+		<colorbox id="colorbox" v-if="feedbackdetail" :show="colorboxshow" title="面试信息" @closebox="closecolorbox">
 			<div slot="slot1">
 				<form id="interviewform" style="font-size: 15px;font-weight: 550;">
 					<table>
@@ -32,10 +32,10 @@
 					<tr>
 					    <td><span class="redstar">*</span></td>
 					    <td>时间</td>
-					    <td style="overflow: hidden;">
+					    <td>
 					    	<!--<input type="text" style="" placeholder="请输入具体面试时间" name="interviewtime" id="interviewtime">-->
 					    	<div style="width: 450px;height: 70px;">
-					    		<Date-picker id="datepicker" style="width: 450px;height: 70px;" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择面试时间"></Date-picker>
+					    		<Date-picker :options="datepickeroptions" placement="bottom" @on-change="getinterviewtime" id="datepicker" style="width: 450px;height: 70px;" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择面试时间"></Date-picker>
 					    	</div>
 		                </td>
 					</tr>
@@ -43,18 +43,20 @@
 					    <td><span class="redstar">*</span></td>
 					    <td>地点</td>
 					    <td>
-					    	<input type="text" style="width: 450px;height: 40px;" placeholder="请输入具体面试地点" name="interviewaddress" id="interviewaddress">
+					    	<input type="text" v-model="feedbackdetail.address" style="width: 450px;height: 40px;" placeholder="请输入具体面试地点" name="interviewaddress" id="interviewaddress">
 		                </td>
 					</tr>
 					<tr>
 					    <td><span class="redstar">*</span></td>
 					    <td>电话</td>
 					    <td>
-					    	<input type="text" style="width: 450px;height: 40px;" placeholder="请输入HR联系方式" name="hrtel" id="hrtel">
+					    	<input type="text" v-model="feedbackdetail.tel" style="width: 450px;height: 40px;" placeholder="请输入HR联系方式" name="hrtel" id="hrtel">
 		                </td>
 					</tr>
 					<tr>
-						
+						<td colspan="3" align="center">
+							<Button @click="inform">通知面试</Button>
+						</td>
 					</tr>
 					</tbody>
 					</table>
@@ -84,23 +86,51 @@
 		},
 		data(){
 			return{
-				datetime:null,
+				feedbackdetail:null,
 				colorboxshow:false,
+				seekers:null,
+				datepickeroptions:{
+					disabledDate (date) {
+                        return date && date.valueOf() < Date.now() - 86400000;
+//						return date && date.valueOf() < Date.now()
+                    }
+				}
 			}
 		},
 		methods:{
 			inform(){
+				//通过idlist访问后台
+				console.log('面试信息')
+				console.log(this.feedbackdetail)
+				console.log('求职者')
+				console.log(this.seekers)
 				
+				//关闭colorbox
+				this.colorboxshow = false
 			},
-			showcolorbox(){
+			informperson(person){
+				this.seekers = person
+				this.feedbackdetail = {
+					address:null,
+					tel:null,
+					time:null
+				}
+				this.colorboxshow = true
+			},
+			showcolorbox(list){
+				this.seekers = list
+				this.feedbackdetail = {
+					address:null,
+					tel:null,
+					time:null
+				}
 				this.colorboxshow = true
 			},
 			closecolorbox(){
 				this.colorboxshow = false
 			},
-			showcheckmodel(){
-				console.log("checkmodel!")
-				console.log(this.checkmodel)
+			getinterviewtime(e){
+				this.feedbackdetail.time = e
 			}
 		}
 	}

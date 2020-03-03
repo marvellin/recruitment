@@ -1,5 +1,11 @@
 <template>
 	<div v-show="show" class="progress_status">
+		<!--
+			关于status
+			1:是默认状态，即投送完成
+			2:简历已查看状态，即简历被HR待定
+			3:简历已回复状态，即已拒绝或已邀请面试，若拒绝则显示默认拒绝信息，若邀请面试则显示面试信息即feedbakcdetail
+		-->
 		<ul class="status_steps">
 		    <li class="status_done status_1">1</li>
 		    <li :class="[status>=2?'status_line_done':'status_line_grey']" class="status_line"><span></span></li>
