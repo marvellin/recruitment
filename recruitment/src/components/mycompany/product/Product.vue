@@ -1,18 +1,5 @@
 <template>
 	<div class="product_wrap">
-		<!--无产品 -->
-		<!--<dl class="c_section dn">
-			<dt>
-				<h2><em></em>公司产品</h2>
-			</dt>
-			<dd>
-				<div class="addnew">
-					酒香不怕巷子深已经过时啦！<br>
-					把自己优秀的产品展示出来吸引人才围观吧！<br>
-					<a class="product_edit" href="javascript:void(0)">+添加公司产品</a>
-				</div>
-			</dd>
-		</dl>-->
 		
 		<!--产品编辑-->
 		<dl id="newProduct" class="newProduct" :class="[edit?'':'dn']">
@@ -26,16 +13,16 @@
 							                    <div>
 							                        <span>上传产品图片</span> 
 							                        <br>	
-							                                                 尺寸：380*220px  	大小：小于5M
+							                                                               尺寸：380*220px  	大小：小于5M              
 							                    </div>
 							                </div>
 							                <div class="product_upload productShow">
-							                    <img width="380" height="220" :src="product.img">
+							                    <img width="380" height="240" :src="product.img">
 								                <span>更换产品图片<br>380*220px 小于5M</span>
 								            </div>
-							                <input type="file" @change="getFile" title="支持jpg、jpeg、gif、png格式，文件小于5M" onchange="product_check(this,'http://www.lagou.com/c/upload.json','productNo','productShow','type','productInfos');" name="myfiles" id="myfiles0">
-							                <input type="hidden" value="3" name="type" class="type"> 
-							                <input type="hidden" value="images/product_default.png" name="productPicUrl" class="productInfos">   
+							                <input type="file" @change="getFile" accept="image/jpg,image/jpeg,image/gif,image/png" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="myfiles0">
+							                <!--<input type="hidden" value="3" name="type" class="type">--> 
+							                <!--<input type="hidden" value="images/product_default.png" name="productPicUrl" class="productInfos">-->   
 							            </div>
 					                    <div class="cp_intro">
 					                        <input type="text" placeholder="请输入产品名称" v-model:value="product.name" name="product">	
@@ -46,7 +33,7 @@
 					                        <div class="clear"></div>
 					                        <input type="button" value="保存" class="btn_small" @click="save">
 					                        <a class="btn_cancel_s product_delete" @click.prevent="handleItemClick">删除</a>
-					                        <input type="hidden" value="11867" class="product_id">
+					                        <!--<input type="hidden" value="11867" class="product_id">-->
 					                    </div>
 									</form>
 					            </dd>
@@ -57,7 +44,7 @@
 					            <dt>
 					                <h2><em></em>公司产品</h2>
 					            </dt>
-					            <dd>
+					            <dd style="width: 680px;">
 					                <img width="380" height="220" :alt="product.name" :src="product.img">
 				                    <div class="cp_intro">
 				                        <h3><a target="_blank" href="http://www.weimob.com">{{product.name}} </a></h3>
@@ -82,15 +69,15 @@
 <script>
 	export default{
 		name:'product',
-		props:['index'],
+		props:['index','product'],
 		data(){
 			return{
 				edit:false,
-				product:{
+				/*product:{
 					name:'',
 					info:'',
 					img:'../../../../static/images/product_default.png'
-				}
+				}*/
 			}
 		},
 		methods:{

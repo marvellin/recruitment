@@ -21,6 +21,7 @@ import collection from '@/components/collection/collection'
 import positionlist from '@/components/positionlist/positionlist'
 import delivery from '@/components/delivery/delivery'
 import deliveryform from '@/components/delivery/deliveryform/deliveryform'
+import companydetail from '@/components/companydetail/companydetail'
 
 Vue.use(Router)
 
@@ -106,6 +107,11 @@ export default new Router({
     	path:'/positionlist',
     	name:'positionlist',
     	component:positionlist
+    },
+    {
+    	path:'/companydetail',
+    	name:'companydetail',
+    	component:companydetail
     },
     {
     	path:'/delivery',

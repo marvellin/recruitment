@@ -1,43 +1,6 @@
 <template>
 	<div>
 	<div id="body">
-		<!--<div id="header">
-			<div class="wrapper">
-				<router-link class="logo" to="/">
-					<img width="229" height="60" alt="全国招聘第一站" src="../../../build/logo.png"/>
-				</router-link>
-				<ul id="navheader" class="reset">
-					<li>
-						<router-link to="/home">首页</router-link>
-					</li>
-					<li class="current">
-						<router-link to="/mycompany">公司</router-link>
-					</li>
-					<li>
-						<router-link to="/forumHome" target="_blank">论坛</router-link>
-					</li>
-					<li>
-						<router-link to="/resumesHome">简历管理</router-link>
-					</li>
-					<li>
-						<router-link to="/postHome">发布职位</router-link>
-					</li>
-				</ul>
-				<dl class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
-					<dt>
-						<span>test&nbsp;</span>
-						<span class="red dn" id="noticeDot-1"></span>
-						<i></i>
-					</dt>
-					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我发布的职位</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我收到的简历</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="">我的公司主页</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要找工作</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
-					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
-				</dl>
-			</div>
-		</div>-->
 		<headert :navlist='2' :isCompany='true'></headert>
 		<div id="container">
 			<div class="clearfix">
@@ -110,7 +73,7 @@
 					            </dt>
 					            <dd>
 					                <div class="addnew">
-					                                         酒香不怕巷子深已经过时啦！<br>
+					                    	酒香不怕巷子深已经过时啦！<br>
 										把自己优秀的产品展示出来吸引人才围观吧！<br>
 					                    <a class="product_edit" href="javascript:void(0)" @click.prevent="addproduct">+添加公司产品</a>
 					                </div>
@@ -118,81 +81,8 @@
 					        </dl>
 						</div>
 						<div v-for="(item,index) in products" :key="index" v-if="products.length">
-							<Product :index="index" @delete="handleItemDelete" @insert="addproduct"></Product>
-						    <!--无产品 -->
-							<!--<dl class="c_section" v-if="!products.length">
-					            <dt>
-					                <h2><em></em>公司产品</h2>
-					            </dt>
-					            <dd>
-					                <div class="addnew">
-					                                                       酒香不怕巷子深已经过时啦！<br>
-										把自己优秀的产品展示出来吸引人才围观吧！<br>
-					                    <a class="product_edit" href="javascript:void(0)">+添加公司产品</a>
-					                </div>
-					            </dd>
-					        </dl>-->
-					        <!--产品编辑-->
-					        <!--<dl id="newProduct" class="newProduct dn">
-					            <dt>
-					            	<h2><em></em>公司产品</h2>
-					            </dt>
-					            <dd>
-					                <form method="post" class="productForm">
-					                    <div class="new_product"> 	
-							                <div class="product_upload dn productNo">
-							                    <div>
-							                        <span>上传产品图片</span> 
-							                        <br>	
-							                                                                  尺寸：380*220px  	大小：小于5M
-							                    </div>
-							                </div>
-							                <div class="product_upload productShow">
-							                    <img width="380" height="220" src="style/images/product_default.png">
-								                <span>更换产品图片<br>380*220px 小于5M</span>
-								            </div>
-							                <input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M" onchange="product_check(this,'http://www.lagou.com/c/upload.json','productNo','productShow','type','productInfos');" name="myfiles" id="myfiles0">
-							                <input type="hidden" value="3" name="type" class="type"> 
-							                <input type="hidden" value="images/product_default.png" name="productPicUrl" class="productInfos">   
-							            </div>
-					                    <div class="cp_intro">
-					                        <input type="text" placeholder="请输入产品名称" value="发大发" name="product">	
-					                        <input type="text" placeholder="请输入产品网址" value="http://www.weimob.com" name="productUrl">	
-					                        <textarea placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="500" value="发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf" class="s_textarea" name="productProfile">发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf</textarea>	
-					                        <div class="word_count fr">你还可以输入 <span>500</span> 字</div>
-					                        <div class="clear"></div>
-					                        <input type="submit" value="保存" class="btn_small">
-					                        <a class="btn_cancel_s product_delete" href="javascript:void(0)">删除</a>
-					                        <input type="hidden" value="11867" class="product_id">
-					                    </div>
-									</form>
-					            </dd>
-					        </dl>-->
-					        
-					        <!--有产品-->
-					        <!--<dl class="c_product" v-if="products.length">
-					            <dt>
-					                <h2><em></em>公司产品</h2>
-					            </dt>
-					            <dd>
-					                <img width="380" height="220" alt="发大发" src="../../../static/images/product_default.png">
-				                    <div class="cp_intro">
-				                        <h3><a target="_blank" href="http://www.weimob.com">发大发 </a></h3>
-					                    <div class="scroll-pane" style="overflow: hidden; padding: 0px; width: 260px;">
-					                    	<div class="jspContainer" style="width: 260px; height: 140px;">
-					                    		<div class="jspPane" style="padding: 0px; top: 0px; width: 260px;">
-					                    			<div>
-					                    				发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf
-					                    			</div>
-					                    		</div>
-					                    	</div>
-					                    </div>
-					                </div>
-					                <a title="编辑公司产品" class="c_edit product_edit" href="javascript:void(0)"></a>
-					            	<a title="新增公司产品" class="c_add product_add" href="javascript:void(0)"></a>
-					            </dd>
-					        </dl>-->
-	            	</div>
+							<Product :product="item" :index="index" @delete="handleItemDelete" @insert="addproduct"></Product>
+						</div>
 					</div>
 					<div id="Profile">
 						<div class="profile_wrap">
@@ -481,7 +371,7 @@
 							<dt>
 								<h2>
 									<em></em>
-									创始团队
+									领导团队
 								</h2>
 								<!--<a title="添加创始人" class="c_add" to=""></a>-->
 							</dt>
@@ -650,39 +540,10 @@
 				</div>
 			</div>
 			
-			<!--弹窗-->
-			<!--<div style="display: none;">
-				<div style="width:650px;height:470px;" class="popup" id="logoUploader">
-					<object width="650" height="470" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="FlashID">
-						<param value="../../flash/avatar.swf?url=http://www.lagou.com/cd/saveProfileLogo.json" name="movie">
-						<param value="high" name="quality">
-					    <param value="opaque" name="wmode">
-						<param value="111.0.0.0" name="swfversion">
-						<param value="../../Scripts/expressInstall.swf" name="expressinstall">
-						<object width="650" height="470" data="../../flash/avatar.swf?url=http://www.lagou.com/cd/saveProfileLogo.json" type="application/x-shockwave-flash">
-						    <param value="high" name="quality">
-						    <param value="opaque" name="wmode">
-						    <param value="111.0.0.0" name="swfversion">
-						    <param value="../../Scripts/expressInstall.swf" name="expressinstall">
-					    	<div>
-					      	<h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
-					      	<p><a href="http://www.adobe.com/go/getflashplayer"><img width="112" height="33" src="style/images/get_flash_player.gif" alt="获取 Adobe Flash Player"></a></p>
-					    	</div>
-				  		</object>
-					</object>
-				</div>
-			</div>-->
-			<!--弹窗end-->
-			
 			<div class="clear"></div>
-			<input type="hidden" value="d1035b6caa514d869727cff29a1c2e0c" id="resubmitToken"/>
 			<a title="回到顶部" id="backtop" style="display: inline;" @click="toTop"></a>
 		</div>
 	</div>
-	<!--<div id="footer">
-		<div class="wrapper">
-		</div>
-	</div>-->
 	<footert></footert>
 	</div>
 </template>
@@ -694,9 +555,7 @@
 	export default{
 		name:'myCompany',
 		created(){
-			/*console.log(
-				this.$route
-			)*/
+			
 		},
 		components:{
 			Product,
@@ -718,24 +577,6 @@
 					list5:['上海','石家庄','绍兴','沈阳','深圳','苏州','天津','太原','台州'],
 					list6:['武汉','无锡','温州','西安','厦门','烟台','珠海','中山','郑州']
 				},
-				/*navlist:[
-					{
-						name:'公司',
-						path:'/mycompany'
-					},
-					{
-						name:'论坛',
-						path:''
-					},
-					{
-						name:'简历管理',
-						path:''
-					},
-					{
-						name:'发布职位',
-						path:''
-					},
-				],*/
 				vashow:false,
 				cityboxshow:false,
 				editintroshow:false,
@@ -796,7 +637,13 @@
 				stagecurrent:null,
 				repocurrent:null,
 				labelcurrent:null,
-				products:[],
+				products:[
+					{
+						name:'',
+						info:'',
+						img:'../../../../static/images/product_default.png'
+					}
+				],
 				comintro:'',
 				comintrotmp:'',
 				newlabel:''
@@ -813,19 +660,17 @@
 			},
 			vaon(){
 				this.vashow=true
-				/*console.log(this.products)
-				console.log(this.products.length)*/
 			},
 			vaout(){
 				this.vashow=false
 			},
 			addproduct(){
-				this.products.push({})
+				this.products.push({
+					name:'',
+					info:'',
+					img:'../../../../static/images/product_default.png'
+				})
 			},
-			/*editproduct(){
-				this.products.push({})
-				this.editproshow = true
-			},*/
 			handleItemDelete(index){
 				let confirmmsg = confirm("确认删除该公司产品信息？")
 				if(confirmmsg){
@@ -842,12 +687,8 @@
 				this.hasIntro = true
 			},
 			saveintro(){
-//				console.log(this.comintro)
-//				console.log(this.$refs.comintro.value.length)
 				this.editintroshow = false
 				this.comintro = this.comintrotmp
-//				console.log(this.isMounted)
-//				console.log(this.comintro)
 			},
 			cancelintro(){
 				this.hasIntro = false
@@ -942,7 +783,6 @@
 			addcommember(){
 				this.hasmember = true
 				this.addmembershow = true
-//				this.editmembershow = false
 			},
 			getmemberimg(e){
 				let _this = this
@@ -1042,16 +882,8 @@
 					this.hasmember = false
 				}
 			},
-			/*comrepolist(){
-				if(this.comrepolist.length == 0){
-					return true
-				}
-			}*/
 		},
 		computed:{
-			/*restcomintrolength(){
-				return 1000 - intro.length
-			}*/
 		}
 	}
 </script>

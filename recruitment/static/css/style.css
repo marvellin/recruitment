@@ -841,7 +841,7 @@ a.greylink{ color:#555;font-size:18px; margin-right:60px;text-decoration:underli
 .add_member:hover{ color:#019875;}
 .add_member:hover i{ background-position:-29px -25px;}
 .new_product{ height:220px; width:380px; position:relative;}
-.product_upload{ width:380px; height:220px; background:#e7e7e7; position:absolute; z-index:1;}
+.product_upload{ width:380px; height:240px; background:#e7e7e7; position:absolute; z-index:1;}
 .product_upload div{ float:left; width:280px; background:#93b7bb url(img/logo_upload.png) 10px center no-repeat; padding:20px 0 20px 45px; margin:70px 0 0 30px; color:#e8e8e8;}
 .product_upload div span{font-size:16px; color:#fff; }
 .new_product input{ width:380px; height:220px; position:absolute; z-index:2;filter:alpha(Opacity=0);-moz-opacity:0;opacity: 0;}
