@@ -96,7 +96,7 @@
 						<router-link to="">BD</router-link>
 					</dd>
 					<dd>
-						<router-link to="">实习</router-link>
+						<router-link :to="{name:'companydetail',query:{id:110}}">实习</router-link>
 					</dd>	
 				</dl>
 				<!--<div id="home_banner">

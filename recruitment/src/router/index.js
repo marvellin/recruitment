@@ -22,6 +22,9 @@ import positionlist from '@/components/positionlist/positionlist'
 import delivery from '@/components/delivery/delivery'
 import deliveryform from '@/components/delivery/deliveryform/deliveryform'
 import companydetail from '@/components/companydetail/companydetail'
+import companyhome from '@/components/companydetail/home/company_home'
+import companyposition from '@/components/companydetail/position/company_position'
+import companyproduct from '@/components/companydetail/product/company_product'
 
 Vue.use(Router)
 
@@ -73,11 +76,6 @@ export default new Router({
     	name:'myresume',
     	component:myresume,
     },
-    /*{
-    	path:'/postjob',
-    	name:'postjob',
-    	component:postjob
-    },*/
     {
     	path:'/management',
     	name:'management',
@@ -111,7 +109,34 @@ export default new Router({
     {
     	path:'/companydetail',
     	name:'companydetail',
-    	component:companydetail
+    	component:companydetail,
+    	redirect:"/companydetail/company_home",
+    	children:[
+    		{
+    			path:'company_home',
+    			name:'company_home',
+    			component:companyhome,
+    			/*props:(route) => ({
+    				id:route.query.companyid
+    			})*/
+    		},
+    		{
+    			path:'company_position',
+    			name:'company_position',
+    			component:companyposition,
+    			/*props:(route) => ({
+    				id:route.query.companyid
+    			})*/
+    		},
+    		{
+    			path:'company_product',
+    			name:'company_product',
+    			component:companyproduct,
+    			/*props:(route) => ({
+    				id:route.query.companyid
+    			})*/
+    		}
+    	]
     },
     {
     	path:'/delivery',
