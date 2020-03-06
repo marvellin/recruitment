@@ -8,32 +8,56 @@
 							<div style="background-color: #fff;" class="c_logo">
 								<a :title="company.comdetail.shortname" id="logoShow" class="inline cboxElement" >
 									<img width="190" height="190" :alt="company.comdetail.shortname" :src="company.comdetail.img"/>
-									<!--<span>更换公司图片<br />190px*190px 小于5M</span>-->
-									<!--<input type="file" @change="getcomimg"/>-->
 								</a>
 							</div>
 							<div class="c_box companyName">
-								<h2 :title="company.comdetail.shortname">{{company.comdetail.shortname}}</h2>
+								<h2 style="max-width: 350px;" :title="company.comdetail.shortname">{{company.comdetail.shortname}}</h2>
 								<em :class="[isvalided?'valid':'unvalid']" class="fr" @mouseover="vashow=true" @mouseout="vashow=false"></em>
 								<span style="margin:-24px 0 0 420px" class="va" :style="{'display':vashow&&!isvalided?'inline':'none'}">未认证企业</span>
 								<span style="margin:-24px 0 0 420px" class="va" :style="{'display':vashow&&isvalided?'inline':'none'}">认证企业</span>
 								<div class="clear"></div>
-								<h1 :title="company.comdetail.fullname" class="fullname">{{company.comdetail.fullname}}</h1>
-								<div class="clear oneword">
+								<h1 style="max-width: 350px;" :title="company.comdetail.fullname" class="fullname">{{company.comdetail.fullname}}</h1>
+								<div style="max-width: 350px;" class="clear oneword">
 									<img width="17" height="15" src="../../../static/images/quote_l.png"/>
 									&nbsp;
 									<span>{{company.comdetail.feature}}</span>
 									&nbsp;
 									<img width="17" height="15" src="../../../static/images/quote_r.png"/>
 								</div>
-								<ul style="overflow: auto;" id="hasLabels" class="reset clearfix">
+								<ul style="max-width: 350px;overflow: auto;" id="hasLabels" class="reset clearfix">
 									<li v-for="(item,index) in company.comdetail.labels" :key="index" style="margin-right:18px;">
 										<span>{{item}}</span>
 									</li>
 								</ul>
+								<div class="c_tags_s">
+									<div id="c_tags_show" class="c_tags solveWrap">
+										<table>
+											<tbody>
+												<tr>
+													<td width="62">地点</td>
+													<td>{{company.comdetail.city}}</td>
+												</tr>
+												<tr>
+													<td>领域</td>
+													<td :title="company.comdetail.field">{{company.comdetail.field}}</td>
+												</tr>
+												<tr>
+													<td>规模</td>
+													<td>{{company.comdetail.scale}}</td>
+												</tr>
+												<tr>
+													<td>主页</td>
+													<td>
+														<a :href="company.comdetail.comurl" target="_blank">前往公司主页</a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 							<div class="clear"></div>
-						</div>
+					</div>
 				</div>
 				<div class="company_nav">
 					<ul style="list-style: none;">
@@ -92,7 +116,7 @@
 						<div id="flag"></div>
 					</div>
 					<div class="content_r">
-						<div id="Tags">
+						<!--<div id="Tags">
 							<div id="c_tags_show" class="c_tags solveWrap">
 								<table>
 									<tbody>
@@ -117,7 +141,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div>-->
 						
 						<dl class="c_section c_stages">
 							<dt>
@@ -162,7 +186,7 @@
 							</dl>
 						</div>
 						
-						<div id="Reported">
+						<!--<div id="Reported">
 							<dl class="c_section c_reported">
 				            	<dt>
 				                	<h2>
@@ -171,15 +195,14 @@
 				                	</h2>
 				                </dt>
 			                	<dd>
-				                	<!-- 编辑报道 -->
 		                       		<ul class="reset" style="color: #555;">
 		                       			<li v-for="(item,index) in company.repolist" :key="index">
 		                       				<a class="article" :title="item.repotitle" target="_blank" :href="item.repolink">{{item.repotitle}}</a>
 				                		</li>
 		                       		</ul>
 			                	</dd>
-			            	</dl><!-- end .c_reported -->
-						</div>
+			            	</dl>
+						</div>-->
 					</div>
 				</div>
 				
@@ -195,7 +218,6 @@
 	import headert from '../header/header'
 	import footert from '../footer/footer'
 	import totop from '../totop/totop'
-//	import productbox from './productbox/productbox'
 	export default{
 		name:"companydetail",
 		created(){
@@ -205,7 +227,6 @@
 			}})
 			.then((res) => {
 				this.company = res.data[0]
-				console.log(this.company)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -238,6 +259,17 @@
 </script>
 
 <style>
+	.c_tags_s{
+		/*margin-right: 40px;*/
+		top: 0;
+		right: 15%;
+		min-width: 100px;
+		width: 280px;
+		min-height: 100px;
+		height: 100%;
+		/*background-color: #019875;*/
+		position: absolute;
+	}
 	#comdetail{
 		margin:5px 0;
 		height: 200px;
