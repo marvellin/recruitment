@@ -17,7 +17,7 @@
 							<h2 title="公司名称测试">{{comdetail.shortname}}</h2>
 							<em class="unvalid" @mouseover="vaon" @mouseout="vaout"></em>
 							<span class="va dn" :style="{'display':vashow?'inline':'none'}">未认证企业</span>
-							<router-link target="_blank" class="applyC" to="">申请认证</router-link>
+							<router-link target="_blank" class="applyC" to="auth">申请认证</router-link>
 							<div class="clear"></div>
 							<h1 title="广东公司名称测试" class="fullname">{{comdetail.fullname}}</h1>
 							<form class="clear editDetail" :class="[editdetailshow?'':'dn']" id="editDetailForm">

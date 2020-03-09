@@ -726,7 +726,7 @@ text-overflow: ellipsis; display:block; width:190px;}
 .addnew_right a{ font-size:16px;color:#0d9572; text-decoration:underline; float:left; margin:10px 0 0 100px;}
 #stageorg{width: 144px;height: 40px;}
 /**my_list.html**/
-.content_mid{width:680px; padding:0 60px; background:#fafafa; margin:0 auto;}
+.content_mid{width:680px; padding:0 60px; background:#fafafa; margin:0 112px;}
 .c_section_mid .c_add{right:27px;}
 .c_section_mid .addnew{margin:70px 0 20px 0;}
 ul.my_jobs{margin:20px 0 0 0;}
@@ -892,7 +892,7 @@ a.greylink{ color:#555;font-size:18px; margin-right:60px;text-decoration:underli
 .c_section_mid dd.c_certify{padding:50px 50px 50px 80px; color:#555;}
 .c_section_mid dd.c_certify h4{font-size:22px; font-weight:normal;margin:20px 0;*margin:80px 0 20px 0;}
 .c_certify_list{list-style:none;margin:0; padding:0; font-size:16px; line-height:24px; color:#777;}
-.c_certify_list li{font-size:18px;color:#555;line-height:24px;background:url(img/no1234.png) no-repeat;padding-left:25px;margin-bottom:10px;}
+.c_certify_list li{width:450px;font-size:18px;color:#555;line-height:24px;background:url(img/no1234.png) no-repeat;padding-left:25px;margin-bottom:10px;}
 .c_certify_list li span{font-size:14px;color:#777777;margin:0 10px;}
 .c_certify_list li.list1{background-position:0 4px;}
 .c_certify_list li.list2{background-position:0 -33px;}

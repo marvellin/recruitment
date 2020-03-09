@@ -25,6 +25,7 @@ import companydetail from '@/components/companydetail/companydetail'
 import companyhome from '@/components/companydetail/home/company_home'
 import companyposition from '@/components/companydetail/position/company_position'
 import companyproduct from '@/components/companydetail/product/company_product'
+import auth from '@/components/auth/auth'
 
 Vue.use(Router)
 
@@ -160,6 +161,11 @@ export default new Router({
     			component:deliveryform
     		}
     	]
+    },
+    {
+    	path:'/auth',
+    	name:'auth',
+    	component:auth
     }
   ]
 })

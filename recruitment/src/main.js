@@ -33,7 +33,6 @@ Vue.use(ElementUI)
 Vue.use(ViewUI)
 Vue.use(VCharts)
 Vue.use(VueQuillEditor)
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
