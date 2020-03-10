@@ -36,7 +36,7 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	/*.hot_info{
 		display: none;
 		left: 0;

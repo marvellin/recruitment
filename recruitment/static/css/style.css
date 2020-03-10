@@ -2099,3 +2099,29 @@ ul.my_collections li i{float:right;width:1px;height:24px;background: url(img/arr
 #tip_didi_img{width:273px;height:118px;background:url(img/tip_didi.png) no-repeat;position:absolute;z-index:100;margin:-20px 0 0 140px;*margin:-20px 0 0 70px;}
 #tip_didi_img a{display:block;width:86px;height:28px;margin:75px 0 0 97px;}
 /*end*/
+
+/*new*/
+.el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+  
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
+  #thumbs_s ul li:last-child{
+		margin-right:0;
+}
+#login_bg{
+		height: 100vh;
+	}
+	/*#login_bg{
+		height: 100vh;
+	}*/

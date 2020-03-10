@@ -23,20 +23,15 @@
 								<em v-show="emp"></em>
 							</li>
 						</ul>
-						<input type="text" id="email" name="email" tabindex="1" placeholder="请输入常用邮箱地址"/>
+						<input style="width: 306px;height: 42px;" type="text" id="email" name="email" tabindex="1" placeholder="请输入常用邮箱地址"/>
 						<span class="error" style="display: none;" id="beError"></span>
-						<input type="password" id="password" name="password" tabindex="2" placeholder="请输入密码"/>
+						<input style="width: 306px;height: 42px;" type="password" id="password" name="password" tabindex="2" placeholder="请输入密码"/>
 						<!--<label class="fl registerJianJu" for="checkbox">
 							<input type="checkbox" id="checkbox" name="checkbox" checked class="checkbox valid"/>
 							我已阅读并同意
 							<router-link to="" target="_blank">《用户协议》</router-link>
 						</label>-->
 						<input type="submit" id="submitLogin" value="注     册"></input>
-						
-						<input type="hidden" id="callback" name="callback" value=""/>
-						<input type="hidden" id="authType" name="authType" value=""/>
-						<input type="hidden" id="signature" name="signature" value=""/>
-						<input type="hidden" id="timestamp" name="timestamp" value=""/>
 					</form>
 					<div class="login_right">
 						<div>已有账号</div>
@@ -94,8 +89,8 @@
 	}
 </script>
 
-<style scoped>
-	#login_bg{
+<style>
+	/*#login_bg{
 		height: 100vh;
-	}
+	}*/
 </style>

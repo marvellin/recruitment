@@ -37,8 +37,8 @@
 	}
 </script>
 
-<style scoped>
-	.el-carousel__item h3 {
+<style>
+	/*.el-carousel__item h3 {
     color: #475669;
     font-size: 14px;
     opacity: 0.75;
@@ -52,5 +52,5 @@
   
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
-  }
+  }*/
 </style>

@@ -78,8 +78,8 @@
 	}
 </script>
 
-<style scoped>
-	#login_bg{
+<style>
+	/*#login_bg{
 		height: 100vh;
-	}
+	}*/
 </style>
