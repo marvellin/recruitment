@@ -26,6 +26,8 @@ import companyhome from '@/components/companydetail/home/company_home'
 import companyposition from '@/components/companydetail/position/company_position'
 import companyproduct from '@/components/companydetail/product/company_product'
 import auth from '@/components/auth/auth'
+import authsuccess from '@/components/auth/authsuccess'
+import about from '@/components/about/about'
 
 Vue.use(Router)
 
@@ -166,6 +168,16 @@ export default new Router({
     	path:'/auth',
     	name:'auth',
     	component:auth
-    }
+    },
+    {
+    	path:'/authsuccess',
+    	name:'authsuccess',
+    	component:authsuccess
+    },
+    {
+    	path:'/about',
+    	name:'about',
+    	component:about
+    },
   ]
 })

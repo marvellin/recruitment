@@ -1203,11 +1203,11 @@
 			<a id="backtop" title="回到顶部" style="display: inline;" rel="nofollow" @click="toTop"></a>
 		</div><!--end of container-->
 	</div><!--end of body-->
-	<div id="footer">
+	<!--<div id="footer">
 		<div class="wrapper">
-			<!--<router-link to=""></router-link>-->
 		</div>
-	</div>
+	</div>-->
+	<footert></footert>
 	</div>
 </template>
 
@@ -1219,6 +1219,7 @@
 	import homebanner from './homebanner/homebanner.vue'
 	import thumbs from './thumbs/thumbs.vue'
 	import headert from '../header/header'
+	import footert from '../footer/footer'
 	
 	export default{
 		name:'home',
@@ -1234,7 +1235,8 @@
 			searchbox,
 			homebanner,
 			thumbs,
-			headert
+			headert,
+			footert
 		},
 		data(){
 			return{

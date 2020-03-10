@@ -176,8 +176,8 @@
 			        </form>
 	            </div>	
 	            <div class="content_r">
-	            	<div class="subscribe_side">
-		            	<a href="subscribe.html" target="_blank">
+	            	<!--<div class="subscribe_side">
+		            	<a href="javascript:void(0)" target="_blank">
 		                    <div class="subpos"><span>订阅</span> 职位</div>
 		                    <div class="c7">拉勾网会根据你的筛选条件，定期将符合你要求的职位信息发给你
 		                    </div>
@@ -192,7 +192,7 @@
 		                    </div>
 		                    <i>我也要订阅职位</i>
 		            	</a>
-		            </div>
+		            </div>-->
 	                <a href="h/subject/jobguide.html" target="_blank" class="eventAd">
 	               		<img src="../../../static/images/subject280.jpg" width="280" height="135" alt="互联网跳槽指南"/>
 	               	</a>

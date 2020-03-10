@@ -34,7 +34,7 @@
 		                                支持jpg、png、gif、pdf格式，文件不超过10M
 		                            </div>
 		                        </div>
-		                        <input type="file" name="businessLicenes" id="businessLicenes" @change="getimg">
+		                        <input type="file" accept="application/pdf,image/jpeg,image/png,image/gif" name="businessLicenes" id="businessLicenes" @change="getimg">
 		                        <!--<input type="hidden" value="0" name="type" id="type">-->  
 		                    </div>
 		                </dd>
@@ -69,8 +69,6 @@
 			getimg(e){
 				this.img = e.target.files[0]
 				this.uploadImg(this.img)
-//				console.log(this.img)
-//				console.log(e.target.files[0])
 			},
 			uploadImg(file){
 				if(!file){
@@ -79,19 +77,15 @@
 				var _this = this
 				var formData = new FormData()
 				formData.append("file",file)
-//				console.log(formData)
 				_this.$axios.post("/api/ossupload",formData)
 				.then((res) => {
-					console.log('this is res')
-					console.log(res)
-					console.log('this is res.data')
-					console.log(res.data)
 					this.filedtos.push(res.data)
-					console.log(this.filedtos)
+					if(res.status === 200){
+						this.$router.push({name:'authsuccess'})
+					}
 				})
 				.catch((err) => {
-					console.log('this is err')
-					console.log(err)
+					this.$message("上传失败！请重新尝试")
 				})
 			},
 			download(){
@@ -118,6 +112,8 @@
 		            } else { // IE10+下载
 		              navigator.msSaveBlob(blob, fileName)
 		          }
+				}).catch(err => {
+					this.$message("下载文件失败！请重新尝试。")
 				})
 			},
 		}

@@ -919,7 +919,7 @@ a.greylink{ color:#555;font-size:18px; margin-right:60px;text-decoration:underli
 /*aboutus.html*/
 .c_section_mid dd.aboutus{padding:80px 25px;}
 .aboutus img{position:absolute;width:186px;height:186px;}
-.aboutus div{margin-left:196px; background:#0d9572;padding:20px 30px;height:145px;}
+.aboutus div{margin-left:206px; background:#0d9572;padding:20px 30px;height:145px;}
 .aboutus div a{color:#fff;text-decoration:underline;}
 .aboutus span{display:block;text-indent:2em;color:#fff;}
 .c_section_mid dd.privacy{padding:80px 25px; line-height:28px;}
