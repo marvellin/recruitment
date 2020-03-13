@@ -1,7 +1,7 @@
 <template>
 	<div id="thumbs_s">
 		<ul id="da-thumbs" class="da-thumbs">
-			<li v-for="(item,index) in thumbslist" key='index' @mouseenter="over(index)" @mouseleave="out">
+			<li v-for="(item,index) in thumbslist" :key='index' @mouseenter="over(index)" @mouseleave="out">
 				<router-link :to="{path:item.path}" target="_blank">
 					<img :src="item.img" :alt="item.h2" width="113" height="113"/>
 					<!--<div class="hot_info" :class="[show?'current':'']">

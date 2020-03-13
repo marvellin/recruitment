@@ -8,7 +8,6 @@
 					<div id="cloud_s" :style="{'margin-left':spx}"><img src="../../../../static/images/cloud_s.png" width="81" height="52" alt="cloud"></div>
 					<div id="cloud_m" :style="{'margin-left':mpx}"><img src="../../../../static/images/cloud_m.png" width="136" height="95"  alt="cloud"></div>
 				</div>
-				<input type="hidden" id="resumbmitToken" value=""/>
 				<div class="login_box">
 					<form id="loginForm" action="">
 						<ul class="register_radio clearfix">
@@ -35,7 +34,9 @@
 					</form>
 					<div class="login_right">
 						<div>已有账号</div>
-						<router-link to="/login" class="registor_now">直接登陆</router-link>
+						<router-link to="/login" style="margin-bottom:150px;" class="registor_now">直接登陆</router-link>
+						<div></div>
+						<router-link to="/home">返回首页</router-link>
 					</div>
 				</div>
 				<div class="login_box_btm"></div>

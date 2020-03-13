@@ -8,7 +8,6 @@
 					<div id="cloud_s" :style="{'margin-left':spx}"><img src="../../../../static/images/cloud_s.png" width="81" height="52" alt="cloud"></div>
 					<div id="cloud_m" :style="{'margin-left':mpx}" @click='add'><img src="../../../../static/images/cloud_m.png" width="136" height="95"  alt="cloud"></div>
 				</div>
-				<input type="hidden" id="resumbmitToken" value=""/>
 				<div class="login_box">
 					<form id="loginForm" action="">
 						<input type="text" id="email" name="email" value="" tabindex="1" placeholder="请输入登陆邮箱地址"/>
@@ -24,14 +23,12 @@
 						<router-link to="" style="color: #fff;" class="submitLogin" title="登 &nbsp; &nbsp陆">
 							登&nbsp; &nbsp;陆
 						</router-link>
-						<input type="hidden" id="callback" name="callback" value=""/>
-						<input type="hidden" id="authType" name="authType" value=""/>
-						<input type="hidden" id="signature" name="signature" value=""/>
-						<input type="hidden" id="timestamp" name="timestamp" value=""/>
 					</form>
 					<div class="login_right">
 						<div>还没有账号？</div>
-						<router-link to="/register" class="registor_now">立即注册</router-link>
+						<router-link to="/register" style="margin-bottom:80px;" class="registor_now">立即注册</router-link>
+						<div></div>
+						<router-link to="/home">返回首页</router-link>
 					</div>
 				</div>
 				<div class="login_box_btm"></div>

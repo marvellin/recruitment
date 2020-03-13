@@ -131,6 +131,8 @@
 	export default{
 		name:'home',
 		created(){
+			/*console.log(this.obj)
+			this.obj.a = {tt:1,dd:2}
 			/*this.$axios.get('/static/data/companylist.json').then((res) => {
 				this.companylist = res.data.companylist
 				console.log(this.companylist[0].name)

@@ -12,6 +12,7 @@ import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
 import VCharts from 'v-charts'
 import VueQuillEditor from 'vue-quill-editor'
+import VueLazyLoad from 'vue-lazyload'
 
 import '../static/css/colorbox.min.css';
 import '../static/css/external.min.css';
@@ -33,6 +34,11 @@ Vue.use(ElementUI)
 Vue.use(ViewUI)
 Vue.use(VCharts)
 Vue.use(VueQuillEditor)
+Vue.use(VueLazyLoad,{
+	error:'../static/images/logo_default.png',
+//	error:'../static/images/ajax-loader.gif',
+	loading:'../static/images/ajax-loader.gif'
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

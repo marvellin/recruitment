@@ -284,6 +284,7 @@ ul.hot_pos i{width: 12px;height: 14px;position:absolute;background:url(img/hot.p
 
 #submitLogin:hover{ background:#00694e;}
 .login_right{*width:170px; float:left;margin:10px 0 0 30px;line-height:30px;}
+/*.backhomefromlogin{color:#019875;background:url(img/registor_now.png) left center no-repeat; padding-right:24px; float:left; height:30px;line-height:30px;}*/
 .registor_now{color:#019875;background:url(img/registor_now.png) right center no-repeat; padding-right:24px; float:left; height:30px;line-height:30px;}
 .registor_now:hover{color:#019875; text-decoration:underline;}
 .login_others{ clear:both; margin:70px 0 10px 0;}
@@ -726,7 +727,7 @@ text-overflow: ellipsis; display:block; width:190px;}
 .addnew_right a{ font-size:16px;color:#0d9572; text-decoration:underline; float:left; margin:10px 0 0 100px;}
 #stageorg{width: 144px;height: 40px;}
 /**my_list.html**/
-.content_mid{width:680px; padding:0 60px; background:#fafafa; margin:0 112px;}
+.content_mid{width:800px; padding:0 60px; background:#fafafa; margin:0 112px;}
 .c_section_mid .c_add{right:27px;}
 .c_section_mid .addnew{margin:70px 0 20px 0;}
 ul.my_jobs{margin:20px 0 0 0;}

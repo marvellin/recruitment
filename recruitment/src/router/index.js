@@ -28,6 +28,12 @@ import companyproduct from '@/components/companydetail/product/company_product'
 import auth from '@/components/auth/auth'
 import authsuccess from '@/components/auth/authsuccess'
 import about from '@/components/about/about'
+import companyinfofillin from '@/components/companyinfofillin/index'
+import index1 from '@/components/companyinfofillin/index1/index1'
+import index2 from '@/components/companyinfofillin/index2/index2'
+import index3 from '@/components/companyinfofillin/index3/index3'
+import index4 from '@/components/companyinfofillin/index4/index4'
+import index5 from '@/components/companyinfofillin/index5/index5'
 
 Vue.use(Router)
 
@@ -179,5 +185,38 @@ export default new Router({
     	name:'about',
     	component:about
     },
+    {
+    	path:'/companyinfofillin',
+    	name:'companyinfofillin',
+    	component:companyinfofillin,
+    	redirect:'/companyinfofillin/step1',
+    	children:[
+    		{
+    			path:'step1',
+    			name:'step1',
+    			component:index1
+    		},
+    		{
+    			path:'step2',
+    			name:'step2',
+    			component:index2
+    		},
+    		{
+    			path:'step3',
+    			name:'step3',
+    			component:index3
+    		},
+    		{
+    			path:'step4',
+    			name:'step4',
+    			component:index4
+    		},
+    		{
+    			path:'step5',
+    			name:'step5',
+    			component:index5
+    		}
+    	]
+    }
   ]
 })

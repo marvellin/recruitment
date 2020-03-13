@@ -10,7 +10,7 @@
 							<a title="上传公司LOGO" id="logoShow" class="inline cboxElement" >
 								<img width="190" height="190" alt="公司logo" :src="comdetail.img"/>
 								<span>更换公司图片<br />190px*190px 小于5M</span>
-								<input type="file" @change="getcomimg"/>
+								<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg"/>
 							</a>
 						</div>
 						<div class="c_box companyName">
@@ -303,11 +303,11 @@
 						<dd>
 							<ul class="reset stageshow" :style="{'display':editstageshow?'none':'block'}">
 	                    		<li>目前阶段：<span class="c5">{{comstage.currentstage}}</span></li>
+	                    		<li v-if="comstage.org&&comstage.org !== ''">投资机构：<span class="c5">{{comstage.org}}</span></li>
 	                    	</ul>
 	                    	<form class="dn" id="stageform" :style="{'display':editstageshow?'block':'none'}">
 	                    		<div class="stageSelect" @mouseleave="currentstagelistshow = false">
 	                    			<label>目前阶段</label>
-	                    			<input type="hidden" :value="comstage.currentstage" id="financeStage" name="financeStage">
 		                         	<input type="button" :value="comstage.currentstage" id="select_fin" class="select_tags_short fl" @click="currentstagelistshow = true">
 		                            <div class="selectBoxShort dn" id="box_fin" :style="{'display':currentstagelistshow?'block':'none'}">
 		                                 <ul class="reset">
@@ -541,7 +541,8 @@
 			</div>
 			
 			<div class="clear"></div>
-			<a title="回到顶部" id="backtop" style="display: inline;" @click="toTop"></a>
+			<!--<a title="回到顶部" id="backtop" style="display: inline;" @click="toTop"></a>-->
+			<totop></totop>
 		</div>
 	</div>
 	<footert></footert>
@@ -552,6 +553,7 @@
 	import Product from './product/Product'
 	import footert from '../footer/footer'
 	import headert from '../header/header'
+	import totop from '../totop/totop'
 	export default{
 		name:'myCompany',
 		created(){
@@ -560,7 +562,8 @@
 		components:{
 			Product,
 			footert,
-			headert
+			headert,
+			totop
 		},
 		mounted(){
 			this.isMounted = true

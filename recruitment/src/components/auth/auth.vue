@@ -3,6 +3,8 @@
 		<div id="body">
 			<headert :navlist="2" :isCompany="true"></headert>
 			<div id="container">
+				<input type="file" @change="uploadImgWithPreview" accept="image/jpeg,image/png,image/jp2,image/gif"/>
+				<img :src="imgurl" width="190px" height="190px"/>
 				<div class="content_mid">
 		        	<dl class="c_section c_section_mid">
 		        		<dt>
@@ -63,12 +65,36 @@
 			return{
 				img:null,
 				filedtos:[],
+				imgurl:null,
 			}
 		},
 		methods:{
 			getimg(e){
 				this.img = e.target.files[0]
 				this.uploadImg(this.img)
+			},
+			uploadImgWithPreview(e){
+				let file = e.target.files[0]
+				if(!file){
+					return
+				}
+				var _this = this
+				var formData = new FormData()
+				formData.append("file",file)
+				_this.$axios({
+					method:'post',
+					url:'/api/ossupload2preview',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res => {
+					const blob = new Blob([res.data])
+					this.imgurl = URL.createObjectURL(blob)
+				}).catch(err => {
+					console.log(err)
+				})
 			},
 			uploadImg(file){
 				if(!file){
