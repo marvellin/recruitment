@@ -13,6 +13,7 @@ import 'view-design/dist/styles/iview.css'
 import VCharts from 'v-charts'
 import VueQuillEditor from 'vue-quill-editor'
 import VueLazyLoad from 'vue-lazyload'
+import VeeValidator from './vee/vee'
 
 import '../static/css/colorbox.min.css';
 import '../static/css/external.min.css';

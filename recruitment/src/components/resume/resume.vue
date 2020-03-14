@@ -127,7 +127,8 @@
 										        	<span class="redstar">*</span>
 										      	</td> 
 								      			<td colspan="3">
-								          			<input type="text" placeholder="手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
+								          			<input type="text" v-validate="'required|tel'" placeholder="请输入手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
+								          			<el-alert :closable="false" :title="errors.first('tel')" type="error" v-show="errors.has('tel')"></el-alert>
 								      			</td>
 								   			</tr>
 								   			<tr>
@@ -135,7 +136,8 @@
 								        			<span class="redstar">*</span>
 								      			</td> 
 								      			<td colspan="3">
-								          			<input type="text" placeholder="接收面试通知的邮箱" v-model="basicinfotmp.email" style="width: 410px;" name="email" id="email">
+								          			<input type="text" v-validate="'required|email'" placeholder="请输入邮箱" v-model="basicinfotmp.email" style="width: 410px;" name="email" id="email">
+								          			<el-alert :closable="false" :title="errors.first('email')" type="error" v-show="errors.has('email')"></el-alert>
 								      			</td>
 								    		</tr>
 								    		<tr>
