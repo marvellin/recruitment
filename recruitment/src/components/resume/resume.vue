@@ -129,6 +129,7 @@
 								      			<td colspan="3">
 								          			<input type="text" v-validate="'required|tel'" placeholder="请输入手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
 								          			<el-alert :closable="false" :title="errors.first('tel')" type="error" v-show="errors.has('tel')"></el-alert>
+								          			
 								      			</td>
 								   			</tr>
 								   			<tr>
