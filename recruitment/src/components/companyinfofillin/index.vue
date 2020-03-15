@@ -31,14 +31,44 @@
 			}
 		},
 		created(){
-			this.company = {}
+			this.dataInit()
 			/*this.companyinit()
 			console.log("this is company from index" + this.company)*/
 		},
 		methods:{
+			dataInit(){
+				if(!this.company){
+					this.company = {
+						comdetail:{
+							fullname:null,
+							shortname:null,
+							feature:null,
+							city:null,
+							field:null,
+							scale:null,
+							comurl:null,
+							scale:null,
+							img:'../../../../static/images/logo_default.png',
+	//						img:null,
+							labels:[]
+						},
+						products:[],
+						intro:"",
+						positions:[],
+						stage:{},
+						member:{
+							name:null,
+							img:null,
+							post:null,
+							intro:null
+						},
+						repolist:[]
+					}
+				}
+			}
 			/*companyinit(){
 				this.company = {
-					companydetail:{},
+					comdetail:{},
 					products:[],
 					intro:"",
 					positions:[],

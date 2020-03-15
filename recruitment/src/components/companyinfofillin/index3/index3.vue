@@ -4,7 +4,54 @@
 			<dt>
 				<slot name='slot1'></slot>
 			</dt>
-			<dd></dd>
+			<dd>
+				<div class="c_text_1">展示强劲的管理团队，让求职者跟随而来吧！</div>
+                <img width="668" height="56" class="c_steps" alt="第三步" src="../../../../static/images/step3.png">
+                    
+                <!--<form method="post" action="http://www.lagou.com/cl/saveLeaderInfos.json" id="memberForm">-->
+                <form>
+                    <div id="memberDiv">
+		                <div class="formWrapper">
+		                    <!--<input type="hidden" value="25927" name="leaderInfos[0].companyId">-->
+		                    <div class="new_portrait">
+		                        <div class="portrait_upload" v-show="!company.member.img" id="portraitNo0">
+		                            <span>上传管理人头像</span>
+		                        </div>
+		                        <div class="portraitShow" v-if="company.member.img" id="portraitShow0">
+			                        <img width="120" height="120" :src="company.member.img">
+			                        <span>更换头像</span>
+			                    </div>
+			                    <!--<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M" onchange="img_check(this,'http://www.lagou.com/c/upload.json',120,120,5,'myfiles0','myfiles0_error','portraitNo0','portraitShow0','type0','leaderInfos0');" name="myfiles" id="myfiles0" class="myfiles">-->
+			                    <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="myfiles0" class="myfiles">
+		                        <em>
+								         尺寸：120*120px <br> 	
+								         大小：小于5M
+		                        </em>
+		                        <!--<span style="display:none;" id="myfiles0_error" class="error"></span>-->
+		                    </div>
+		                        
+		                        
+		                    <h3>管理人姓名</h3>
+		                    <input type="text" v-model="company.member.name" style="width: 416px;height: 46px;" placeholder="请输入管理人姓名" name="leaderInfos[0].name" id="name0" class="s_input1 valid">	
+		                        
+		                    <h3>当前职位</h3>
+		                    <input type="text" v-model="company.member.post" style="width: 416px;height: 46px;" placeholder="请输入当前职位，如：创始人兼CEO" name="leaderInfos[0].position" id="position0" class="s_input1 valid">	
+		                        
+		                    <!--<h3>新浪微博</h3>
+		                    <input type="text" placeholder="请输入创始人新浪微博地址" name="leaderInfos[0].weibo" id="weibo0">	-->
+		                        
+		                    <h3>管理人简介</h3> 
+		                    <textarea v-model="company.member.intro" placeholder="请输入该管理人的个人履历等，建议按照时间倒序分条展示" maxlength="1000" name="leaderInfos[0].remark" id="description0"></textarea>	
+		                    <div class="word_count">你还可以输入 <span>{{remainingwords}}</span> 字</div>
+		                </div>
+	                </div>
+                    	<!--<a id="addMember" class="add_member" href="javascript:void(0)"><i></i>继续添加创始团队</a>-->
+                   	<div class="clear"></div>
+					<input type="button" @click="goback" value="上一步" id="step2Submit" class="btn_big fl">
+					<input type="submit" @click.prevent="goforward" value="下一步" id="step3Submit" class="btn_big fr">
+                    <!--<a class="btn_cancel fr" href="http://www.lagou.com/c/product.html">跳过</a>-->
+                </form>
+			</dd>
 		</dl>
 	</div>
 </template>
@@ -16,6 +63,70 @@
 			company:{
 				type:Object,
 				required:true
+			}
+		},
+		computed:{
+			remainingwords(){
+				if(this.company.member.intro){
+					return 500 - this.company.member.intro.length
+				}
+				else{
+					return 500
+				}
+			}
+		},
+		mounted(){
+			console.log('from index3 mounted' + JSON.stringify(this.company))
+		},
+		created(){
+			this.dataInit()
+		},
+		methods:{
+			getmemberimg(e){
+				var memberimg = e.target.files[0]
+				this.uploadimg(memberimg)
+			},
+			uploadimg(file){
+				if(!file){
+					return
+				}
+				var formData = new FormData()
+				formData.append("file",file)
+				this.$axios({
+					method:'post',
+					url:'/api/ossupload2preview',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res => {
+					const blob = new Blob([res.data])
+//					console.log('beforeupdate')
+					this.company.member.img = URL.createObjectURL(blob)
+//					console.log('afterupdate')
+					console.log(this.company.member.img)
+					this.$message("上传成功!")
+				}).catch(err => {
+					this.$message("上传失败!")
+					console.log(err)
+				})
+			},
+			goforward(){
+				this.$router.push({path:'/companyinfofillin/step4'})
+			},
+			goback(){
+				this.$router.push({path:'/companyinfofillin/step2'})
+			},
+			dataInit(){
+				if(!this.company.member || this.company.member == {}){
+					this.company.member = {
+						name:null,
+						img:null,
+						post:null,
+						intro:null
+					}
+				}
 			}
 		},
 		watch:{

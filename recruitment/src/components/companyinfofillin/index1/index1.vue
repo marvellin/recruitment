@@ -197,9 +197,11 @@
 			this.getdatas()
 			this.addlisteners()
 		},
+		mounted(){
+			console.log('from index1 mounted' + JSON.stringify(this.company))
+		},
 		methods:{
 			pickcity(city){
-//				console.log('enter pickcity')
 				this.company.comdetail.city = city
 				this.cityboxshow = false
 			},
@@ -209,13 +211,15 @@
 			getimg(e){
 				var _this = this
 				var files = e.target.files[0]
-				if(!e || !window.FileReader || !files) return
+				/*
+				 * 上传失败不应该有预览图，预览图应该由后台上传成功后回传
+				 * if(!e || !window.FileReader || !files) return
 				let reader = new FileReader()
 				reader.readAsDataURL(files)//这里是关键一步，转换就在这里
 				reader.onload = function(){
 					_this.company.comdetail.img = this.result
 				}
-				console.log('in getimg ' + _this.company.comdetail.img)
+				console.log('in getimg ' + _this.company.comdetail.img)*/
 				this.uploadimg(files)
 			},
 			uploadimg(file){
@@ -234,10 +238,10 @@
 					responseType:'arraybuffer'
 				}).then(res => {
 					const blob = new Blob([res.data])
-					console.log('beforeupdate')
+//					console.log('beforeupdate')
 					this.company.comdetail.img = URL.createObjectURL(blob)
-					console.log('afterupdate')
-					console.log(this.company.comdetail.img)
+//					console.log('afterupdate')
+//					console.log(this.company.comdetail.img)
 					this.$message("上传成功!")
 				}).catch(err => {
 					this.$message("上传失败!")
@@ -245,7 +249,7 @@
 				})
 			},
 			dataInit(){
-				if(!this.company.comdetail){
+				if(!this.company.comdetail || this.company.comdetail == {}){
 					this.company.comdetail = {
 						fullname:null,
 						shortname:null,
@@ -260,7 +264,7 @@
 						labels:[]
 					}
 				}
-				if(!this.company.stage){
+				if(!this.company.stage || this.company.stage == {}){
 					this.company.stage = {
 						currentstage:null,
 						org:null
