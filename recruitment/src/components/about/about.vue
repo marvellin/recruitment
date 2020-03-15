@@ -3,6 +3,7 @@
 		<div id="body">
 			<headert :navlist="2" :isCompany="true"></headert>
 			<div id="container">
+				
 				<div class="content_mid">
 		        	<dl class="c_section c_section_mid" style="width: 680px;height: 457px;">
 		        		<dt>
