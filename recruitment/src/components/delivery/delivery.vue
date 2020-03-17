@@ -115,6 +115,11 @@
 				
 			}
 		},
+		methods:{
+			refresh(){
+				this.$router.go(0)
+			}
+		},
 		components:{
 			footert,
 			headert,

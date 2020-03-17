@@ -1299,45 +1299,8 @@
 								<span>添加自我描述</span>
 		            		</div><!--end .descriptionAdd-->
 		            	</div><!--end #selfDescription-->
-
-		
-		            	<!--<div class="profile_box" id="worksShow">
-		            		<h2>作品展示</h2>
-		            		<span class="c_add dn"></span>
-		            		<div class="workShow dn">
-		            		    <ul class="slist clearfix">
-		            			</ul>
-		            		</div>
-		            		<div class="workEdit dn">
-		            			<form class="workForm">
-			            			<table>
-			            				<tbody><tr>
-									      	<td>
-									        	<input type="text" placeholder="请输入作品链接" name="workLink" class="workLink">
-									      	</td>
-									    </tr>
-			            				<tr>
-											<td>
-												<textarea maxlength="100" class="workDescription s_textarea" name="workDescription" placeholder="请输入说明文字"></textarea>
-												<div class="word_count">你还可以输入 <span>100</span> 字</div>
-											</td>
-			            				</tr>
-			            				<tr>
-			            					<td>
-												<input type="submit" value="保 存" class="btn_profile_save">
-								          		<a class="btn_profile_cancel" href="javascript:;">取 消</a>
-			            					</td>
-			            				</tr>
-			            			</tbody></table>
-			            			<input type="hidden" class="showId" value="">
-		            			</form>
-		            		</div>
-		            		<div class="workAdd pAdd">
-		            		           好作品会说话！<br>
-								快来秀出你的作品打动企业吧！
-								<span>添加作品展示</span>
-		            		</div>
-		            	</div>-->
+						
+						<button class="btn_big fr" @click="saveresume">保存</button>
 	            	</div><!--end .content_l-->
 	            	<div class="content_r">
 		            	<div class="mycenterR" id="myInfo">
@@ -1557,7 +1520,7 @@
 							                    <a class="btn_addPic" href="javascript:void(0);">
 							                    	<span>选择上传文件</span>
 							                        <!--<input type="file" onchange="file_check(this,'h/nearBy/updateMyResume.json','resumeUpload')" class="filePrew" id="resumeUpload" name="newResume" size="3" title="支持word、pdf、ppt、txt、wps格式文件，大小不超过10M" tabindex="3">-->
-							                        <input type="file" accept="application/msword,application/pdf,application/vnd.ms-powerpoint,application/vnd.ms-works" @change="getresumefile" class="filePrew" id="resumeUpload" name="newResume" size="3" title="支持word、pdf、ppt、txt、wps格式文件，大小不超过10M" tabindex="3"/>
+							                        <input type="file" accept="text/plain,application/msword,application/pdf,application/vnd.ms-powerpoint,application/vnd.ms-works" @change="getresumefile" class="filePrew" id="resumeUpload" name="newResume" size="3" title="支持word、pdf、ppt、txt、wps格式文件，大小不超过10M" tabindex="3"/>
 							                    </a>
 							                </form>
 							            </td>
@@ -1779,6 +1742,22 @@
 			}
 		},
 		methods:{
+			saveresume(){
+				this.$axios({
+					method:"post",
+					url:"http://127.0.0.1:3000/resume",
+					data:this.resume
+				}).then(res => {
+					this.$message({
+						message:"保存成功！"
+					})
+				}).catch(err => {
+					this.$message({
+						type:"warn",
+						message:"保存失败！"
+					})
+				})
+			},
 			chartdata_inc(index){
 				this.chartdata.rows[0].precent += index
 				this.chartdata.rows[1].precent -= index

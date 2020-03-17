@@ -10,8 +10,8 @@
 				</div>
 				<div class="login_box">
 					<form id="loginForm" action="">
-						<input type="text" id="email" name="email" value="" tabindex="1" placeholder="请输入登陆邮箱地址"/>
-						<input type="password" id="password" name="password" tabindex="2" placeholder="请输入密码"/>
+						<input type="text" style="width: 316px;height: 42px;" id="email" name="email" value="" tabindex="1" placeholder="请输入登陆邮箱地址"/>
+						<input type="password" style="width: 316px;height: 42px;" id="password" name="password" tabindex="2" placeholder="请输入密码"/>
 						<span class="error" style="display: none;" id="beError"></span>
 						<label class="fl" for="remember">
 							<input type="checkbox" id="remember" value="" checked="checked" name="autoLogin"/>

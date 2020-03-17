@@ -35,27 +35,28 @@
 		                    </dd>
 		                    <dd class="resume resume_web">
 						        <div style="width:400px;">
-									<span> 你已设置默认投递简历：<a title="jason的简历" target="_blank" href="resume/myresume.html"><strong>在线简历：jason的简历</strong></a></span><br>
-									<span>设置于2014-07-01 17:08</span>
+									<span>你已设置默认投递简历：<router-link title="jason的简历" target="_blank" to=""><strong>在线简历：jason的简历</strong></router-link></span><br>
+									<!--<span>设置于2014-07-01 17:08</span>-->
+									<span>&nbsp;</span>
 						        </div>
-						        <a title="设置默认投递简历" href="#setResume" class="inline fl cboxElement">重新设置</a>
+						        <router-link title="设置默认投递简历" to="/setting/resumesetting" class="inline fl cboxElement">重新设置</router-link>
 						    </dd>
-						    <div class="saoma saoma_btm">
+						    <!--<div class="saoma saoma_btm">
 		                      	<div class="dropdown_menu">
-									<!--<div class="drop_l">
+									<div class="drop_l">
 										<img width="131" height="131" src="style/images/73338ca8e1694b298d223745670f8daf_318969.jpg">
 										<span>[仅限本人使用]</span>
-									</div>-->
-									<!--<div class="drop_r">
+									</div>
+									<div class="drop_r">
 										<div class="drop_title"></div>
 										<p>
 											想知道HR在看简历嘛？<br>
 		          							想在微信中收到面试通知？<br>
 		          							<span>&lt;&lt; 扫一扫，给你解决</span>
 										</p>
-									</div>-->
+									</div>
 								</div>
-		                    </div>
+		                    </div>-->
 		                    <dd>
 		                        <!-- 用户是否激活 0-否；1-是 -->
 				                <a title="投个简历" class="btn fr btn_apply" href="javascript:sendResume(314873,149487,false,false);">投个简历</a>

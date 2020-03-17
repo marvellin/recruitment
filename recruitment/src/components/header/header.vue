@@ -31,7 +31,7 @@
 					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/management">我收到的简历</router-link></dd>
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/mycompany">我的公司主页</router-link></dd>
 					<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要找工作</router-link></dd>-->
-					<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
+					<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>-->
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
 				</dl>
 				<dl v-if="!isCompany" class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
@@ -44,7 +44,7 @@
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/collection">我的收藏</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/delivery">我的投递</router-link></dd>
 						<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>-->
-						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>
+						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/setting">账号设置</router-link></dd>
 						<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
 				</dl>
 			</div>

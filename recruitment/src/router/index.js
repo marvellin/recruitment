@@ -39,6 +39,9 @@ import companyinforfillinsuccess from '@/components/companyinfofillin/success/su
 import setting from '@/components/setting/index'
 import pwdsetting from '@/components/setting/pwdsetting/pwdsetting'
 import resumesetting from '@/components/setting/resumesetting/resumesetting'
+import attachment from '@/components/setting/resumesetting/attachment'
+import online from '@/components/setting/resumesetting/online'
+import infosetting from '@/components/setting/infosetting/infosetting'
 
 Vue.use(Router)
 
@@ -258,7 +261,25 @@ export default new Router({
     		{
     			path:'resumesetting',
     			name:'resumesetting',
-    			component:resumesetting
+    			component:resumesetting,
+    			redirect:'/setting/resumesetting/online',
+    			children:[
+    				{
+    					path:'attachment',
+    					name:'attachment',
+    					component:attachment
+    				},
+    				{
+    					path:'online',
+    					name:'online',
+    					component:online
+    				},
+    			]
+    		},
+    		{
+    			path:'infosetting',
+    			name:'infosetting',
+    			component:infosetting
     		}
     	]
     }

@@ -7,7 +7,7 @@
 			</a>
 			<div class="resumeIntro">
 			    <h3 class="unread">
-					<a target="_blank" title="预览resume.basicinfo.username的简历" href="javascript:void(0)">
+					<a target="_blank" :title="'预览'+resume.basicinfo.username+'的简历'" href="javascript:void(0)">
 			            {{resume.basicinfo.username}}的简历
 			        </a>
 			        <em></em>
@@ -19,7 +19,7 @@
 			    </div>
 			    <div class="jdpublisher">
 					<span>
-				                     应聘职位：<a title="position.name" target="_blank" href="javascript:void(0)">{{position.name}}</a>
+				        应聘职位：<a title="position.name" target="_blank" href="javascript:void(0)">{{position.name}}</a>
 				    </span>
 			    </div>
 			</div>
