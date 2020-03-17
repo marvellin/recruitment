@@ -13,6 +13,7 @@ import expiredposition from '@/components/mycompany/management/expiredposition/e
 import notifiedresume from '@/components/mycompany/management/notifiedresume/notifiedresume'
 import pendingresume from '@/components/mycompany/management/pendingresume/pendingresume'
 import postposition from '@/components/mycompany/management/postposition/postposition'
+import postpositionsuccess from '@/components/mycompany/management/postposition/success'
 import unsuitableresume from '@/components/mycompany/management/unsuitableresume/unsuitableresume'
 import validposition from '@/components/mycompany/management/validposition/validposition'
 import undeterminedresume from '@/components/mycompany/management/undeterminedresume/undeterminedresume'
@@ -34,6 +35,10 @@ import index2 from '@/components/companyinfofillin/index2/index2'
 import index3 from '@/components/companyinfofillin/index3/index3'
 import index4 from '@/components/companyinfofillin/index4/index4'
 import index5 from '@/components/companyinfofillin/index5/index5'
+import companyinforfillinsuccess from '@/components/companyinfofillin/success/success'
+import setting from '@/components/setting/index'
+import pwdsetting from '@/components/setting/pwdsetting/pwdsetting'
+import resumesetting from '@/components/setting/resumesetting/resumesetting'
 
 Vue.use(Router)
 
@@ -94,7 +99,23 @@ export default new Router({
     		{path:'expiredposition',name:'expiredposition',component:expiredposition},
     		{path:'notifiedresume',name:'notifiedresume',component:notifiedresume},
     		{path:'pendingresume',name:'pendingresume',component:pendingresume},
-    		{path:'postposition',name:'postposition',component:postposition},
+    		{
+    			path:'postposition',
+    			name:'postposition',
+    			component:postposition,
+    			/*children:[
+    				{
+    					path:'success',
+    					name:'postpositionsuccess',
+    					component:postpositionsuccess
+    				}
+    			]*/
+    		},
+    		{
+    					path:'success',
+    					name:'postpositionsuccess',
+    					component:postpositionsuccess
+    		},
     		{path:'unsuitableresume',name:'unsuitableresume',component:unsuitableresume},
     		{path:'validposition',name:'validposition',component:validposition},
     		{path:'undeterminedresume',name:'undeterminedresume',component:undeterminedresume}
@@ -191,6 +212,11 @@ export default new Router({
     	component:companyinfofillin,
     	redirect:'/companyinfofillin/step1',
     	children:[
+	    	{
+	    		path:'success',
+	    		name:'success',
+	    		component:companyinforfillinsuccess
+	    	},
     		{
     			path:'step1',
     			name:'step1',
@@ -215,6 +241,24 @@ export default new Router({
     			path:'step5',
     			name:'step5',
     			component:index5
+    		}
+    	]
+    },
+    {
+    	path:'/setting',
+    	name:'setting',
+    	component:setting,
+    	redirect:'/setting/pwdsetting',
+    	children:[
+    		{
+    			path:'pwdsetting',
+    			name:'pwdsetting',
+    			component:pwdsetting
+    		},
+    		{
+    			path:'resumesetting',
+    			name:'resumesetting',
+    			component:resumesetting
     		}
     	]
     }

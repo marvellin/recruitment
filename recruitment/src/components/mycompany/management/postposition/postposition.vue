@@ -465,6 +465,7 @@
 				if(this.job){
 					this.$axios.post('http://127.0.0.1:3000/position',this.job).then(res => {
 						console.log(res)
+						this.$router.push({path:'/management/success'})
 					}).catch(err => {
 						console.log(err)
 					})

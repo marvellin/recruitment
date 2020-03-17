@@ -32,8 +32,6 @@
 		},
 		created(){
 			this.dataInit()
-			/*this.companyinit()
-			console.log("this is company from index" + this.company)*/
 		},
 		methods:{
 			dataInit(){
