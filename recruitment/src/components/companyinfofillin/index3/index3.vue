@@ -32,16 +32,19 @@
 		                        
 		                        
 		                    <h3>管理人姓名</h3>
-		                    <input type="text" v-model="company.member.name" style="width: 416px;height: 46px;" placeholder="请输入管理人姓名" name="leaderInfos[0].name" id="name0" class="s_input1 valid">	
+		                    <input type="text" v-validate="'required|membername|max:20'" v-model="company.member.name" style="width: 416px;height: 46px;" placeholder="请输入管理人姓名" name="membername" id="name0" class="s_input1 valid">	
+		                    <el-alert style="width: 416px;height: 46px;" :closable="false" :title="errors.first('membername')" type="error" v-show="errors.has('membername')"></el-alert>
 		                        
 		                    <h3>当前职位</h3>
-		                    <input type="text" v-model="company.member.post" style="width: 416px;height: 46px;" placeholder="请输入当前职位，如：创始人兼CEO" name="leaderInfos[0].position" id="position0" class="s_input1 valid">	
+		                    <input type="text" v-validate="'required|nosymbol|max:20'" v-model="company.member.post" style="width: 416px;height: 46px;" placeholder="请输入当前职位，如：创始人兼CEO" name="memberposition" id="position0" class="s_input1 valid">	
+		                    <el-alert style="width: 416px;height: 46px;" :closable="false" :title="errors.first('memberposition')" type="error" v-show="errors.has('memberposition')"></el-alert>
 		                        
 		                    <!--<h3>新浪微博</h3>
 		                    <input type="text" placeholder="请输入创始人新浪微博地址" name="leaderInfos[0].weibo" id="weibo0">	-->
 		                        
 		                    <h3>管理人简介</h3> 
-		                    <textarea v-model="company.member.intro" placeholder="请输入该管理人的个人履历等，建议按照时间倒序分条展示" maxlength="1000" name="leaderInfos[0].remark" id="description0"></textarea>	
+		                    <textarea v-validate="'required|max:500'" v-model="company.member.intro"  placeholder="请输入该管理人的个人履历等，建议按照时间倒序分条展示" maxlength="1000" name="memberintro" id="description0"></textarea>	
+		                    <el-alert style="height: 46px;width: 600px;" :closable="false" :title="errors.first('memberintro')" type="error" v-show="errors.has('memberintro')"></el-alert>
 		                    <div class="word_count">你还可以输入 <span>{{remainingwords}}</span> 字</div>
 		                </div>
 	                </div>
@@ -113,7 +116,23 @@
 				})
 			},
 			goforward(){
-				this.$router.push({path:'/companyinfofillin/step4'})
+				this.$validator.validate().then((result) => {
+			        if (result) {
+			          this.$router.push({path:'/companyinfofillin/step4'})
+			        }
+			        else{
+				        this.$message({
+							type:'warn',
+							message:"请先完善页面信息！"
+						})
+			        }
+			      }).catch(err => {
+			      		this.$message({
+							type:'warn',
+							message:"请先完善页面信息！"
+						})
+			      		console.log(err)
+			      })
 			},
 			goback(){
 				this.$router.push({path:'/companyinfofillin/step2'})

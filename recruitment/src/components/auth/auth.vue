@@ -3,8 +3,8 @@
 		<div id="body">
 			<headert :navlist="2" :isCompany="true"></headert>
 			<div id="container">
-				<input type="file" @change="uploadImgWithPreview" accept="image/jpeg,image/png,image/jp2,image/gif"/>
-				<img :src="imgurl" width="190px" height="190px"/>
+				<!--<input type="file" @change="uploadImgWithPreview" accept="image/jpeg,image/png,image/jp2,image/gif"/>-->
+				<!--<img :src="imgurl" width="190px" height="190px"/>-->
 				<div class="content_mid">
 		        	<dl class="c_section c_section_mid">
 		        		<dt>

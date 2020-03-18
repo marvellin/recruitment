@@ -30,14 +30,16 @@
 			                <!--<span style="display:none;" id="myfiles0_error" class="error"></span>-->
 			                    
 		                    <h3>产品名称</h3>
-		                    <input type="text" style="width: 624px;height: 46px" placeholder="请输入产品名称" v-model="product.name" :name="product.name">	
+		                    <input type="text" @click="pickcurrentproduct(index)" v-validate="'required|max:20'" style="width: 624px;height: 46px" placeholder="请输入产品名称" v-model="product.name" :name="'产品'+(index+1)+'的名称'">	
+		                    <el-alert style="width: 624px;height: 46px;" :closable="false" :title="errors.first('产品'+(index+1)+'的名称')" type="error" v-show="errors.has('产品'+(index+1)+'的名称')"></el-alert>
 		                        
 		                    <!--<h3>产品地址</h3>
 		                    <input type="text" placeholder="请输入产品主页URL或产品下载地址" name="productInfos[0].productUrl" id="address0">-->	
 		                        
 		                    <h3>产品简介</h3> 
-		                    <textarea style="width: 624px;height: 275px;" placeholder="请简短描述该产品定位、产品特色、用户群体等" v-model="product.info" maxlength="1000" name="productinfo"></textarea>	
+		                    <textarea @click="pickcurrentproduct(index)" v-validate="'required|max:500'" style="width: 624px;height: 275px;" placeholder="请简短描述该产品定位、产品特色、用户群体等" v-model="product.info" maxlength="500" :name="'产品'+(index+1)+'的介绍'"></textarea>	
 		                    <div class="word_count">你还可以输入 <span>{{remainingwords(index)}}</span> 字</div>
+		                    <el-alert style="width: 624px;height: 46px;" :closable="false" :title="errors.first('产品'+(index+1)+'的介绍')" type="error" v-show="errors.has('产品'+(index+1)+'的介绍')"></el-alert>
 		                </div>
 	                </div>
                     <a id="addMember" class="add_member" @click="addproduct" href="javascript:void(0)"><i></i>继续添加公司产品</a>
@@ -53,10 +55,15 @@
 <script>
 	export default{
 		name:"index",
+		data(){
+			return{
+				currentproduct:null
+			}
+		},
 		props:{
 			company:{
 				type:Object,
-				required:true
+				required:true,
 			},
 //			producttmp:null,
 		},
@@ -68,6 +75,10 @@
 			console.log('from index4 mounted' + JSON.stringify(this.company))
 		},
 		methods:{
+			pickcurrentproduct(index){
+				this.currentproduct = index
+//				console.log(this.currentproduct)
+			},
 			deleteproduct(index){
 				if(index >= 0 && index < this.company.products.length){
 					this.$confirm('是否删除这个产品?', '提示', {
@@ -97,7 +108,23 @@
 				}
 			},
 			goforward(){
-				this.$router.push({path:'/companyinfofillin/step5'})
+				this.$validator.validate().then((result) => {
+			        if (result) {
+			          this.$router.push({path:'/companyinfofillin/step5'})
+			        }
+			        else{
+				        this.$message({
+							type:'warn',
+							message:"请先完善页面信息！"
+						})
+			        }
+			      }).catch(err => {
+			      		this.$message({
+							type:'warn',
+							message:"请先完善页面信息！"
+						})
+			      		console.log(err)
+			      })
 			},
 			goback(){
 				this.$router.push({path:'/companyinfofillin/step3'})

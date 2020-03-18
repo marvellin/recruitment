@@ -15,8 +15,9 @@
 	            		<i @click="deletelabel(index)"></i>
 	            	</li>
 	            </ul>
-	            <input type="text" v-model="customlabel" placeholder="请输入自定义标签" style="width: 514px;height: 46px;" name="label" id="label">	
+	            <input type="text" v-validate.immediate="'max:6'" v-model="customlabel" placeholder="请输入自定义标签" style="width: 514px;height: 46px;" name="label" id="label">	
 	            <input type="button" @click="pastelabel" value="贴上" id="add_label">
+	            <el-alert style="width: 514px;height: 46px;" :closable="false" :title="errors.first('label')" type="error" v-show="errors.has('label')"></el-alert>
 	            <div class="clear"></div>
 	            <div id="box_labels" v-if="labelslist">
 	            	<dl v-for="(item,index1) in labelslist" :key='index1'>
@@ -113,16 +114,23 @@
 		},
 		methods:{
 			pastelabel(){
+				console.log(this.$validator)
 				if(this.company.comdetail.labels.length >= 10){
 					this.$message({
 						type:'info',
 						message:'已选择10个标签，无法再添加新的标签！'
 					})
+					this.customlabel = null
 				}
-				else if(this.customlabel != undefined && this.customlabel != null && this.company.comdetail.labels.length < 10){
+				else if(this.customlabel != undefined && this.customlabel != null && this.company.comdetail.labels.length < 10 && !this.$validator.errors.has('label')){
 					this.company.comdetail.labels.push(this.customlabel)
 				}
-				this.customlabel = null
+				else if(this.$validator.errors.has('label')){
+					this.$message({
+						type:'warn',
+						message:'标签超过限定字数！'
+					})
+				}
 			},
 			deletelabel(index){
 				if(index >= 0 && index < this.company.comdetail.labels.length){
@@ -175,7 +183,17 @@
 				})
 			},
 			goforward(){
-				this.$router.push({path:'/companyinfofillin/step3'})
+				if(this.company.comdetail.labels.length <= 0){
+					this.$confirm('还未添加任何公司标签，是否跳过?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.$router.push({path:'/companyinfofillin/step3'})
+			        }).catch(() => {
+				                   
+			        })
+				}
 			},
 			goback(){
 				this.$router.push({path:'/companyinfofillin/step1'})
