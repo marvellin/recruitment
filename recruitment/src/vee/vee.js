@@ -3,6 +3,8 @@ import VeeValidate, { Validator } from 'vee-validate';
 import messages from 'vee-validate/dist/locale/zh_CN'
 
 const attributesCh = {
+	loginemail:'登陆邮箱',
+	password:'密码',
 	temptation:'一句话介绍',
 	label:'标签',
 	select_industry:'行业领域',
@@ -16,7 +18,21 @@ const attributesCh = {
 	companyshortname:'公司简称',
 	companycity:'公司所在地',
 	select_scale:'公司规模',
-	companystage:'公司融资阶段'
+	companystage:'公司融资阶段',
+	confirmpassword:'确认密码',
+	posttype:'职位类别',
+	positionName:'职位名称',
+	department:'所属部门',
+	salaryMax:'最高月薪',
+	salaryMin:'最低月薪',
+	workAddress:'工作城市',
+	workexperience:'工作经验',
+	select_education:'学历要求',
+	positionAdvantage:'职位诱惑',
+	positionAddress:'工作地址',
+	interviewaddress:'面试地点',
+	hrtel:'HR联系方式'
+//	editor:'职位描述',
 }
 Validator.updateDictionary({
     zh_CN: {
@@ -39,7 +55,7 @@ Validator.updateDictionary({
 Validator.addLocale(messages)
 Validator.extend('tel',{
 	messages:{
-		zh_CN:field => field + '手机号码必须为11位且以正确号段开头（如13、15等）',
+		zh_CN:field => field + '应为11位且以正确号段开头电话号码（如13、15等）',
 	},
 	validate:value => {
 		return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
@@ -108,6 +124,31 @@ Validator.extend('nosymbol&number',{
 		return regex.test(value)
 	}
 })
+Validator.extend('password',{
+	messages:{
+		zh_CN:field => field + "必须包含数字、字母和特殊符号"
+	},
+	validate:value => {
+//		const regex = /^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]{8,}$/
+//		const regex = /^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]$/
+
+		const regex = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$)(?![0-9a-z]+$)(?![0-9A-Z]+$)(?![0-9a-zA-Z]+$)^.{8,20}$/	
+		return regex.test(value)
+	}
+})
+/*Validator.extend('editorrequired',{
+	messages:{
+		zh_CN:field => field + '是必须的.'
+	},
+	validate:value => {
+		if(value === undefined || value === null || value === ''){
+			return false
+		}
+		else{
+			return true
+		}
+	}
+})*/
 /*Validator.extend('',{
 	messages:{
 		zh_CN:field => 

@@ -33,24 +33,27 @@
 					    <td><span class="redstar">*</span></td>
 					    <td>时间</td>
 					    <td>
-					    	<!--<input type="text" style="" placeholder="请输入具体面试时间" name="interviewtime" id="interviewtime">-->
-					    	<div style="width: 450px;height: 70px;">
-					    		<Date-picker :options="datepickeroptions" placement="bottom" @on-change="getinterviewtime" id="datepicker" style="width: 450px;height: 70px;" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择面试时间"></Date-picker>
+					    	<div style="width: 450px;height: 60px;">
+					    		<Date-picker @on-open-change="checktime" :options="datepickeroptions" placement="bottom" @on-change="getinterviewtime" id="datepicker" style="width: 450px;height: 70px;" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="请选择面试时间"></Date-picker>
+					    		<!--<el-alert style="width: 450px;height: 36px;" :closable="false" title="面试时间是必须的." type="error" v-show="hasinterviewtimeError"></el-alert>-->
 					    	</div>
+					    	<el-alert style="width: 450px;height: 36px;" :closable="false" title="面试时间是必须的." type="error" v-show="hasinterviewtimeError"></el-alert>
 		                </td>
 					</tr>
 					<tr>
 					    <td><span class="redstar">*</span></td>
 					    <td>地点</td>
 					    <td>
-					    	<input type="text" v-model="feedbackdetail.address" style="width: 450px;height: 40px;" placeholder="请输入具体面试地点" name="interviewaddress" id="interviewaddress">
+					    	<input type="text" v-validate="'required'" v-model="feedbackdetail.address" style="width: 450px;height: 40px;" placeholder="请输入具体面试地点" name="interviewaddress" id="interviewaddress">
+					    	<el-alert style="width: 450px;height: 36px;" :closable="false" :title="errors.first('interviewaddress')" type="error" v-show="errors.has('interviewaddress')"></el-alert>
 		                </td>
 					</tr>
 					<tr>
 					    <td><span class="redstar">*</span></td>
 					    <td>电话</td>
 					    <td>
-					    	<input type="text" v-model="feedbackdetail.tel" style="width: 450px;height: 40px;" placeholder="请输入HR联系方式" name="hrtel" id="hrtel">
+					    	<input v-validate="'required|min:11|max:11|tel'" type="text" v-model="feedbackdetail.tel" style="width: 450px;height: 40px;" placeholder="请输入HR联系方式" name="hrtel" id="hrtel">
+					    	<el-alert style="width: 450px;height: 36px;" :closable="false" :title="errors.first('hrtel')" type="error" v-show="errors.has('hrtel')"></el-alert>
 		                </td>
 					</tr>
 					<tr>
@@ -86,6 +89,7 @@
 		},
 		data(){
 			return{
+				hasinterviewtimeError:false,
 				feedbackdetail:null,
 				colorboxshow:false,
 				seekers:null,
@@ -98,15 +102,57 @@
 			}
 		},
 		methods:{
+			checktime(e){
+//				console.log(e)
+				if(e === false){
+					if(this.feedbackdetail.time === undefined || this.feedbackdetail.time === null || this.feedbackdetail.time === ''){
+						this.hasinterviewtimeError = true
+						return
+					}
+				}
+				this.hasinterviewtimeError = false
+			},
 			inform(){
+				this.$validator.validate().then((result) => {
+			        if (result) {
+			        	//判断面试事件是否报错
+			        	if(!this.hasinterviewtimeError){
+			        		//如不报错，则根据seekers的idlist访问后台并提交保存面试数据，并关闭colorbox
+			        		this.colorboxshow = false
+			        		//打印面试信息
+			        		console.log(this.feedbackdetail)
+			        		//打印通知的求职者
+			        		console.log(this.seekers)
+			        	}
+			        	else{
+			        		//提示报错并停留在colorbox，并且不提交数据
+			        		this.$message({
+								type:'warn',
+								message:"请先面试时间信息！"
+							})
+			        	}
+			        }
+			        else{
+				        this.$message({
+							type:'warn',
+							message:"请先完善面试信息！"
+						})
+			        }
+			      }).catch(err => {
+			      		this.$message({
+							type:'warn',
+							message:"请先完善面试信息！"
+						})
+			      		console.log(err)
+			      })
 				//通过idlist访问后台
-				console.log('面试信息')
+				/*console.log('面试信息')
 				console.log(this.feedbackdetail)
 				console.log('求职者')
-				console.log(this.seekers)
+				console.log(this.seekers)*/
 				
-				//关闭colorbox
-				this.colorboxshow = false
+				/*//关闭colorbox
+				this.colorboxshow = false*/
 			},
 			informperson(person){
 				this.seekers = person
@@ -130,6 +176,7 @@
 				this.colorboxshow = false
 			},
 			getinterviewtime(e){
+				console.log("entertime")
 				this.feedbackdetail.time = e
 			}
 		}
@@ -165,6 +212,6 @@
 		margin:8px 0 0 0 ;
 	}
 	#interviewform input{
-		margin: 5px 0;
+		margin: 0 0;
 	}
 </style>

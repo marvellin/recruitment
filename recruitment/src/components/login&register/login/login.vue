@@ -10,19 +10,21 @@
 				</div>
 				<div class="login_box">
 					<form id="loginForm" action="">
-						<input type="text" style="width: 316px;height: 42px;" id="email" name="email" value="" tabindex="1" placeholder="请输入登陆邮箱地址"/>
-						<input type="password" style="width: 316px;height: 42px;" id="password" name="password" tabindex="2" placeholder="请输入密码"/>
-						<span class="error" style="display: none;" id="beError"></span>
-						<label class="fl" for="remember">
+						<input type="text" v-validate="'required|email'" style="width: 316px;height: 42px;margin-bottom: 0;" id="email" name="loginemail" v-model="login.email" tabindex="1" placeholder="请输入登陆邮箱地址"/>
+						<el-alert style="width: 316px;height: 42px;" :closable="false" :title="errors.first('loginemail')" type="error" v-show="errors.has('loginemail')"></el-alert>
+						<input type="password" v-validate="'required|min:8|max:20|password'" style="width: 316px;height: 42px;margin: 20px 0 0 0;" id="password" name="password" v-model="login.password" tabindex="2" placeholder="请输入密码"/>
+						<el-alert style="width: 316px;height: 42px;" :closable="false" :title="errors.first('password')" type="error" v-show="errors.has('password')"></el-alert>
+						<!--<span class="error" style="display: none;" id="beError"></span>-->
+						<label class="fl" for="remember" style="margin-top: 10px;">
 							<input type="checkbox" id="remember" value="" checked="checked" name="autoLogin"/>
 							记住我
 						</label>
-						<router-link to="" class="fr" target="_blank">
+						<router-link to="" class="fr" target="_blank" style="margin-top: 10px;">
 							忘记密码？
 						</router-link>
-						<router-link to="" style="color: #fff;" class="submitLogin" title="登 &nbsp; &nbsp陆">
+						<a @click.prevent="userlogin" style="color: #fff;" class="submitLogin" title="登陆">
 							登&nbsp; &nbsp;陆
-						</router-link>
+						</a>
 					</form>
 					<div class="login_right">
 						<div>还没有账号？</div>
@@ -43,12 +45,36 @@
 			return{
 				spx:'0px',
 				mpx:'0px',
-				timer:''
+				timer:'',
+				login:{
+					password:null,
+					email:null
+				}
 			}
 		},
 		methods:{
 			add(){
 				this.mpx = (this.m++) + 'px' 
+			},
+			userlogin(){
+				this.$validator.validate().then((result) => {
+			        if (result) {
+			        	//提交登陆数据到后台进行验证登陆，登陆成功则跳转至首页
+			          this.$router.push({path:'/home'})
+			        }
+			        else{
+				        this.$message({
+							type:'warn',
+							message:"请先完善登陆信息！"
+						})
+			        }
+			      }).catch(err => {
+			      		this.$message({
+							type:'warn',
+							message:"请先完善登陆信息！"
+						})
+			      		console.log(err)
+			      })
 			}
 		},
 		mounted(){

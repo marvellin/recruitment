@@ -1,5 +1,9 @@
 <template>
-	<quill-editor v-model="content" ref="editor" :options="editoroption" class="n-editor"></quill-editor>
+	<div>
+	<quill-editor name="editor" v-model="content" ref="editor" :options="editoroption" class="n-editor"></quill-editor>
+	<!--<button @click="showerrors1">show</button>-->
+	<!--<el-alert :closable="false" :title="errors.first('editor')" type="error" v-show="errors.has('editor')"></el-alert>-->
+	</div>
 </template>
 
 <script>
@@ -27,7 +31,12 @@
 			content(v){
 				this.$emit("getcontent",v)
 			}
-		}
+		},
+		/*methods:{
+			showerrors1(){
+				console.log(this.$validator)
+			}
+		}*/
 	}
 </script>
 

@@ -1,6 +1,11 @@
 <template>
-	<div>
-		<div class="basicEdit">
+	<div class="content user_modifyContent">
+		<dl class="c_section">
+            <dt>
+            	<h2><em></em>个人信息</h2>
+            </dt>
+            <dd>
+            	<div class="basicEdit">
 		            			<form id="profileForm">
 								  	<table>
 								    	<tbody>
@@ -92,7 +97,7 @@
 								      			<td></td> 
 								      			<td colspan="3">
 								          			<input type="submit" value="保 存" class="btn_profile_save" @click.prevent="savebasic">
-								          			<a class="btn_profile_cancel" @click.prevent="canceleditbasic">取 消</a>
+								          			<!--<a class="btn_profile_cancel" @click.prevent="canceleditbasic">取 消</a>-->
 								      			</td>
 								    		</tr>
 								  		</tbody>
@@ -115,6 +120,8 @@
 								  	<span style="display:none;" id="headPic_error" class="error"></span>
 								</div><!--end .new_portrait-->
 		            		</div>
+			</dd>
+        </dl>
 	</div>
 </template>
 
