@@ -1,4 +1,5 @@
 <template>
+	<!--已废弃本文件-->
 	<div>
 		<div id="body">
 			<headert :navlist='2' :isCompanylist='true'></headert>
