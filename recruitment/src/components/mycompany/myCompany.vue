@@ -13,6 +13,7 @@
 								<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg"/>
 							</a>
 						</div>
+						
 						<div class="c_box companyName">
 							<h2 title="公司名称测试">{{comdetail.shortname}}</h2>
 							<em class="unvalid" @mouseover="vaon" @mouseout="vaout"></em>
@@ -20,10 +21,14 @@
 							<router-link target="_blank" class="applyC" to="auth">申请认证</router-link>
 							<div class="clear"></div>
 							<h1 title="广东公司名称测试" class="fullname">{{comdetail.fullname}}</h1>
-							<form class="clear editDetail" :class="[editdetailshow?'':'dn']" id="editDetailForm">
-								<input type="text" ref="editshortname" placeholder="请输入公司简称" maxlength="15" :value="comdetail.shortname" name="companyShortName" id="companyShortName"/>
-								<input type="text" ref="editfeature" placeholder="一句话描述公司优势，核心键值，限50字" maxlength="50" :value="comdetail.feature" name="companyFeatures" id="companyFeatures"/>
-								<input type="hidden" value="25927" id="companyId" name="companyId"/>
+							<form v-if="detailtmp" class="clear editDetail" :class="[editdetailshow?'':'dn']" id="editDetailForm">
+								<input v-validate="'required|companyshortname'" data-vv-scope="scope1" type="text" ref="editshortname" placeholder="请输入公司简称" maxlength="15" v-model="detailtmp.shortname" name="companyshortname" id="companyShortName"/>
+								<el-alert style="width:400px;" :closable="false" :title="errors.first('scope1.companyshortname')" type="error" v-show="errors.has('scope1.companyshortname')"></el-alert>
+
+								<input data-vv-scope="scope1" v-validate="'required|max:50'" type="text" ref="editfeature" placeholder="一句话描述公司优势，核心键值，限50字" maxlength="50" v-model="detailtmp.feature" name="temptation" id="companyFeatures"/>
+	                    		<el-alert style="width:400px;" :closable="false" :title="errors.first('scope1.temptation')" type="error" v-show="errors.has('scope1.temptation')"></el-alert>
+								
+								<!--<input type="hidden" value="25927" id="companyId" name="companyId"/>-->
 								<input type="button" value="保存" id="saveDetail" class="btn_small" @click="savedetail"/>
 								<a id="cancelDetail" class="btn_cancel_s" @click.prevent="canceldetail">取消</a>
 							</form>
@@ -51,8 +56,10 @@
 								<!--<router-link id="changeLabels" class="change" to="">换一换</router-link>-->
 								<!--<input type="hidden" value="1" id="labelPageNo"/>-->
 								
-								<input type="text" ref="newlabel" placeholder="添加自定义标签" name="label" id="label" class="label_form"/>
+								<input data-vv-scope="labelscope" v-validate="'max:6'" v-model="labeltmp" type="text" ref="newlabel" placeholder="添加自定义标签" name="label" id="label" class="label_form"/>
 								<input type="button" value="贴上" class="" id="add_label" @click="pastelabel"/>
+								<el-alert style="width:215px;" :closable="false" :title="errors.first('labelscope.label')" type="error" v-show="errors.has('labelscope.label')"></el-alert>
+								
 								<div class="clear"></div>
 								<ul class="reset clearfix"></ul>
 								<a id="saveLabels" class="btn_small" @click.prevent="savelabel">保存</a>
@@ -60,10 +67,13 @@
 								
 							</div>
 						</div>
+						
 						<a title="编辑基本信息" class="c_edit" id="editCompanyDetail" @click.prevent="editdetail"></a>
 						<div class="clear"></div>
 					</div>
+					
 					<div class="c_breakline"></div>
+					
 					<div id="Product">
 						<div>
 							<!--无产品 -->
@@ -84,10 +94,11 @@
 							<Product :product="item" :index="index" @delete="handleItemDelete" @insert="addproduct"></Product>
 						</div>
 					</div>
+					
 					<div id="Profile">
 						<div class="profile_wrap">
 					        <!--无介绍 -->
-							<dl class="c_section nointro" v-if="!hasIntro">
+							<dl class="c_section nointro" v-show="!editintroshow" v-if="intro===undefined||intro===null||intro===''">
 					            <dt>
 					                <h2><em></em>公司介绍</h2>
 					            </dt>
@@ -106,9 +117,12 @@
 					            </dt>
 					            <dd>
 						            <form id="companyDesForm">
-						                <textarea placeholder="请分段详细描述公司简介、企业文化等" v-model="comintrotmp" ref="comintro"  name="companyProfile" id="companyProfile">{{comintro}}</textarea>		                                        
+						                <textarea data-vv-scope="comintro" v-validate="'required|max:1000'" placeholder="请分段详细描述公司简介、企业文化等" v-model="comintrotmp" ref="comintro"  name="companyProfile" id="companyProfile"></textarea>		                                        
+						                
 						                <div class="word_count fr" v-show="!hascomintro()">简介不超过 <span>1000</span> 字</div>
 						                <div class="word_count fr" v-show="hascomintro()">还可以输入 <span>{{1000-comintrotmp.length}}</span> 字</div>
+						                <el-alert style="width: 600px;height: 40px;" :closable="false" :title="errors.first('comintro.companyProfile')" type="error" v-show="errors.has('comintro.companyProfile')"></el-alert>
+						                
 						                <div class="clear"></div>
 						                <input type="button" value="保存" id="submitProfile" class="btn_small" @click="saveintro">
 						                <a id="delProfile" class="btn_cancel_s" href="javascript:void(0)" @click="cancelintro">取消</a>
@@ -117,12 +131,12 @@
 					        </dl>
 					            
 					        <!--有介绍-->
-					        <dl class="c_section" :class="[editintroshow?'dn':'']" v-if="hasIntro">
+					        <dl class="c_section" v-if="intro!==undefined&&intro!==null&&intro!==''" v-show="!editintroshow">
 					            <dt>
 					                <h2><em></em>公司介绍</h2>
 					            </dt>
 					            <dd>
-					                <div class="c_intro">{{comintro}}</div>
+					                <div class="c_intro">{{intro}}</div>
 					                <a title="编辑公司介绍" id="editIntro" class="c_edit" href="javascript:void(0)" @click.prevent="editIntro"></a>
 					            </dd>
 					        </dl>
@@ -156,21 +170,21 @@
 								<tbody>
 									<tr>
 										<td width="62">地点</td>
-										<td>{{comtags.city}}</td>
+										<td>{{comdetail.city}}</td>
 									</tr>
 									<tr>
 										<td>领域</td>
-										<td title="移动互联网">{{comtags.field}}</td>
+										<td title="移动互联网">{{comdetail.field}}</td>
 									</tr>
 									<tr>
 										<td>规模</td>
-										<td>{{comtags.scale}}</td>
+										<td>{{comdetail.scale}}</td>
 									</tr>
 									<tr>
 										<td>主页</td>
 										<td>
 											<!--<router-link to="" target="_blank"></router-link>-->
-											<a :href="comtags.comurl" target="_blank">前往公司主页</a>
+											<a :href="comdetail.comurl" target="_blank">前往公司主页</a>
 										</td>
 									</tr>
 								</tbody>
@@ -185,8 +199,9 @@
 		                            		<td>地点</td>
 		                            		<td @mouseleave="cityboxshow=false">
 		                            		<!--<td>-->
-		                            			<!--<input type="text" placeholder="请输入地点" v-model="comtags.city" name="city" id="city">-->	
-		                            			<input type="text" placeholder="请输入地点" readonly="readonly" @click="cityboxshow=true" :value="comtags.city" name="city" id="city">
+		                            			<!--<input type="text" placeholder="请输入地点" v-model="comdetail.city" name="city" id="city">-->	
+		                            			<input data-vv-scope="tags" v-validate="'required'" type="text" placeholder="请输入地点" readonly="readonly" @click="cityboxshow=true" :value="comdetail.city" name="companycity" id="city">
+		                            			<el-alert style="width: 184px;height: 36px;" :closable="false" :title="errors.first('tags.companycity')" type="error" v-show="errors.has('tags.companycity')"></el-alert>
 		                            			<div class="boxUpDown_s boxUpDown_596" id="box_expectCity_s" :style="{'display':cityboxshow?'block':'none'}">
 										          		<dl>
 										        			<dt>热门城市</dt>
@@ -248,16 +263,18 @@
 		                        		<tr>
 		                            		<td>领域</td><!-- 支持多选 -->
 		                            		<td>
-		                            			<input type="hidden" v-model="comtags.field" id="industryField" name="industryField">
-		                            			<!--<input type="text" v-model="comtags.field" style="background:none;cursor:default;border:none !important;" value="移动互联网" id="select_ind" class="select_tags">-->
-		                            			<input type="text" v-model="comtags.field" id="select_ind">
+		                            			<!--<input type="hidden" v-model="comdetail.field" id="industryField" name="industryField">-->
+		                            			<!--<input type="text" v-model="comdetail.field" style="background:none;cursor:default;border:none !important;" value="移动互联网" id="select_ind" class="select_tags">-->
+		                            			<input data-vv-scope="tags" type="text" v-validate="'required|industry|max:15'" v-model="comdetail.field" id="select_ind" name="select_industry">
+		                            			<el-alert style="width: 184px;height: 36px;" :closable="false" :title="errors.first('tags.select_industry')" type="error" v-show="errors.has('tags.select_industry')"></el-alert>
 		                            		</td>
 		                        		</tr>
 		                        		<tr>
 		                            		<td>规模</td>
 		                            		<td @mouseleave="outscalelist">
-		                            			<input type="hidden" value="" id="companySize" name="companySize">
-		                            			<input type="button" :value="comtags.scale" id="select_sca" class="select_tags" :class="[selecttagshow?'select_tags_focus':'']" @click="overscalelist">
+		                            			<!--<input type="hidden" value="" id="companySize" name="companySize">-->
+		                            			<input data-vv-scope="tags" name="select_scale" v-validate="'required'" type="button" :value="comdetail.scale" id="select_sca" class="select_tags" :class="[selecttagshow?'select_tags_focus':'']" @click="overscalelist">
+		                            			<el-alert style="width: 184px;height: 36px;" :closable="false" :title="errors.first('tags.select_scale')" type="error" v-show="errors.has('tags.select_scale')"></el-alert>
 		                                		<div class="selectBox dn" id="box_sca" :style="{'display': selecttagshow?'block':'none'}">
 			                                    	<ul class="reset">
 			                                    		<li :class="[index==scalecurrent?'current':'']" v-for="(item,index) in scalelist" :key="index" @click="choosescale(index)">
@@ -276,15 +293,16 @@
 				                        <tr>
 				                            <td>主页</td>
 				                            <td>
-		                            			<input type="text" placeholder="请输入网址" v-model="comtags.comurl" name="companyUrl" id="companyUrl">	
+		                            			<input data-vv-scope="tags" v-validate="'required|website'" type="text" placeholder="请输入网址" v-model="comdetail.comurl" name="website" id="companyUrl">	
+		                            			<el-alert style="width: 184px;height: 46px;" :closable="false" :title="errors.first('tags.website')" type="error" v-show="errors.has('tags.website')"></el-alert>
 				                            </td>
 				                        </tr>
 		                    		</tbody>
 								</table>
-								<input type="hidden" id="comCity" :value="comtags.city"/>
-								<input type="hidden" id="comInd" :value="comtags.field"/>
-								<input type="hidden" id="comSize" :value="comtags.scale"/>
-								<input type="hidden" id="comUrl" :value="comtags.comurl"/>
+								<!--<input type="hidden" id="comCity" :value="comdetail.city"/>
+								<input type="hidden" id="comInd" :value="comdetail.field"/>
+								<input type="hidden" id="comSize" :value="comdetail.scale"/>
+								<input type="hidden" id="comUrl" :value="comdetail.comurl"/>-->
 								<input type="button" value="保存" id="submitFeatures" class="btn_small" @click="savetags"/>
 								<!--<router-link id="cancelFeatures" class="btn_cancel_s" to="">取消</router-link>-->
 								<div class="clear"></div>
@@ -300,68 +318,35 @@
 							</h2>
 							<a title="编辑融资阶段" class="c_edit" :style="{'display':editstageshow?'none':'block'}" @click.prevent="editstage"></a>
 						</dt>
+						
 						<dd>
-							<ul class="reset stageshow" :style="{'display':editstageshow?'none':'block'}">
-	                    		<li>目前阶段：<span class="c5">{{comstage.currentstage}}</span></li>
-	                    		<li v-if="comstage.org&&comstage.org !== ''">投资机构：<span class="c5">{{comstage.org}}</span></li>
+							<ul v-if="stage" class="reset stageshow" :style="{'display':editstageshow?'none':'block'}">
+	                    		<li>目前阶段：<span class="c5">{{stage.currentstage}}</span></li>
+	                    		<li v-if="stage.org&&stage.org !== ''">投资机构：<span class="c5">{{stage.org}}</span></li>
 	                    	</ul>
-	                    	<form class="dn" id="stageform" :style="{'display':editstageshow?'block':'none'}">
+	                    	<form v-if="stagetmp" class="dn" id="stageform" :style="{'display':editstageshow?'block':'none'}">
 	                    		<div class="stageSelect" @mouseleave="currentstagelistshow = false">
 	                    			<label>目前阶段</label>
-		                         	<input type="button" :value="comstage.currentstage" id="select_fin" class="select_tags_short fl" @click="currentstagelistshow = true">
+		                         	<input v-validate="'required'" data-vv-scope="stage" type="button" :value="stagetmp.currentstage" id="select_fin" class="select_tags_short fl" @click="currentstagelistshow = true" name="companystage">
+		                         	<el-alert style="width: 228px;height: 36px;" :closable="false" :title="errors.first('stage.companystage')" type="error" v-show="errors.has('stage.companystage')"></el-alert>
 		                            <div class="selectBoxShort dn" id="box_fin" :style="{'display':currentstagelistshow?'block':'none'}">
 		                                 <ul class="reset">
 		                                 	<li v-for="(item,index) in stagelist" :class="index==stagecurrent?'current':''" :key="index" @click="choosestage(index)">
 		                                 		{{item}}
 		                                 	</li>
-		                                 	<!--<li>未融资</li>
-					                        <li class="current">天使轮</li>
-					                        <li>A轮</li>
-					                        <li>B轮</li>
-					                        <li>C轮</li>
-					                        <li>D轮及以上</li>
-					                        <li>上市公司</li>-->
 					                    </ul>
 		                            </div>	
 	                    		</div>	
 		                    	<ul id="stagesList" class="reset">
 			                    	<li>
-			                    		<!--<label>融资阶段</label>
-			                    		<input type="hidden" class="select_invest_hidden" name="select_invest_hidden">
-					                    <input type="button" value="融资阶段" class="select_tags_short select_invest">
-					                    <div class="selectBoxShort dn" style="display: none;">
-						                    <ul class="reset">
-						                        <li>A轮</li>
-							                    <li>B轮</li>
-							                    <li>C轮</li>
-							                    <li>D轮及以上</li>
-							                    <li>上市公司</li>
-							                </ul>
-					                    </div>-->
 					                    <label>投资机构</label>
-					                    <input type="text" ref="org" placeholder="如真格基金" name="stageorg" :value="comstage.org">
+					                    <input v-validate="'max:10'" data-vv-scope="stage" type="text" ref="org" placeholder="如真格基金" name="stageorg" v-model="stagetmp.org">
+					                    <el-alert style="width: 228px;height: 36px;" :closable="false" :title="errors.first('stage.stageorg')" type="error" v-show="errors.has('stage.stageorg')"></el-alert>
 			                    	</li>
 			                    </ul>
 			                    <input type="button" value="保存" @click="savestage" class="btn_small">
 			                    <a id="cancelStages" class="btn_cancel_s" @click.prevent="editstageshow = false" href="javascript:void(0)">取消</a>
 			                    <div class="clear"></div>
-			                    <!--<div class="dn" id="cloneInvest">
-			                    	<label>融资阶段</label>
-		                    		<input type="hidden" class="select_invest_hidden" name="select_invest_hidden">
-				                    <input type="button" value="发展阶段" class="select_tags_short select_invest">
-				                    <div class="selectBoxShort dn" style="display: none;">
-				                        <ul class="reset">
-				                        	<li>天使轮</li>
-					                        <li>A轮</li>
-					                        <li>B轮</li>
-					                        <li>C轮</li>
-					                        <li>D轮及以上</li>
-					                        <li>上市公司</li>
-					                    </ul>
-				                    </div>
-				                    <label>投资机构</label>
-				                    <input type="text" placeholder="如真格基金" name="stageorg">
-			                    </div>-->
 			                </form>
 						</dd>
 					</dl>
@@ -378,88 +363,97 @@
 							<dd>
 								<div class="member_wrap">
 									<!--无创始人-->
-									<div class="member_info addnew_right" v-if="!hasmember">
+									<div class="member_info addnew_right" v-show="!addmembershow&&!editmembershow" v-if="member===undefined||member===null||member===''||member.name===undefined||member.name===null||member.name===''">
 										展示公司领导团体，<br>提升诱人指数<br>
 										<a class="member_edit" @click.prevent="addcommember">+添加成员</a>
 									</div>
 									
 									<!--添加创始人-->
-									<div class="member_info newMember" v-show="addmembershow">
+									<div class="member_info newMember" v-if="membertmp" v-show="addmembershow">
 										<form class="memberForm">
 											<div class="new_portrait">
 						                            <div class="portrait_upload dn portraitNo">
-						                                <span>上传创始人头像</span>
+						                                <span>上传负责人头像</span>
 						                            </div>
 						                            <div class="portraitShow">
 						                            	<img width="120" height="120" :src="newmemberimg">
 							                        	<span>更换头像</span>
 							                        </div>
-							                        <input type="file" @change="getnewmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="profiles0">
-							                    	<input type="hidden" value="7" name="type" class="type">
-							                    	<input type="hidden" value="images/leader_default.png" name="photo" class="leaderInfos">
+							                        <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getnewmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="profiles0">
+							                    	<!--<input type="hidden" value="7" name="type" class="type">-->
+							                    	<!--<input type="hidden" value="images/leader_default.png" name="photo" class="leaderInfos">-->
 						                            <em>
 												                                尺寸：120*120px <br> 	
 												                                大小：小于5M
 						                            </em>
 						                    </div>
-						                    <input type="text" placeholder="请输入创始人姓名" value="" ref="newmembername" name="name">	
-					                        <input type="text" placeholder="请输入创始人当前职位" value="" ref="newmemberpost" name="position">	
-					                        <!--<input type="text" placeholder="请输入创始人新浪微博地址" value="http://weimob.weibo.com" name="weibo">-->	
-					                        <textarea placeholder="请输入创始人个人简介" maxlength="500" class="s_textarea" name="remark" value="" ref="newmemberintro"></textarea>	
-					                        <div class="word_count fr">简介不超过 <span>500</span> 字</div>
+						                    <input style="width: 234px;height: 46px;" v-validate="'required|membername|max:20'" data-vv-scope="member" type="text" placeholder="请输入负责人姓名" v-model="membertmp.name" ref="newmembername" name="membername">	
+						                    <el-alert style="width: 234px;height: 36px;" :closable="false" :title="errors.first('member.membername')" type="error" v-show="errors.has('member.membername')"></el-alert>
+						                    
+						                    
+					                        <input style="width: 234px;height: 46px;" v-validate="'required|nosymbol|max:20'" data-vv-scope="member" type="text" placeholder="请输入负责人当前职位" v-model="membertmp.post" ref="newmemberpost" name="memberposition">	
+					                        <el-alert style="width: 234px;height: 36px;" :closable="false" :title="errors.first('member.memberposition')" type="error" v-show="errors.has('member.memberposition')"></el-alert>
+					                        
+					                        
+					                        <textarea style="width: 234px;" v-validate="'required|max:500'" data-vv-scope="member" placeholder="请输入负责人个人简介" maxlength="500" class="s_textarea" name="memberintro" v-model="membertmp.intro" ref="newmemberintro"></textarea>	
+					                        <div v-if="membertmp.intro" class="word_count fr">简介不超过 <span>{{500-membertmp.intro.length}}</span> 字</div>
+					                        <div v-if="!membertmp.intro" class="word_count fr">简介不超过 <span>500</span> 字</div>
+					                        <el-alert style="width: 234px;height: 36px;" :closable="false" :title="errors.first('member.memberintro')" type="error" v-show="errors.has('member.memberintro')"></el-alert>
+					                        
 					                        <div class="clear"></div>
 					                        <input type="button" value="保存" class="btn_small" @click="savenewmember">
 				                            <!--<a class="btn_cancel_s member_delete" href="javascript:void(0)">删除</a>-->
 				                            <a class="btn_cancel_s member_delete" @click.prevent="canceladdnewmember">取消</a>
-				                        	<input type="hidden" value="11493" class="leader_id">
 										</form>
 									</div>
 									
 									<!--编辑创始人-->
-									<div class="member_info newMember" v-show="editmembershow">
+									<div class="member_info newMember" v-if="membertmp" v-show="editmembershow">
 										<form class="memberForm">
 											<div class="new_portrait">
 						                            <div class="portrait_upload dn portraitNo">
 						                                <span>上传创始人头像</span>
 						                            </div>
 						                            <div class="portraitShow">
-						                            	<img width="120" height="120" :src="commember.img">
+						                            	<img width="120" height="120" :src="member.img">
 							                        	<span>更换头像</span>
 							                        </div>
-							                        <input type="file" @change="getmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="profiles0">
-							                    	<input type="hidden" value="7" name="type" class="type">
-							                    	<input type="hidden" value="images/leader_default.png" name="photo" class="leaderInfos">
+							                        <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="profiles1">
 						                            <em>
 												                                尺寸：120*120px <br> 	
 												                                大小：小于5M
 						                            </em>
 						                    </div>
-						                    <input type="text" placeholder="请输入创始人姓名" v-model="commember.name" name="name">	
-					                        <input type="text" placeholder="请输入创始人当前职位" v-model="commember.post" name="position">	
-					                        <!--<input type="text" placeholder="请输入创始人新浪微博地址" value="http://weimob.weibo.com" name="weibo">-->	
-					                        <textarea placeholder="请输入创始人个人简介" maxlength="500" class="s_textarea" name="remark" v-model="commember.intro">{{commember.intro}}</textarea>	
-					                        <div class="word_count fr">简介不超过 <span>500</span> 字</div>
+						                    <input style="width: 234px;height: 46px;" v-validate="'required|membername|max:20'" data-vv-scope="member" type="text" placeholder="请输入创始人姓名" v-model="membertmp.name" name="membername">	
+						                    <el-alert style="width: 234px;height: 36px;" :closable="false" :title="errors.first('member.membername')" type="error" v-show="errors.has('member.membername')"></el-alert>
+						                    
+					                        <input style="width: 234px;height: 46px;" v-validate="'required|nosymbol|max:20'" data-vv-scope="member" type="text" placeholder="请输入创始人当前职位" v-model="membertmp.post" name="memberposition">	
+					                        <el-alert style="width: 234px;height: 36px;" :closable="false" :title="errors.first('member.memberposition')" type="error" v-show="errors.has('member.memberposition')"></el-alert>
+					                        
+					                        <textarea style="width: 234px;" v-validate="'required|max:500'" data-vv-scope="member" placeholder="请输入创始人个人简介" maxlength="500" class="s_textarea" name="memberintro" v-model="membertmp.intro"></textarea>	
+					                        <div v-if="membertmp.intro" class="word_count fr">简介不超过 <span>{{500-membertmp.intro.length}}</span> 字</div>
+					                        <div v-if="!membertmp.intro" class="word_count fr">简介不超过 <span>500</span> 字</div>
+					                        <el-alert style="width: 234px;height: 36px;" :closable="false" :title="errors.first('member.memberintro')" type="error" v-show="errors.has('member.memberintro')"></el-alert>
+					                        
 					                        <div class="clear"></div>
-					                        <input type="button" value="保存" class="btn_small" @click="editmembershow = false">
-				                            <!--<a class="btn_cancel_s member_delete" href="javascript:void(0)">删除</a>-->
+					                        <input type="button" value="保存" class="btn_small" @click="savenewmember">
 				                            <a class="btn_cancel_s member_delete" @click.prevent="deletemember">删除</a>
-				                        	<input type="hidden" value="11493" class="leader_id">
 										</form>
 									</div>
 									
 									<!--显示创始人-->
-									<div class="member_info" v-if="hasmember" v-show="!editmembershow&!addmembershow">
+									<div class="member_info" v-if="member!==undefined&&member!==null&&member!==''&&member.name!==undefined&&member.name!==null&&member.name!==''" v-show="!editmembershow&!addmembershow">
 										<!--<a title="编辑创始人" class="c_edit member_edit" href="javascript:void(0)"></a>-->
-										<a title="编辑创始人" class="c_edit member_edit" @click.prevent="editmembershow = true"></a>
+										<a title="编辑创始人" class="c_edit member_edit" @click.prevent="editmember"></a>
 				                        <div class="m_portrait">
 				                            <div></div>
-				                            <img width="120" height="120" :alt="commember.name" :src="commember.img">
+				                            <img width="120" height="120" :alt="member.name" :src="member.img">
 					                    </div>
 				                        <div class="m_name">
-				                        	{{commember.name}}
+				                        	{{member.name}}
 				                        </div>
-				                        <div class="m_position">{{commember.post}}</div>
-				                    	<div class="m_intro">{{commember.intro}}</div>
+				                        <div class="m_position">{{member.post}}</div>
+				                    	<div class="m_intro">{{member.intro}}</div>
 									</div>
 								</div>
 							</dd>
@@ -474,63 +468,46 @@
 			                		公司新闻报道
 			                	</h2>
 	                   			<!--<a title="添加报道" class="c_add" href="javascript:void(0)"></a>-->
-	                   			<a v-show="comrepolist.length!=0&&!addreposhow" title="添加报道" class="c_add" @click.prevent="addreposhow = true"></a>
+	                   			<a v-show="repolist&&repolist.length!=0&&!addreposhow&&!editreposhow&&repolist.length<3" title="添加报道" class="c_add" @click.prevent="addrepo"></a>
 			                </dt>
 		                	<dd>
 			                	<!-- 编辑报道 -->
 	                       		<ul class="reset">
-	                       			<li v-for="(item,index) in comrepolist" :key="index">
+	                       			<li v-for="(item,index) in repolist" :key="index">
 	                       				<a :style="{'display':editreposhow&&index==repocurrent?'none':''}" class="article" :title="item.repotitle" target="_blank" :href="item.repolink">{{item.repotitle}}</a>
-			                			<a title="编辑报道" class="c_edit dn" @click.prevent="editrepo(index)" :style="{'display':editreposhow?'none':'inline'}"></a>
-			                			<form class="reportForm" v-show="index==repocurrent&&editreposhow">
-			                				<input type="text" placeholder="请输入文章标题" v-model="item.repotitle" name="articleTitle" class="valid">
-			                				<input type="text" placeholder="请输入文章链接" v-model="item.repolink" name="articleUrl" class="valid"><span for="articleUrl" generated="true" class="error" style="display: none;">请输入有效的文章链接</span>
-			                				<input type="button" value="保存" class="btn_small" @click="editreposhow=false">
+			                			<a title="编辑报道" v-show="!addreposhow" class="c_edit dn" @click.prevent="editrepo(index)" :style="{'display':editreposhow?'none':'inline'}"></a>
+			                			<form class="reportForm" v-if="repotmp" v-show="index==repocurrent&&editreposhow&&!addreposhow">
+			                				<input style="width: 234px;height: 46px;" v-validate="'required|max:15'" data-vv-scope="repo" type="text" placeholder="请输入文章标题" v-model="repotmp.repotitle" name="articleTitle" class="valid">
+			                				<el-alert style="width: 234px;height: 46px;" :closable="false" :title="errors.first('repo.articleTitle')" type="error" v-show="errors.has('repo.articleTitle')"></el-alert>
+			                				
+			                				<input style="width: 234px;height: 46px;" v-validate="'required|website'" data-vv-scope="repo" type="text" placeholder="请输入文章链接" v-model="repotmp.repolink" name="articleUrl" class="valid"><span for="articleUrl" generated="true" class="error" style="display: none;">请输入有效的文章链接</span>
+			                				<el-alert style="width: 234px;height: 46px;" :closable="false" :title="errors.first('repo.articleUrl')" type="error" v-show="errors.has('repo.articleUrl')"></el-alert>
+			                				
+			                				<input type="button" value="保存" class="btn_small" @click="saverepo(index)">
 				                            <a class="btn_cancel_s report_delete" @click.prevent="deleterepo(index)">删除</a>
-				                            <!--<input type="hidden" value="5235" class="article_id">-->
 				                     	</form>
-	                       			</li>
-	                       			<!--<li>
-			                			<a style="" class="article" title="随便写" target="_blank" href="http://www.baidu.com">随便写</a>
-			                			<a title="编辑报道" class="c_edit dn" href="javascript:;" style="display: inline;"></a>
-			                			<form class="reportForm dn">
-			                				<input type="text" placeholder="请输入文章标题" value="" name="articleTitle" class="valid">
-			                				<input type="text" placeholder="请输入文章链接" value="" name="articleUrl" class="valid"><span for="articleUrl" generated="true" class="error" style="display: none;">请输入有效的文章链接</span>
-			                				<input type="submit" value="保存" class="btn_small">
-				                            <a class="btn_cancel_s report_delete" href="javascript:;">删除</a>
-				                            <input type="hidden" value="5235" class="article_id">
-				                     	</form>
-			                		</li>
-			                		<li>
-			                			<a style="" class="article" title="随便写" target="_blank" href="http://www.baidu.com">随便写</a>
-			                			<a title="编辑报道" class="c_edit dn" href="javascript:;" style="display: inline;"></a>
-			                			<form class="reportForm dn">
-			                				<input type="text" placeholder="请输入文章标题" value="" name="articleTitle" class="valid">
-			                				<input type="text" placeholder="请输入文章链接" value="" name="articleUrl" class="valid">
-			                				<input type="submit" value="保存" class="btn_small">
-				                            <a class="btn_cancel_s report_delete" href="javascript:;">删除</a>
-				                            <input type="hidden" value="5236" class="article_id">
-				                     	</form>
-			                		</li>-->
+	                       		</li>
 	                       		</ul>
 		                	
 			                	<!-- 无报道 -->
-		                        <div class="addnew_right reported_info" v-show="comrepolist.length==0&&!addreposhow">
+		                        <div class="addnew_right reported_info" v-show="repolist.length==0&&!addreposhow">
 		                        	展示外界对公司的深度报道，<br>便于求职者了解公司！<br>
-		                            <a class="report_edit" @click.prevent="addreposhow = true">+添加报道</a>
+		                            <a class="report_edit" @click.prevent="addrepo">+添加报道</a>
 		                        </div>
 	                        
 	                        	<!--添加新的报道-->
-			                	<ul class="newReport" v-show="addreposhow">
+			                	<ul class="newReport" v-if="repotmp" v-show="addreposhow">
 		                        	<li>
-			                			<!--<a style="display:none;" class="article" title="" target="_blank" ></a>-->
-			                			<!--<a title="编辑报道" class="c_edit dn" href="javascript:;"></a>-->
 			                			<form class="reportForm">
-			                				<input type="text" placeholder="请输入文章标题" ref="newtitle" value="" name="articleTitle">
-			                				<input type="text" placeholder="请输入文章链接" ref="newlink" value="" name="articleUrl">
+			                				<input style="width: 234px;height: 46px;" v-validate="'required|max:15'" data-vv-scope="repo" type="text" placeholder="请输入文章标题" ref="newtitle" v-model="repotmp.repotitle" name="articleTitle">
+			                				<el-alert style="width: 234px;height: 46px;" :closable="false" :title="errors.first('repo.articleTitle')" type="error" v-show="errors.has('repo.articleTitle')"></el-alert>
+			                				
+			                				<input style="width: 234px;height: 46px;" v-validate="'required|website'" data-vv-scope="repo" type="text" placeholder="请输入文章链接" ref="newlink" v-model="repotmp.repolink" name="articleUrl">
+			                				<el-alert style="width: 234px;height: 46px;" :closable="false" :title="errors.first('repo.articleUrl')" type="error" v-show="errors.has('repo.articleUrl')"></el-alert>
+			                				
 			                				<input type="button" value="保存" class="btn_small" @click="savenewrepo">
 				                            <a class="btn_cancel_s report_cancel" @click.prevent="canceladdnewrepo">取消</a>
-				                            <input type="hidden" value="" class="article_id">
+				                            <!--<input type="hidden" value="" class="article_id">-->
 				                     	</form>
 			                		</li>
 		                        </ul>
@@ -593,34 +570,43 @@
 				collapsibleshow:false,
 				currentstagelistshow:false,
 				hasIntro:false,
-				hasmember:false,
+//				hasmember:false,
 				editstageshow:false,
 				editmembershow:false,
+				detailtmp:null,
+				labeltmp:null,
+				stagetmp:null,
+				membertmp:null,
+				repotmp:null,
 				comdetail:{
 					fullname:'公司全名',
 					shortname:'公司简称',
 					feature:'公司特征',
 					labels:['年终分红','五险一金','弹性工作','岗位晋升'],
-					img:'../../../static/images/logo_default.png'
-				},
-				comtags:{
+					img:'../../../static/images/logo_default.png',
 					city:'上海',
 					field:'移动互联网',
 					scale:'150-500人',
 					comurl:'http://www.baidu.com'
 				},
-				comstage:{
+				/*comdetail:{
+					city:'上海',
+					field:'移动互联网',
+					scale:'150-500人',
+					comurl:'http://www.baidu.com'
+				},*/
+				stage:{
 					currentstage:'天使轮',
 					org:null
 				},
-				commember:{
+				member:{
 					name:null,
 					img:'../../../static/images/leader_default.png',
 					post:null,
 					intro:null,
 				},
 				newmemberimg:'../../../static/images/leader_default.png',
-				comrepolist:[
+				repolist:[
 					{
 						repotitle:'随便写1',
 						repolink:'http://www.baidu.com'
@@ -630,10 +616,6 @@
 						repolink:'http://www.alibaba.com'
 					}
 				],
-				newrepo:{
-					repotitle:null,
-					repolink:null
-				},
 				scalelist:['少于15人','15-50人','50-150人','150-500人','500-2000人','2000人以上'],
 				stagelist:['未融资','天使轮','A轮','B轮','C轮','D轮及以上','上市公司'],
 				scalecurrent:null,
@@ -647,7 +629,7 @@
 						img:'../../../../static/images/product_default.png'
 					}
 				],
-				comintro:'',
+				intro:'',
 				comintrotmp:'',
 				newlabel:''
 			}
@@ -675,35 +657,102 @@
 				})
 			},
 			handleItemDelete(index){
-				let confirmmsg = confirm("确认删除该公司产品信息？")
+				if(index >= 0 && index < this.products.length){
+					this.$confirm('是否删除这个产品?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.products.splice(index,1)
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				}
+				/*let confirmmsg = confirm("确认删除该公司产品信息？")
 				if(confirmmsg){
 					this.products.splice(index,1)
 				}
-				else{}
+				else{}*/
 			},
 			editIntro(){
-				this.comintrotmp = this.comintro
+				this.comintrotmp = this.intro
 				this.editintroshow = true
 			},
 			addIntro(){
 				this.editintroshow = true
-				this.hasIntro = true
+//				this.hasIntro = true
 			},
 			saveintro(){
-				this.editintroshow = false
-				this.comintro = this.comintrotmp
+				var validateScope = 'comintro'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存公司介绍并关闭编辑页面
+					      	this.editintroshow = false
+							this.intro = this.comintrotmp
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善公司介绍信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善公司介绍信息！'
+						})
+			   	})
 			},
 			cancelintro(){
-				this.hasIntro = false
+//				this.hasIntro = false
 				this.editintroshow = false
 			},
 			editdetail(){
 				this.editdetailshow = true
+				this.detailtmp = JSON.parse(JSON.stringify(this.comdetail))
 			},
 			savedetail(){
-				this.editdetailshow = false
-				this.comdetail.shortname = this.$refs.editshortname.value
-				this.comdetail.feature = this.$refs.editfeature.value
+//				var _self = this
+				    var validateScope = 'scope1'
+				    this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存数据
+					      	this.comdetail = JSON.parse(JSON.stringify(this.detailtmp))
+							this.editdetailshow = false
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善页面信息！'
+							})
+					     }
+			   		}).catch(err => {
+			   			console.log(err)
+			   		})
+				/*if(this.$validator.validate('companyshortname') && this.$validator.validate('temptation')){
+					this.comdetail = JSON.parse(JSON.stringify(this.detailtmp))
+					this.editdetailshow = false
+				}
+				else{
+					this.$message({
+						type:'warn',
+						message:'请先完善页面信息！'
+					})
+				}*/
+//				this.comdetail.shortname = this.$refs.editshortname.value
+//				this.comdetail.feature = this.$refs.editfeature.value
 			},
 			canceldetail(){
 				this.editdetailshow = false
@@ -719,7 +768,8 @@
 			},
 			choosescale(index){
 				this.scalecurrent = index
-				this.comtags.scale = this.scalelist[index]
+				this.comdetail.scale = this.scalelist[index]
+				this.selecttagshow = false
 			},
 			entercollapsible(){
 				this.collapsibleshow = true
@@ -728,64 +778,194 @@
 				this.collapsibleshow = false
 			},
 			savetags(){
-				this.edittagshow = false
+				var validateScope = 'tags'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存comdetail数据并关闭编辑页面
+						    this.edittagshow = false
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善公司信息！'
+							})
+					     }
+			   	}).catch(err => {
+			   			console.log(err)
+			   	})
 			},
 			editlabelshow(){
 				this.editlabel = true
 			},
 			savelabel(){
-				this.editlabel = false
-				this.$refs.newlabel.value=""
+				var validateScope = 'labelscope'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存数据
+					      	if(this.labeltmp && this.comdetail.labels.length < 10){
+					      		this.comdetail.labels.push(this.labeltmp)
+					      	}
+					      	else{
+					      		this.$message({
+									type:'info',
+									message:'已选择10个标签，无法再添加新的标签！'
+								})
+					      	}
+					      	this.labeltmp = null
+					      	this.editlabel = false
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善标签信息！'
+							})
+					     }
+			   	}).catch(err => {
+			   			console.log(err)
+			   	})
 			},
 			cancellabel(){
 				this.editlabel = false
-				this.$refs.newlabel.value=""
+				this.labeltmp = null
 			},
 			pastelabel(){
-				if(this.$refs.newlabel.value != null && this.$refs.newlabel.value != ''){
+				/*if(this.$refs.newlabel.value != null && this.$refs.newlabel.value != ''){
 					this.comdetail.labels.push(this.$refs.newlabel.value)
 					this.$refs.newlabel.value = null
 				}
 				else{
 					alert("请输入标签内容！")
-				}
+				}*/
+				var validateScope = 'labelscope'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存数据
+					      	if(this.labeltmp && this.comdetail.labels.length < 10){
+					      		this.comdetail.labels.push(this.labeltmp)
+					      		this.labeltmp = null
+					      	}
+					      	else{
+					      		this.$message({
+									type:'info',
+									message:'已选择10个标签，无法再添加新的标签！'
+								})
+					      	}
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善标签信息！'
+							})
+					     }
+			   	}).catch(err => {
+			   			console.log(err)
+			   	})
 			},
 			deletelabel(index){
-				let confirmmsg = confirm("确认删除标签？")
+				if(index >= 0 && index < this.comdetail.labels.length){
+					this.$confirm('是否删除这个标签?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.comdetail.labels.splice(index,1)
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				}
+				/*let confirmmsg = confirm("确认删除标签？")
 				if(confirmmsg == true){
 					this.comdetail.labels.splice(index,1)
 				}
-				else{}
+				else{}*/
 			},
 			editstage(){
+				this.stagetmp = JSON.parse(JSON.stringify(this.stage))
 				this.editstageshow = true
 			},
 			choosestage(index){
 				this.stagecurrent = index
-				this.comstage.currentstage = this.stagelist[index]
+				this.stagetmp.currentstage = this.stagelist[index]
+				this.currentstagelistshow = false
 			},
 			savestage(){
-				this.comstage.org = this.$refs.org.value
-				this.editstageshow = false
+				var validateScope = 'stage'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存融资阶段数据并关闭编辑页
+					      	this.stage = JSON.parse(JSON.stringify(this.stagetmp))
+							this.editstageshow = false
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善融资信息！'
+							})
+					     }
+			   	}).catch(err => {
+			   			console.log(err)
+			   	})
 			},
 			deletemember(){
-				let confirmmsg = confirm("确认删除该创始人资料？")
+					this.$confirm('是否删除这个负责人?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.member=null
+			        	  this.membertmp=null
+			        	  this.editmembershow=false
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				/*let confirmmsg = confirm("确认删除该创始人资料？")
 				if(confirmmsg){
-					this.commember = {
+					this.member = {
 						name:null,
 						img:'../../../static/images/leader_default.png',
 						post:null,
 						intro:null,
 					}
-					this.hasmember=false
+//					this.hasmember=false
 					this.editmembershow=false
 				}
 				else{
-				}
+				}*/
 			},
 			addcommember(){
-				this.hasmember = true
+				this.membertmp = {
+					name:null,
+					img:'../../../static/images/leader_default.png',
+					post:null,
+					intro:null,
+				}
 				this.addmembershow = true
+			},
+			editmember(){
+				this.membertmp = JSON.parse(JSON.stringify(this.member))
+				this.editmembershow = true
 			},
 			getmemberimg(e){
 				let _this = this
@@ -794,7 +974,7 @@
 				let reader = new FileReader()
 				reader.readAsDataURL(files)//这里是关键一步，转换就在这里
 				reader.onloadend = function(){
-					_this.commember.img = this.result
+					_this.member.img = this.result
 				}
 			},
 			getcomimg(e){
@@ -808,39 +988,129 @@
 				}
 			},
 			addrepo(){
-				this.comrepolist.push()
-			},
-			editrepo(index){
-				this.repocurrent = index
-				this.editreposhow = true
-			},
-			deleterepo(index){
-				let confirmmsg = confirm("确认删除此条报道？")
-				if(confirmmsg){
-					this.comrepolist.splice(index,1)
-					this.editreposhow = false
+				if(this.repolist.length < 5){
+					this.repotmp = {
+						repotitle:null,
+						repolink:null
+					}
+					this.addreposhow = true
+				}
+				else{
+					this.$message({
+						message:'已拥有3条公司新闻报道，无法编写更多报道！'
+					})
 				}
 			},
+			editrepo(index){
+				if(index >= 0 && index < this.repolist.length){
+					this.repotmp = JSON.parse(JSON.stringify(this.repolist[index]))
+					this.repocurrent = index
+					this.editreposhow = true
+				}
+			},
+			deleterepo(index){
+				if(index >= 0 && index < this.repolist.length){
+					this.$confirm('是否删除这条新闻报道?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.repolist.splice(index,1)
+			        	  this.repocurrent = null
+			        	  this.editreposhow = false
+			        	  this.addreposhow = false
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				}
+			},
+			saverepo(index){
+				var validateScope = 'repo'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+					      	// 保存新闻报道数据并关闭编辑页
+					      	if(index >= 0 && index < this.repolist.length){
+					      		this.repolist[index] = JSON.parse(JSON.stringify(this.repotmp))
+					      		this.editreposhow = false
+					      	}
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善新闻报道信息！'
+							})
+					     }
+			   	}).catch(err => {
+			   			console.log(err)
+			   	})
+			},
 			savenewrepo(){
-				let repo = {repotitle:'',repolink:''} 
-				repo.repotitle = this.$refs.newtitle.value
-				repo.repolink = this.$refs.newlink.value
-				this.comrepolist.push(repo)
-				this.addreposhow = false
-				this.$refs.newtitle.value = ""
-				this.$refs.newlink.value = ""
+				var validateScope = 'repo'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+					      	// 保存新添加的新闻报道数据并关闭编辑页
+					      	if(this.repolist.length < 3){
+					      		if(this.repotmp){
+					      			this.repolist.push(JSON.parse(JSON.stringify(this.repotmp)))
+					      			this.addreposhow = false
+					      		}
+					      	}
+					      	else{
+								this.$message({
+									message:'已拥有3条公司新闻报道，无法编写更多报道！'
+								})
+							}
+						 }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善新闻报道信息！'
+							})
+					     }
+			   	}).catch(err => {
+			   			console.log(err)
+			   	})
 			},
 			savenewmember(){
-				this.commember.name = this.$refs.newmembername.value
-				this.commember.post = this.$refs.newmemberpost.value
-				this.commember.intro = this.$refs.newmemberintro.value
-				this.commember.img = this.newmemberimg
-				this.newmemberimg = '../../../static/images/leader_default.png'
-				this.addmembershow = false
+				//添加新的member和编译保存已有member相同
+				/*this.member.name = this.$refs.newmembername.value
+				this.member.post = this.$refs.newmemberpost.value
+				this.member.intro = this.$refs.newmemberintro.value
+				this.member.img = this.newmemberimg
+				this.newmemberimg = '../../../static/images/leader_default.png'*/
+				var validateScope = 'member'
+				    this.$validator.validate(validateScope + '.*').then((result) => {
+					     if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存member数据并关闭编辑页面
+					      	this.member = JSON.parse(JSON.stringify(this.membertmp))
+							this.addmembershow = false
+							this.editmembershow = false
+					     }
+					     else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善负责人信息！'
+							})
+					     }
+			   		}).catch(err => {
+			   			console.log(err)
+			   		})
 			},
 			canceladdnewmember(){
-				this.hasmember=false
+//				this.hasmember=false
 				this.addmembershow=false
+//				this.membertmp = null
 				this.newmemberimg = '../../../static/images/leader_default.png'
 			},
 			getnewmemberimg(e){
@@ -855,14 +1125,13 @@
 			},
 			canceladdnewrepo(){
 				this.addreposhow=false
-				this.$refs.newtitle.value = ""
-				this.$refs.newlink.value = ""
+				this.repotmp = null
 			},
 			toTop(){
 				body.scrollIntoView({behavior:'smooth'})
 			},
 			pickcity(item){
-				this.comtags.city = item
+				this.comdetail.city = item
 				this.cityboxshow = false
 			},
 			hascomintro(){
@@ -875,16 +1144,16 @@
 			}
 		},
 		watch:{
-			comintro(){
+			/*comintro(){
 				if(this.comintro === ''){
 					this.hasIntro = false
 				}
 			},
-			commember(){
-				if(this.commember == null){
-					this.hasmember = false
+			member(){
+				if(this.member == null){
+//					this.hasmember = false
 				}
-			},
+			},*/
 		},
 		computed:{
 		}

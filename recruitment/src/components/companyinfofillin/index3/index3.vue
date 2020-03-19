@@ -15,7 +15,7 @@
 		                    <!--<input type="hidden" value="25927" name="leaderInfos[0].companyId">-->
 		                    <div class="new_portrait">
 		                        <div class="portrait_upload" v-show="!company.member.img" id="portraitNo0">
-		                            <span>上传管理人头像</span>
+		                            <span>上传负责人头像</span>
 		                        </div>
 		                        <div class="portraitShow" v-if="company.member.img" id="portraitShow0">
 			                        <img width="120" height="120" :src="company.member.img">
@@ -31,19 +31,19 @@
 		                    </div>
 		                        
 		                        
-		                    <h3>管理人姓名</h3>
-		                    <input type="text" v-validate="'required|membername|max:20'" v-model="company.member.name" style="width: 416px;height: 46px;" placeholder="请输入管理人姓名" name="membername" id="name0" class="s_input1 valid">	
+		                    <h3>负责人姓名</h3>
+		                    <input type="text" v-validate="'required|membername|max:20'" v-model="company.member.name" style="width: 416px;height: 46px;" placeholder="请输入负责人姓名" name="membername" id="name0" class="s_input1 valid">	
 		                    <el-alert style="width: 416px;height: 46px;" :closable="false" :title="errors.first('membername')" type="error" v-show="errors.has('membername')"></el-alert>
 		                        
 		                    <h3>当前职位</h3>
-		                    <input type="text" v-validate="'required|nosymbol|max:20'" v-model="company.member.post" style="width: 416px;height: 46px;" placeholder="请输入当前职位，如：创始人兼CEO" name="memberposition" id="position0" class="s_input1 valid">	
+		                    <input type="text" v-validate="'required|nosymbol|max:20'" v-model="company.member.post" style="width: 416px;height: 46px;" placeholder="请输入负责人当前职位，如：创始人兼CEO" name="memberposition" id="position0" class="s_input1 valid">	
 		                    <el-alert style="width: 416px;height: 46px;" :closable="false" :title="errors.first('memberposition')" type="error" v-show="errors.has('memberposition')"></el-alert>
 		                        
 		                    <!--<h3>新浪微博</h3>
 		                    <input type="text" placeholder="请输入创始人新浪微博地址" name="leaderInfos[0].weibo" id="weibo0">	-->
 		                        
-		                    <h3>管理人简介</h3> 
-		                    <textarea v-validate="'required|max:500'" v-model="company.member.intro"  placeholder="请输入该管理人的个人履历等，建议按照时间倒序分条展示" maxlength="1000" name="memberintro" id="description0"></textarea>	
+		                    <h3>负责人简介</h3> 
+		                    <textarea v-validate="'required|max:500'" v-model="company.member.intro"  placeholder="请输入该负责人的个人简介等，建议按照时间倒序分条展示" maxlength="1000" name="memberintro" id="description0"></textarea>	
 		                    <el-alert style="height: 46px;width: 600px;" :closable="false" :title="errors.first('memberintro')" type="error" v-show="errors.has('memberintro')"></el-alert>
 		                    <div class="word_count">你还可以输入 <span>{{remainingwords}}</span> 字</div>
 		                </div>

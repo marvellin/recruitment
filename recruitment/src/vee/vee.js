@@ -31,7 +31,10 @@ const attributesCh = {
 	positionAdvantage:'职位诱惑',
 	positionAddress:'工作地址',
 	interviewaddress:'面试地点',
-	hrtel:'HR联系方式'
+	hrtel:'HR联系方式',
+	stageorg:'投资机构名称',
+	articleTitle:'新闻标题',
+	articleUrl:'新闻链接'
 //	editor:'职位描述',
 }
 Validator.updateDictionary({

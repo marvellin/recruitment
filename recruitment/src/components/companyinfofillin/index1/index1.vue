@@ -109,7 +109,7 @@
 	                    
 	                    <h3>行业领域</h3>
 	                    <div @mouseleave="fieldboxshow=false">
-		                    <input type="text" v-validate="'required|industry'" v-model="company.comdetail.field" placeholder="请选择行业领域" name="select_industry" id="select_industry" class="select" @click.stop="fieldboxshow=true">
+		                    <input type="text" v-validate="'required|industry|max:15'" v-model="company.comdetail.field" placeholder="请选择行业领域" name="select_industry" id="select_industry" class="select" @click.stop="fieldboxshow=true">
 		                    <el-alert :closable="false" :title="errors.first('select_industry')" type="error" v-show="errors.has('select_industry')"></el-alert>
 							<div class="infobox" style="width: 625px;" id="box_industry" :style="{'display':fieldboxshow?'block':'none'}">
 		                        <ul class="reset">
@@ -162,14 +162,16 @@
 				                    	</li>
 				                    </ul>
 			                    </div>
-			                    <input type="text" v-model="company.stage.org" style="width: 384px;" placeholder="请输入投资机构，如:真格基金" name="stageorg">
-			                    <el-alert style="width: 228px;height: 46px;" :closable="false" :title="errors.first('companystage')" type="error" v-show="errors.has('companystage')"></el-alert>
+			                    <input v-validate="'max:10'" type="text" v-model="company.stage.org" style="width: 384px;" placeholder="请输入投资机构，如:真格基金" name="stageorg">
+			                    <el-alert style="width: 625px;height: 36px;" :closable="false" :title="errors.first('companystage')" type="error" v-show="errors.has('companystage')"></el-alert>
+			                    <el-alert style="width: 625px;height: 36px;" :closable="false" :title="errors.first('stageorg')" type="error" v-show="errors.has('stageorg')"></el-alert>
 	                    	</li>
 	                    </ul>
 	                    
 	                    <h3>一句话介绍</h3> 
 	                    <input type="text" v-model="company.comdetail.feature" v-validate="'required|max:50'" placeholder="一句话概括公司亮点，如公司愿景、领导团队等，限50字" maxlength="50" name="temptation" id="temptation">	
 	                    <el-alert :closable="false" :title="errors.first('temptation')" type="error" v-show="errors.has('temptation')"></el-alert>
+	                    
 	                    <span style="display:none;" class="error" id="beError"></span>
 	                    <input type="submit" @click.prevent="goforward" value="下一步" id="stepBtn" class="btn_big fr">
 	            </form>

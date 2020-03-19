@@ -15,7 +15,7 @@
 	            		<i @click="deletelabel(index)"></i>
 	            	</li>
 	            </ul>
-	            <input type="text" v-validate.immediate="'max:6'" v-model="customlabel" placeholder="请输入自定义标签" style="width: 514px;height: 46px;" name="label" id="label">	
+	            <input type="text" v-validate="'max:6'" v-model="customlabel" placeholder="请输入自定义标签" style="width: 514px;height: 46px;" name="label" id="label">	
 	            <input type="button" @click="pastelabel" value="贴上" id="add_label">
 	            <el-alert style="width: 514px;height: 46px;" :closable="false" :title="errors.first('label')" type="error" v-show="errors.has('label')"></el-alert>
 	            <div class="clear"></div>
