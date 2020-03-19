@@ -15,13 +15,17 @@
 			            		<router-link :to="{name:'resumepreview'}" @click.native="topreview" target="_blank">预览</router-link>
 		            		</div>
 		            		<form class="fl" :class="[renameshow?'':'dn']" id="resumeNameForm">
-		            			<input type="text" ref="newresumename" :value="resume.name" name="resumeName" class="nameEdit c9">	
+		            			<input data-vv-scope="resumename" v-validate="'required|max:10'" type="text" ref="newresumename" v-model="resumenametmp" name="resumeName" class="nameEdit c9">	
+		            			<!--<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('resumename.resumeName')" type="error" v-show="errors.has('resumename.resumeName')"></el-alert>-->
+		            			
 		            			<input type="button" value="保存" @click="saveresumename"> |
 		            			<input type="button" value="取消" @click="cancelrename"/>
+		            			<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('resumename.resumeName')" type="error" v-show="errors.has('resumename.resumeName')"></el-alert>
 		            			<!--<a target="_blank" href="h/resume/preview.html">预览</a>-->
 		            		</form>
 		            	</div><!--end #resume_name-->
 		            	<!--<div class="fr c5" id="lastChangedTime">最后一次更新：<span>2014-07-01 15:14 </span></div><!--end #lastChangedTime-->
+		            	
 		            	<div id="resumeScore">
 		            		<div class="score fl">
 		            			<!--<canvas height="120" width="120" id="doughnutChartCanvas" style="width: 120px; height: 120px;"></canvas>-->
@@ -59,8 +63,9 @@
 								        			<span class="redstar">*</span>
 								      			</td> 
 								      			<td>
-								        			<input type="text" placeholder="姓名" v-model="basicinfotmp.username" name="name" id="name">
-								      			</td>
+								        			<input v-validate="'required|username'" data-vv-scope="basicinfo" type="text" placeholder="姓名" v-model="basicinfotmp.username" name="username_s" id="name">
+								        			<!--<el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.username_s')" type="error" v-show="errors.has('basicinfo.username_s')"></el-alert>-->
+								        		</td>
 								      			<td valign="top"></td> 
 								      			<td>
 								          			<ul class="profile_radio clearfix reset">
@@ -76,22 +81,24 @@
 								      			</td>
 								    		</tr>
 								    		<tr>
+								    			<td></td>
+								    			<td colspan="3">
+								    				<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('basicinfo.username_s')" type="error" v-show="errors.has('basicinfo.username_s')"></el-alert>
+								    			</td>
+								    		</tr>
+								    		<tr>
 											    <td valign="top">
 											      	<span class="redstar">*</span>
 											    </td> 
 								     			<td @mouseleave="degreelistshow=false">
-											      	<!--<input type="hidden" id="topDegree" value="大专" name="topDegree">-->
-											        <input type="button" :value="basicinfotmp.degree" @click="degreelistshow=true" :class="[degreelistshow?'select_focus':'']" id="select_topDegree" class="profile_select_190 profile_select_normal">
+											        <input v-validate="'required'" data-vv-scope="basicinfo" type="text" readonly="readonly" placeholder="最高学历" :value="basicinfotmp.degree" name="degreemax" @click="degreelistshow=true" id="select_topDegree" class="profile_select_190 profile_select_normal">
+											        <el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.degreemax')" type="error" v-show="errors.has('basicinfo.degreemax')"></el-alert>
+											        
 													<div class="boxUpDown boxUpDown_190" id="box_topDegree" :style="{'display':degreelistshow?'block':'none'}" style="width: 190px;">
 											        	<ul>
 											        		<li v-for="(item,index) in degreelist" :key='index' @click="pickdegree(item)">
 											        			{{item}}
 											        		</li>
-											        		<!--<li>大专</li>
-											        		<li>本科</li>
-											        		<li>硕士</li>
-											        		<li>博士</li>
-											        		<li>其他</li>-->
 											        	</ul>
 								        			</div>  
 								      			</td>
@@ -100,24 +107,14 @@
 								      			</td> 
 											    <td @mouseleave="workyearlistshow=false">
 											        <!--<input type="hidden" id="workyear" value="" name="workyear">-->
-											        <input type="button" :value="basicinfotmp.workyear" id="select_workyear" @click="workyearlistshow=true" :class="[workyearlistshow?'select_focus':'']" class="profile_select_190 profile_select_normal">
+											        <input v-validate="'required'" data-vv-scope="basicinfo" type="text" readonly="readonly" placeholder="工作经验" :value="basicinfotmp.workyear" id="select_workyear" name="select_workyear" @click="workyearlistshow=true" class="profile_select_190 profile_select_normal">
+											        <el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.select_workyear')" type="error" v-show="errors.has('basicinfo.select_workyear')"></el-alert>
+											        
 													<div class="boxUpDown boxUpDown_190" id="box_workyear" style="width: 190px;" :style="{'display':workyearlistshow?'block':'none'}">
 											          	<ul>
 											          		<li v-for="(item,index) in workyearlist" :key='index' @click="pickworkyear(item)">
 											          			{{item}}
 											          		</li>
-											        		<!--<li>应届毕业生</li>
-											        		<li>1年</li>
-											        		<li>2年</li>
-											        		<li>3年</li>
-											        		<li>4年</li>
-											        		<li>5年</li>
-											        		<li>6年</li>
-											        		<li>7年</li>
-											        		<li>8年</li>
-											        		<li>9年</li>
-											        		<li>10年</li>
-											        		<li>10年以上</li>-->
 								        				</ul>
 								          			</div>  
 								      			</td>
@@ -127,8 +124,8 @@
 										        	<span class="redstar">*</span>
 										      	</td> 
 								      			<td colspan="3">
-								          			<input type="text" v-validate="'required|tel'" placeholder="请输入手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
-								          			<el-alert :closable="false" :title="errors.first('tel')" type="error" v-show="errors.has('tel')"></el-alert>
+								          			<input data-vv-scope="basicinfo" type="text" v-validate="'required|min:11|max:11|tel'" placeholder="请输入手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
+								          			<el-alert :closable="false" :title="errors.first('basicinfo.tel')" type="error" v-show="errors.has('basicinfo.tel')"></el-alert>
 								      
 								      			</td>
 								   			</tr>
@@ -137,24 +134,22 @@
 								        			<span class="redstar">*</span>
 								      			</td> 
 								      			<td colspan="3">
-								          			<input type="text" v-validate="'required|email'" placeholder="请输入邮箱" v-model="basicinfotmp.email" style="width: 410px;" name="email" id="email">
-								          			<el-alert :closable="false" :title="errors.first('email')" type="error" v-show="errors.has('email')"></el-alert>
+								          			<input data-vv-scope="basicinfo" type="text" v-validate="'required|email'" placeholder="请输入邮箱" v-model="basicinfotmp.email" style="width: 410px;" name="email" id="email">
+								          			<el-alert :closable="false" :title="errors.first('basicinfo.email')" type="error" v-show="errors.has('basicinfo.email')"></el-alert>
 								      			</td>
 								    		</tr>
 								    		<tr>
 								      			<td valign="top"> </td> 
 								      			<td colspan="3" @mouseleave="currentstatelistshow=false">
 								          			<!--<input type="hidden" id="currentState" value="" name="currentState">-->
-								          			<input type="button" @click="currentstatelistshow=true" :value="basicinfotmp.currentstate" id="select_currentState" class="profile_select_410 profile_select_normal" :class="[currentstatelistshow?'select_focus':'']">
+								          			<input style="width: 410px;" v-validate="'required'" data-vv-scope="basicinfo" type="text" readonly="readonly" placeholder="目前状态" @click="currentstatelistshow=true" :value="basicinfotmp.currentstate" id="select_currentState" name="select_currentState" class="profile_select_410 profile_select_normal">
+								          			<el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.select_currentState')" type="error" v-show="errors.has('basicinfo.select_currentState')"></el-alert>
+								          			
 										  			<div class="boxUpDown boxUpDown_410" id="box_currentState" style="width: 410px;" :style="{'display':currentstatelistshow?'block':'none'}">
 											          	<ul>
 											          		<li v-for="(item,index) in currentstatelist" :key='index' @click="pickcurrentstate(item)">
 											          			{{item}}
 											          		</li>
-											        		<!--<li>我目前已离职，可快速到岗</li>
-											        		<li>我目前正在职，正考虑换个新环境</li>
-											        		<li>我暂时不想找工作</li>
-											        		<li>我是应届毕业生</li>-->
 											        	</ul>
 								          			</div>  
 								      			</td>
@@ -206,13 +201,14 @@
 		            		    </span>
 		            		</div><!--end .expectShow-->
 		            		<div class="expectEdit" :class="[editexpectjobshow?'':'dn']" v-if="expectjobtmp!=null">
-		            			<form id="expectForm" onsubmit="saveexpectjob()">
+		            			<form id="expectForm">
 			            			<table>
 			            				<tbody>
 			            					<tr>
 			            						<td @mouseleave="cityboxshow=false">
 			            							<!--<input type="hidden" id="expectCity" value="" name="expectCity">-->
-			            							<input type="text" :value="expectjobtmp.city" placeholder="期望城市，如：北京" readonly="readonly" id="select_expectCity" class="profile_select_287 profile_select_normal" @click="cityboxshow=true">
+			            							<input data-vv-scope="expectjob" v-validate="'required'" type="text" :value="expectjobtmp.city" placeholder="请选择期望城市，如：北京" readonly="readonly" id="select_expectCity" name="select_expectCity" class="profile_select_287 profile_select_normal" @click="cityboxshow=true">
+			            							<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('expectjob.select_expectCity')" type="error" v-show="errors.has('expectjob.select_expectCity')"></el-alert>
 													<div class="boxUpDown boxUpDown_596" id="box_expectCity" :style="{'display':cityboxshow?'block':'none'}">
 										          		<dl>
 										        			<dt>热门城市</dt>
@@ -329,40 +325,23 @@
 			            									{{item}}<em></em>
 			            									<input type="radio" name="type" :value="item"/>
 			            								</li>
-			            								<!--<li class="current">
-											             	 全职<em></em>
-											              	<input type="radio" checked="" name="type" value="全职"> 
-											            </li>
-											            <li>
-											              	兼职<em></em>
-											              	<input type="radio" name="type" value="兼职"> 
-											            </li>
-											            <li>
-											            	  实习<em></em>
-											              	<input type="radio" name="type" value="实习"> 
-											            </li>-->
 										            </ul> 
 			            						</td>
 			            					</tr>
 			            					<tr>
 				            					<td>
-										        	<input type="text" placeholder="期望职位，如：产品经理" v-model="expectjobtmp.post" name="expectPosition" id="expectPosition">
+										        	<input data-vv-scope="expectjob" v-validate="'required|max:10'" type="text" placeholder="期望职位，如：产品经理" v-model="expectjobtmp.post" name="expectPosition" id="expectPosition">
+										        	<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('expectjob.expectPosition')" type="error" v-show="errors.has('expectjob.expectPosition')"></el-alert>
 												</td>
 				            					<td @mouseleave="salaryboxshow=false">
 				            						<!--<input type="hidden" id="expectSalary" value="" name="expectSalary">-->
-				            						<input type="text" readonly="readonly" placeholder="期望月薪" :value="expectjobtmp.salary" id="select_expectSalary" class="profile_select_287 profile_select_normal" @click="salaryboxshow=true">
+				            						<input data-vv-scope="expectjob" v-validate="'required'" type="text" readonly="readonly" placeholder="期望月薪" :value="expectjobtmp.salary" id="select_expectSalary" name="select_expectSalary" class="profile_select_287 profile_select_normal" @click="salaryboxshow=true">
+				            						<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('expectjob.select_expectSalary')" type="error" v-show="errors.has('expectjob.select_expectSalary')"></el-alert>
 				            						<div class="boxUpDown boxUpDown_287" id="box_expectSalary" :style="{'display':salaryboxshow?'block':'none'}" style="width: 287px;">
 											          	<ul>
 											          		<li v-for="(item,index) in salarylist" :key='index' @click="picksalary(item)">
 											          			{{item}}
 											          		</li>
-											        		<!--<li>2k以下</li>
-											        		<li>2k-5k</li>
-											        		<li>5k-10k</li>
-											        		<li>10k-15k</li>
-											        		<li>15k-25k</li>
-											        		<li>25k-50k</li>
-											        		<li>50k以上</li>-->
 											        	</ul>
 											        </div>  
 				            					</td>
@@ -382,197 +361,22 @@
 								快来添加期望工作吧！
 								<span>添加期望工作</span>
 		            		</div><!--end .expectAdd-->
-		            		<!--<button @click="resume.expectjob=null">置空</button>-->
 		            		
-		            		<!--<input type="hidden" id="expectJobVal" value="">
-		            		<input type="hidden" id="expectCityVal" value="">
-		            		<input type="hidden" id="typeVal" value="">
-		            		<input type="hidden" id="expectPositionVal" value="">
-		            		<input type="hidden" id="expectSalaryVal" value="">-->
 		            	</div><!--end #expectJob-->
 		            	
 		            	<div class="profile_box" id="workExperience">
 		            		<h2>
 		            			工作经历  
-		            			<!--<span>
+		            			<span>
 		            	 			（投递简历时必填）
-		            			</span>-->
+		            			</span>
 		            		</h2>
 		            		<span class="c_add" @click="addexperience" title="添加工作经历" v-show="resume.experiencelist.length!=0&&!addexperienceshow&&!editexperienceshow"></span> <!--:class="[editexperienceshow?'dn':'']"-->
 		            		<div class="experienceShow" v-if="resume.experiencelist.length!=0"><!--:class="[editexperienceshow?'dn':'']"-->
-		            		    <!--<form class="experienceForm borderBtm dn">
-			            			<table>
-			            				<tbody><tr>
-									      	<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-									      	<td>
-									        	<input type="text" placeholder="公司名称" name="companyName" class="companyName">
-									      	</td>
-									      	<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-									      	<td>
-									          	<input type="text" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
-									      	</td>
-									    </tr>
-			            				<tr>
-			            					<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-			            					<td>
-				            					<div class="fl">
-				            						<input type="hidden" class="companyYearStart" value="" name="companyYearStart">
-										        	<input type="button" value="开始年份" class="profile_select_139 profile_select_normal select_companyYearStart">
-													<div class="box_companyYearStart boxUpDown boxUpDown_139 dn" style="display: none;">
-											            <ul>
-											        											        			<li>2014</li>
-											        											        			<li>2013</li>
-											        											        			<li>2012</li>
-											        											        			<li>2011</li>
-											        											        			<li>2010</li>
-											        											        			<li>2009</li>
-											        											        			<li>2008</li>
-											        											        			<li>2007</li>
-											        											        			<li>2006</li>
-											        											        			<li>2005</li>
-											        											        			<li>2004</li>
-											        											        			<li>2003</li>
-											        											        			<li>2002</li>
-											        											        			<li>2001</li>
-											        											        			<li>2000</li>
-											        											        			<li>1999</li>
-											        											        			<li>1998</li>
-											        											        			<li>1997</li>
-											        											        			<li>1996</li>
-											        											        			<li>1995</li>
-											        											        			<li>1994</li>
-											        											        			<li>1993</li>
-											        											        			<li>1992</li>
-											        											        			<li>1991</li>
-											        											        			<li>1990</li>
-											        											        			<li>1989</li>
-											        											        			<li>1988</li>
-											        											        			<li>1987</li>
-											        											        			<li>1986</li>
-											        											        			<li>1985</li>
-											        											        			<li>1984</li>
-											        											        			<li>1983</li>
-											        											        			<li>1982</li>
-											        											        			<li>1981</li>
-											        											        			<li>1980</li>
-											        											        			<li>1979</li>
-											        											        			<li>1978</li>
-											        											        			<li>1977</li>
-											        											        			<li>1976</li>
-											        											        			<li>1975</li>
-											        											        			<li>1974</li>
-											        											        			<li>1973</li>
-											        											        			<li>1972</li>
-											        											        			<li>1971</li>
-											        											        			<li>1970</li>
-											        											        	</ul>
-											        </div>
-												</div>
-												<div class="fl">
-											        <input type="hidden" class="companyMonthStart" value="" name="companyMonthStart">
-										        	<input type="button" value="开始月份" class="profile_select_139 profile_select_normal select_companyMonthStart">
-													<div style="display: none;" class="box_companyMonthStart boxUpDown boxUpDown_139 dn">
-											            <ul>
-											        		<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li><li>09</li><li>10</li><li>11</li><li>12</li>
-											        	</ul>
-											        </div>
-											    </div>
-											    <div class="clear"></div>
-			            					</td>
-			            					<td valign="top">
-									        	<span class="redstar">*</span>
-									      	</td> 
-			            					<td>
-				            					<div class="fl">
-				            						<input type="hidden" class="companyYearEnd" value="" name="companyYearEnd">
-										        	<input type="button" value="结束年份" class="profile_select_139 profile_select_normal select_companyYearEnd">
-													<div class="box_companyYearEnd  boxUpDown boxUpDown_139 dn" style="display: none;">
-											            <ul>
-											            	<li>至今</li>
-											        											        			<li>2014</li>
-											        											        			<li>2013</li>
-											        											        			<li>2012</li>
-											        											        			<li>2011</li>
-											        											        			<li>2010</li>
-											        											        			<li>2009</li>
-											        											        			<li>2008</li>
-											        											        			<li>2007</li>
-											        											        			<li>2006</li>
-											        											        			<li>2005</li>
-											        											        			<li>2004</li>
-											        											        			<li>2003</li>
-											        											        			<li>2002</li>
-											        											        			<li>2001</li>
-											        											        			<li>2000</li>
-											        											        			<li>1999</li>
-											        											        			<li>1998</li>
-											        											        			<li>1997</li>
-											        											        			<li>1996</li>
-											        											        			<li>1995</li>
-											        											        			<li>1994</li>
-											        											        			<li>1993</li>
-											        											        			<li>1992</li>
-											        											        			<li>1991</li>
-											        											        			<li>1990</li>
-											        											        			<li>1989</li>
-											        											        			<li>1988</li>
-											        											        			<li>1987</li>
-											        											        			<li>1986</li>
-											        											        			<li>1985</li>
-											        											        			<li>1984</li>
-											        											        			<li>1983</li>
-											        											        			<li>1982</li>
-											        											        			<li>1981</li>
-											        											        			<li>1980</li>
-											        											        			<li>1979</li>
-											        											        			<li>1978</li>
-											        											        			<li>1977</li>
-											        											        			<li>1976</li>
-											        											        			<li>1975</li>
-											        											        			<li>1974</li>
-											        											        			<li>1973</li>
-											        											        			<li>1972</li>
-											        											        			<li>1971</li>
-											        											        			<li>1970</li>
-											        											        	</ul>
-											        </div>
-												</div>
-												<div class="fl">
-											        <input type="hidden" class="companyMonthEnd" value="" name="companyMonthEnd">
-										        	<input type="button" value="结束月份" class="profile_select_139 profile_select_normal select_companyMonthEnd">
-													<div style="display: none;" class="box_companyMonthEnd boxUpDown boxUpDown_139 dn">
-											            <ul>
-											        		<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li><li>09</li><li>10</li><li>11</li><li>12</li>
-											        	</ul>
-											        </div>
-										        </div>
-										        <div class="clear"></div>
-			            					</td>
-			            				</tr>
-			            				<tr>
-			            					<td></td>
-			            					<td colspan="3">
-												<input type="submit" value="保 存" class="btn_profile_save">
-								          		<a class="btn_profile_cancel" href="javascript:;">取 消</a>
-			            					</td>
-			            				</tr>
-			            			</tbody></table>
-			            			<input type="hidden" class="expId" value="">
-		            			</form><!--end .experienceForm-->
-		            			<ul class="wlist clearfix">
+		            		    <ul class="wlist clearfix">
 		            				<li v-for="(item,index) in resume.experiencelist" :key='index'>
 		            					<a class="c_edit fr" v-show="(index!=currentexperience||!editexperienceshow)&&!addexperienceshow" @click="editexperience(index)"></a>
 		            					<div v-show="!editexperienceshow||index!=currentexperience">
-		            						<!--<h3>
-		            							{{item.post}}&nbsp;&nbsp;|&nbsp;&nbsp;{{item.comname}}<br>
-		            		    				{{item.startym}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endym}}
-		            		    			</h3>-->
 		            		    			<h3>{{item.post}}</h3><h4>{{item.comname}}</h4>
 		            		    			<h4>{{item.startym}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endym}}</h4>
 		            					</div>
@@ -585,13 +389,15 @@
 												        	<span class="redstar">*</span>
 												      	</td> 
 												      	<td>
-												        	<input type="text" v-model="experiencetmp.comname" placeholder="公司名称" name="companyName" class="companyName">
+												        	<input v-validate="'required|companyshortname'" data-vv-scope="workexperience" type="text" v-model="experiencetmp.comname" placeholder="公司名称" name="companyName" class="companyName">
+												        	<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('workexperience.companyName')" type="error" v-show="errors.has('workexperience.companyName')"></el-alert>
 												      	</td>
 												      	<td valign="top">
 												        	<span class="redstar">*</span>
 												      	</td> 
 												      	<td>
-												          	<input type="text" v-model="experiencetmp.post" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
+												          	<input v-validate="'required|nosymbol|max:10'" data-vv-scope="workexperience" type="text" v-model="experiencetmp.post" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
+												          	<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('workexperience.positionName')" type="error" v-show="errors.has('workexperience.positionName')"></el-alert>
 												      	</td>
 												    </tr>
 						            				<tr>
@@ -600,67 +406,10 @@
 												      	</td> 
 						            					<td>
 							            					<div class="fl">
-							            						<!--<input type="hidden" class="companyYearStart" value="" name="companyYearStart">-->
-													        	<!--<input type="text" v-model="experiencetmp.start.year" readonly="readonly" style="width: 139px;height: 46px;font-size: 15px;" placeholder="开始年份" class="profile_select_139 profile_select_normal select_companyYearStart" :class="[startyearboxshow?'select_focus':'']" @click="startyearboxshow=true">-->
-													        	<el-date-picker v-model="experiencetmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
-																<!--<div class="box_companyYearStart boxUpDown boxUpDown_139 dn" :style="{'display':startyearboxshow?'block':'none'}" style="width: 139px;">
-														            <ul>
-														        		<li>2014</li>
-														        		<li>2013</li>
-														        		<li>2012</li>
-														        		<li>2011</li>
-														        		<li>2010</li>
-														        		<li>2009</li>
-														        		<li>2008</li>
-														        		<li>2007</li>
-														        		<li>2006</li>
-														        		<li>2005</li>
-														        		<li>2004</li>
-														        		<li>2003</li>
-														        		<li>2002</li>
-														        		<li>2001</li>
-														        		<li>2000</li>
-														        		<li>1999</li>
-														        		<li>1998</li>
-														        		<li>1997</li>
-														        		<li>1996</li>
-														        		<li>1995</li>
-														        		<li>1994</li>
-														        		<li>1993</li>
-														        		<li>1992</li>
-														        		<li>1991</li>
-														        		<li>1990</li>
-														        		<li>1989</li>
-														        		<li>1988</li>
-														        		<li>1987</li>
-														        		<li>1986</li>
-														        		<li>1985</li>
-														        		<li>1984</li>
-														        		<li>1983</li>
-														        		<li>1982</li>
-														        		<li>1981</li>
-														        		<li>1980</li>
-														        		<li>1979</li>
-														        		<li>1978</li>
-														        		<li>1977</li>
-														        		<li>1976</li>
-														        		<li>1975</li>
-														        		<li>1974</li>
-														        		<li>1973</li>
-														        		<li>1972</li>
-														        		<li>1971</li>
-														        		<li>1970</li>
-														        	</ul>
-														        </div>-->
+													        	<el-date-picker v-validate:experiencetmp.startym="'required'" data-vv-scope="workexperience" name="startym" v-model="experiencetmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
+													        	<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年月不能为空" type="error" v-show="experiencetmp.startym===undefined||experiencetmp.startym===null||experiencetmp.startym===''"></el-alert>
 															</div>
-															<!--<div class="fl" @mouseleave="startmonthboxshow=false">
-													        	<input type="text" v-model="experiencetmp.start.month" readonly="readonly" style="width: 139px;height: 46px;font-size: 15px;" placeholder="开始月份" class="profile_select_139 profile_select_normal select_companyYearStart" :class="[startmonthboxshow?'select_focus':'']" @click="startmonthboxshow=true">
-																<div :style="{'display':startmonthboxshow?'block':'none'}" class="box_companyMonthStart boxUpDown boxUpDown_139 dn" style="width: 139px;">
-														            <ul>
-														        		<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li><li>09</li><li>10</li><li>11</li><li>12</li>
-														        	</ul>
-														        </div>
-														    </div>-->
+															
 														    <div class="clear"></div>
 						            					</td>
 						            					<td valign="top">
@@ -668,67 +417,9 @@
 												      	</td> 
 						            					<td>
 							            					<div class="fl">
-							            						<el-date-picker v-model="experiencetmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
-													        	<!--<input type="text" v-model="experiencetmp.end.year" readonly="readonly" style="width: 139px;height: 46px;font-size: 15px;" placeholder="结束年份" class="profile_select_139 profile_select_normal select_companyYearStart" :class="[endyearboxshow?'select_focus':'']" @click="endyearboxshow=true">
-																<div class="box_companyYearEnd  boxUpDown boxUpDown_139 dn" :style="{'display':endyearboxshow?'block':'none'}" style="width: 139px;">
-														            <ul>
-														            	<li>至今</li>
-														        		<li>2014</li>
-														        		<li>2013</li>
-														        		<li>2012</li>
-														        		<li>2011</li>
-														        		<li>2010</li>
-														        		<li>2009</li>
-														        		<li>2008</li>
-														        		<li>2007</li>
-														        		<li>2006</li>
-														        		<li>2005</li>
-														        		<li>2004</li>
-														        		<li>2003</li>
-														        		<li>2002</li>
-														        		<li>2001</li>
-														        		<li>2000</li>
-														        		<li>1999</li>
-														        		<li>1998</li>
-														        		<li>1997</li>
-														        		<li>1996</li>
-														        		<li>1995</li>
-														        		<li>1994</li>
-														        		<li>1993</li>
-														        		<li>1992</li>
-														        		<li>1991</li>
-														        		<li>1990</li>
-														        		<li>1989</li>
-														        		<li>1988</li>
-														        		<li>1987</li>
-														        		<li>1986</li>
-														        		<li>1985</li>
-														        		<li>1984</li>
-														        		<li>1983</li>
-														        		<li>1982</li>
-														        		<li>1981</li>
-														        		<li>1980</li>
-														        		<li>1979</li>
-														        		<li>1978</li>
-														        		<li>1977</li>
-														        		<li>1976</li>
-														        		<li>1975</li>
-														        		<li>1974</li>
-														        		<li>1973</li>
-														        		<li>1972</li>
-														        		<li>1971</li>
-														        		<li>1970</li>
-														        	</ul>-->
-														        <!--</div>-->
+							            						<el-date-picker v-validate:experiencetmp.endym="'required'" data-vv-scope="workexperience" name="endym" v-model="experiencetmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
+							            						<el-alert style="width: 288px;height: auto;" :closable="false" title="结束年月不能为空" type="error" v-show="experiencetmp.endym===undefined||experiencetmp.endym===null||experiencetmp.endym===''"></el-alert>
 															</div>
-															<!--<div class="fl" @mouseleave="endmonthboxshow=false">
-														        <input type="text" v-model="experiencetmp.end.month" readonly="readonly" style="width: 139px;height: 46px;font-size: 15px;" placeholder="结束月份" class="profile_select_139 profile_select_normal select_companyYearStart" :class="[endmonthboxshow?'select_focus':'']" @click="endmonthboxshow=true">
-																<div :style="{'display':endmonthboxshow?'block':'none'}" style="width: 139px;" class="box_companyMonthEnd boxUpDown boxUpDown_139 dn">
-														            <ul>
-														        		<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li><li>09</li><li>10</li><li>11</li><li>12</li>
-														        	</ul>
-														        </div>
-													        </div>-->
 													        <div class="clear"></div>
 						            					</td>
 						            				</tr>
@@ -741,7 +432,6 @@
 						            				</tr>
 					            				</tbody>
 					            			</table>
-			            					<!--<input type="hidden" class="expId" value="">-->
 		            					</form>
 		            				</li>
 		            			</ul>
@@ -755,13 +445,15 @@
 										        	<span class="redstar">*</span>
 										      	</td> 
 										      	<td>
-										        	<input type="text" v-model="experiencetmp.comname" placeholder="公司名称" name="companyName" class="companyName">
+										        	<input v-validate="'required|companyshortname'" data-vv-scope="workexperience" type="text" v-model="experiencetmp.comname" placeholder="公司名称" name="companyName" class="companyName">
+										        	<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('workexperience.companyName')" type="error" v-show="errors.has('workexperience.companyName')"></el-alert>
 										      	</td>
 										      	<td valign="top">
 										        	<span class="redstar">*</span>
 										      	</td> 
 										      	<td>
-										          	<input type="text" v-model="experiencetmp.post" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
+										          	<input v-validate="'required|nosymbol|max:10'" data-vv-scope="workexperience" type="text" v-model="experiencetmp.post" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
+										          	<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('workexperience.positionName')" type="error" v-show="errors.has('workexperience.positionName')"></el-alert>
 										      	</td>
 										    </tr>
 				            				<tr>
@@ -770,7 +462,8 @@
 										      	</td> 
 				            					<td>
 					            					<div class="fl">
-					            						<el-date-picker v-model="experiencetmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
+					            						<el-date-picker v-validate="'required'" data-vv-scope="workexperience" v-model="experiencetmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
+					            						<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年月不能为空" type="error" v-show="experiencetmp.startym===undefined||experiencetmp.startym===null||experiencetmp.startym===''"></el-alert>
 													</div>
 												    <div class="clear"></div>
 				            					</td>
@@ -779,7 +472,8 @@
 										      	</td> 
 				            					<td>
 					            					<div class="fl">
-					            						<el-date-picker v-model="experiencetmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
+					            						<el-date-picker v-validate="'required'" data-vv-scope="workexperience" v-model="experiencetmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
+					            						<el-alert style="width: 288px;height: auto;" :closable="false" title="结束年月不能为空" type="error" v-show="experiencetmp.endym===undefined||experiencetmp.endym===null||experiencetmp.endym===''"></el-alert>
 													</div>
 											        <div class="clear"></div>
 				            					</td>
@@ -793,13 +487,12 @@
 				            				</tr>
 			            				</tbody>
 			            			</table>
-			            			<!--<input type="hidden" class="expId" value="">-->
 		            			</form><!--end .experienceForm-->
 		            		</div><!--end .experienceEdit-->
 		            		<div class="experienceAdd pAdd" v-show="resume.experiencelist.length==0&&!addexperienceshow" @click="addexperience">
 		            		        工作经历最能体现自己的工作能力,<br>
 		            		        来展示你的工作经历吧！
-								<!--且完善后才可投递简历哦！-->
+								且完善后才可投递简历哦！
 								<span>添加工作经历</span>
 		            		</div><!--end .experienceAdd-->
 		            	</div><!--end #workExperience-->
@@ -811,15 +504,7 @@
 		            		    <ul class="plist clearfix">
 		            		    	<li v-for="(item,index) in resume.projectlist" :key='index'>
 		            		    		<a class="c_edit fr" style="position: relative;" v-show="(index!=currentproject||!editprojectshow)&&!addprojectshow" @click="editproject(index)"></a>
-		            		    		<!--<dl v-show="!editprojectshow||index!=currentproject">
-		            		    			<dt>
-		            		    				{{item.proname}}&nbsp;&nbsp;|&nbsp;&nbsp;{{item.post}}
-		            		    			</dt><br />
-		            		    			<dd>
-		            		    				{{item.startym}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endym}}<br />
-		            		    				{{item.intro}}
-		            		    			</dd>
-		            		    		</dl>-->
+		            		    		
 		            		    		<div v-show="!editprojectshow||index!=currentproject" style="margin-left: 30px;">
 		            		    			<h3 style="font-weight: bold;">{{item.proname}}&nbsp;&nbsp;|&nbsp;&nbsp;{{item.post}}</h3>
 		            		    			{{item.startym}}&nbsp;&nbsp;至&nbsp;&nbsp;{{item.endym}}<br />
@@ -832,13 +517,15 @@
 											        	<span class="redstar">*</span>
 											      	</td> 
 											      	<td>
-											        	<input type="text" v-model="projecttmp.proname" placeholder="项目名称" name="projectName" class="projectName">
+											        	<input v-validate="'required|nosymbol|max:15'" data-vv-scope="projectexperience" type="text" v-model="projecttmp.proname" placeholder="项目名称" name="projectName" class="projectName">
+											        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('projectexperience.projectName')" type="error" v-show="errors.has('projectexperience.projectName')"></el-alert>
 											      	</td>
 					            					<td valign="top">
 											        	<span class="redstar">*</span>
 											      	</td> 
 											      	<td>
-											          	<input type="text" v-model="projecttmp.post" placeholder="担任职务，如：产品负责人" name="thePost" class="thePost">
+											          	<input v-validate="'required|nosymbol|max:10'" data-vv-scope="projectexperience" type="text" v-model="projecttmp.post" placeholder="担任职务，如：产品负责人" name="thePost" class="thePost">
+											          	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('projectexperience.thePost')" type="error" v-show="errors.has('projectexperience.thePost')"></el-alert>
 											      	</td>
 											    </tr>
 					            				<tr>
@@ -847,7 +534,8 @@
 											      	</td> 
 					            					<td>
 						            					<div class="fl">
-						            						<el-date-picker v-model="projecttmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
+						            						<el-date-picker v-validate="'required'" data-vv-scope="projectexperience" v-model="projecttmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
+						            						<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年月不能为空" type="error" v-show="projecttmp.startym===undefined||projecttmp.startym===null||projecttmp.startym===''"></el-alert>
 														</div>
 												        <div class="clear"></div>
 					            					</td>
@@ -856,7 +544,8 @@
 											      	</td> 
 					            					<td>
 					            						<div class="fl">
-					            							<el-date-picker v-model="projecttmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
+					            							<el-date-picker v-validate="'required'" data-vv-scope="projectexperience" v-model="projecttmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
+					            							<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年月不能为空" type="error" v-show="projecttmp.endym===undefined||projecttmp.endym===null||projecttmp.endym===''"></el-alert>
 														</div>
 												        <div class="clear"></div>
 					            					</td>
@@ -864,8 +553,9 @@
 					            				<tr>
 					            					<td valign="top"></td> 
 													<td colspan="3">
-														<textarea class="projectDescription s_textarea" v-model="projecttmp.intro" name="projectDescription" placeholder="项目描述"></textarea>
+														<textarea v-validate="'required|max:500'" data-vv-scope="projectexperience" class="projectDescription s_textarea" v-model="projecttmp.intro" name="projectDescription" placeholder="项目描述"></textarea>
 														<div class="word_count">你还可以输入 <span>{{500-projecttmp.intro.length}}</span> 字</div>
+														<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('projectexperience.projectDescription')" type="error" v-show="errors.has('projectexperience.projectDescription')"></el-alert>
 													</td>
 					            				</tr>
 					            				<tr>
@@ -890,13 +580,15 @@
 									        	<span class="redstar">*</span>
 									      	</td> 
 									      	<td>
-									        	<input type="text" v-model="projecttmp.proname" placeholder="项目名称" name="projectName" class="projectName">
+									        	<input v-validate="'required|nosymbol|max:15'" data-vv-scope="projectexperience" type="text" v-model="projecttmp.proname" placeholder="项目名称" name="projectName" class="projectName">
+									        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('projectexperience.projectName')" type="error" v-show="errors.has('projectexperience.projectName')"></el-alert>
 									      	</td>
 			            					<td valign="top">
 									        	<span class="redstar">*</span>
 									      	</td> 
 									      	<td>
-									          	<input type="text" v-model="projecttmp.post" placeholder="担任职务，如：产品负责人" name="thePost" class="thePost">
+									          	<input v-validate="'required|nosymbol|max:10'" data-vv-scope="projectexperience" type="text" v-model="projecttmp.post" placeholder="担任职务，如：产品负责人" name="thePost" class="thePost">
+									          	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('projectexperience.thePost')" type="error" v-show="errors.has('projectexperience.thePost')"></el-alert>
 									      	</td>
 									    </tr>
 			            				<tr>
@@ -905,68 +597,9 @@
 									      	</td> 
 			            					<td>
 				            					<div class="fl">
-				            						<el-date-picker v-model="projecttmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
-				            						<!--<input type="hidden" class="projectYearStart" value="" name="projectYearStart">-->
-										        	<!--<input type="button" value="开始年份" class="profile_select_139 profile_select_normal select_projectYearStart">-->
-													<!--<div class="box_projectYearStart  boxUpDown boxUpDown_139 dn" style="display: none;">
-											            <ul>
-											        											        			<li>2014</li>
-											        											        			<li>2013</li>
-											        											        			<li>2012</li>
-											        											        			<li>2011</li>
-											        											        			<li>2010</li>
-											        											        			<li>2009</li>
-											        											        			<li>2008</li>
-											        											        			<li>2007</li>
-											        											        			<li>2006</li>
-											        											        			<li>2005</li>
-											        											        			<li>2004</li>
-											        											        			<li>2003</li>
-											        											        			<li>2002</li>
-											        											        			<li>2001</li>
-											        											        			<li>2000</li>
-											        											        			<li>1999</li>
-											        											        			<li>1998</li>
-											        											        			<li>1997</li>
-											        											        			<li>1996</li>
-											        											        			<li>1995</li>
-											        											        			<li>1994</li>
-											        											        			<li>1993</li>
-											        											        			<li>1992</li>
-											        											        			<li>1991</li>
-											        											        			<li>1990</li>
-											        											        			<li>1989</li>
-											        											        			<li>1988</li>
-											        											        			<li>1987</li>
-											        											        			<li>1986</li>
-											        											        			<li>1985</li>
-											        											        			<li>1984</li>
-											        											        			<li>1983</li>
-											        											        			<li>1982</li>
-											        											        			<li>1981</li>
-											        											        			<li>1980</li>
-											        											        			<li>1979</li>
-											        											        			<li>1978</li>
-											        											        			<li>1977</li>
-											        											        			<li>1976</li>
-											        											        			<li>1975</li>
-											        											        			<li>1974</li>
-											        											        			<li>1973</li>
-											        											        			<li>1972</li>
-											        											        			<li>1971</li>
-											        											        			<li>1970</li>
-											        											        	</ul>
-											        </div>-->
-												</div>
-												<!--<div class="fl">
-											        <input type="hidden" class="projectMonthStart" value="" name="projectMonthStart">
-										        	<input type="button" value="开始月份" class="profile_select_139 profile_select_normal select_projectMonthStart">
-													<div style="display: none;" class="box_projectMonthStart boxUpDown boxUpDown_139 dn">
-											            <ul>
-											        		<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li><li>09</li><li>10</li><li>11</li><li>12</li>
-											        	</ul>
-											        </div>
-										        </div>-->
+				            						<el-date-picker v-validate="'required'" data-vv-scope="projectexperience" v-model="projecttmp.startym" type="month" placeholder="开始年月" value-format="yyyy-MM"></el-date-picker>
+				            						<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年月不能为空" type="error" v-show="projecttmp.startym===undefined||projecttmp.startym===null||projecttmp.startym===''"></el-alert>
+				            					</div>
 										        <div class="clear"></div>
 			            					</td>
 			            					<td valign="top">
@@ -974,86 +607,20 @@
 									      	</td> 
 			            					<td>
 			            						<div class="fl">
-			            							<el-date-picker v-model="projecttmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
-				            						<!--<input type="hidden" class="projectYearEnd" value="" name="projectYearEnd">
-										        	<input type="button" value="结束年份" class="profile_select_139 profile_select_normal select_projectYearEnd">
-													<div class="box_projectYearEnd  boxUpDown boxUpDown_139 dn" style="display: none;">
-											            <ul>
-											            	<li>至今</li>
-											        											        			<li>2014</li>
-											        											        			<li>2013</li>
-											        											        			<li>2012</li>
-											        											        			<li>2011</li>
-											        											        			<li>2010</li>
-											        											        			<li>2009</li>
-											        											        			<li>2008</li>
-											        											        			<li>2007</li>
-											        											        			<li>2006</li>
-											        											        			<li>2005</li>
-											        											        			<li>2004</li>
-											        											        			<li>2003</li>
-											        											        			<li>2002</li>
-											        											        			<li>2001</li>
-											        											        			<li>2000</li>
-											        											        			<li>1999</li>
-											        											        			<li>1998</li>
-											        											        			<li>1997</li>
-											        											        			<li>1996</li>
-											        											        			<li>1995</li>
-											        											        			<li>1994</li>
-											        											        			<li>1993</li>
-											        											        			<li>1992</li>
-											        											        			<li>1991</li>
-											        											        			<li>1990</li>
-											        											        			<li>1989</li>
-											        											        			<li>1988</li>
-											        											        			<li>1987</li>
-											        											        			<li>1986</li>
-											        											        			<li>1985</li>
-											        											        			<li>1984</li>
-											        											        			<li>1983</li>
-											        											        			<li>1982</li>
-											        											        			<li>1981</li>
-											        											        			<li>1980</li>
-											        											        			<li>1979</li>
-											        											        			<li>1978</li>
-											        											        			<li>1977</li>
-											        											        			<li>1976</li>
-											        											        			<li>1975</li>
-											        											        			<li>1974</li>
-											        											        			<li>1973</li>
-											        											        			<li>1972</li>
-											        											        			<li>1971</li>
-											        											        			<li>1970</li>
-											        											        	</ul>
-											        </div>-->
-												</div>
-												<!--<div class="fl">
-											        <input type="hidden" class="projectMonthEnd" value="" name="projectMonthEnd">
-										        	<input type="button" value="结束月份" class="profile_select_139 profile_select_normal select_projectMonthEnd">
-													<div style="display: none;" class="box_projectMonthEnd boxUpDown boxUpDown_139 dn">
-											            <ul>
-											        		<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li><li>09</li><li>10</li><li>11</li><li>12</li>
-											        	</ul>
-											        </div>
-										        </div>-->
+			            							<el-date-picker v-validate="'required'" data-vv-scope="projectexperience" v-model="projecttmp.endym" type="month" placeholder="结束年月" value-format="yyyy-MM"></el-date-picker>
+			            							<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年月不能为空" type="error" v-show="projecttmp.endym===undefined||projecttmp.endym===null||projecttmp.endym===''"></el-alert>
+				            					</div>
 										        <div class="clear"></div>
 			            					</td>
 			            				</tr>
 			            				<tr>
 			            					<td valign="top"></td> 
 											<td colspan="3">
-												<textarea class="projectDescription s_textarea" v-model="projecttmp.intro" name="projectDescription" placeholder="项目描述"></textarea>
+												<textarea v-validate="'required|max:500'" data-vv-scope="projectexperience" class="projectDescription s_textarea" v-model="projecttmp.intro" name="projectDescription" placeholder="项目描述"></textarea>
 												<div class="word_count">你还可以输入 <span>{{500-projecttmp.intro.length}}</span> 字</div>
-												<!--<div class="word_count" v-show="projecttmp.intro.length!=0"></div>-->
+												<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('projectexperience.projectDescription')" type="error" v-show="errors.has('projectexperience.projectDescription')"></el-alert>
 											</td>
 			            				</tr>
-			            				<!-- <tr>
-											<td colspan="2">
-												<textarea placeholder="职责描述" name="ResponsDescription" class="ResponsDescription s_textarea"></textarea>
-												<div class="word_count">你还可以输入 <span>500</span> 字</div>
-											</td>
-			            				</tr> -->
 			            				<tr>
 			            					<td valign="top"></td> 
 			            					<td colspan="3">
@@ -1062,7 +629,6 @@
 			            					</td>
 			            				</tr>
 			            			</tbody></table>
-					            	<input type="hidden" value="" class="projectId">
 		            			</form><!--end .projectForm-->
 		            		</div><!--end .projectEdit-->
 		            		<div class="projectAdd pAdd" v-show="resume.projectlist.length==0&&!addprojectshow" @click="addproject">
@@ -1073,7 +639,7 @@
 		            	</div><!--end #projectExperience-->
 		
 		            	<div class="profile_box" id="educationalBackground">
-		            		<h2>教育背景<!--<span>（投递简历时必填）</span>--></h2>
+		            		<h2>教育背景<span>（投递简历时必填）</span></h2>
 		            		<span class="c_add" @click="addeducation" title="添加教育经历" v-if="resume.educationlist.length!=0&&!addedushow&&!editedushow"></span>
 		            		<div class="educationalShow" v-if="resume.educationlist.length!=0">
 		            			<ul class="elist clearfix">
@@ -1091,24 +657,21 @@
 											        	<span class="redstar">*</span>
 											      	</td> 
 											      	<td>
-											        	<input type="text" v-model="educationtmp.school" placeholder="学校名称" name="schoolName" class="schoolName">
+											        	<input v-validate="'required|nosymbol|max:20'" data-vv-scope="educationbackground" type="text" v-model="educationtmp.school" placeholder="学校名称" name="schoolName" class="schoolName">
+											        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.schoolName')" type="error" v-show="errors.has('educationbackground.schoolName')"></el-alert>
 											      	</td>
 											      	<td valign="top">
 											        	<span class="redstar">*</span>
 											      	</td> 
 											      	<td @mouseleave="edudegreelistshow=false">
 											      		<!--<input type="hidden" class="degree" value="" name="degree">-->
-											        	<input type="text" @click="edudegreelistshow=true" placeholder="学历" :class="[edudegreelistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.degree" class="profile_select_287 profile_select_normal select_degree">
+											        	<input name='select_degree' v-validate="'required'" data-vv-scope="educationbackground" type="text" @click="edudegreelistshow=true" placeholder="学历" :class="[edudegreelistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.degree" class="profile_select_287 profile_select_normal select_degree">
+											        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.select_degree')" type="error" v-show="errors.has('educationbackground.select_degree')"></el-alert>
 														<div class="box_degree boxUpDown boxUpDown_287 dn" style="width: 288px;" :style="{'display':edudegreelistshow?'block':'none'}">
 												            <ul>
 												            	<li v-for="(item,index) in degreelist" :key="index" @click="pickedudegree(item)">
 												            		{{item}}
 												            	</li>
-												        		<!--<li>大专</li>
-												        		<li>本科</li>
-												        		<li>硕士</li>
-												        		<li>博士</li>
-												        		<li>其他</li>-->
 												        	</ul>
 												        </div>
 											        </td>
@@ -1118,15 +681,17 @@
 											        	<span class="redstar">*</span>
 											      	</td> 
 					            					<td>
-					            						<input type="text" placeholder="专业名称" v-model="educationtmp.profession" name="professionalName" class="professionalName">
+					            						<input v-validate="'required|nosymbol|max:10'" data-vv-scope="educationbackground" type="text" placeholder="专业名称" v-model="educationtmp.profession" name="professionalName" class="professionalName">
+					            						<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.professionalName')" type="error" v-show="errors.has('educationbackground.professionalName')"></el-alert>
 					            					</td>
 					            					<td valign="top">
 											        	<span class="redstar"></span>
 											      	</td> 
 					            					<td @mouseleave="ranklistshow=false">
 											      		<!--<input type="hidden" class="degree" value="" name="degree">-->
-											        	<input type="text" @click="ranklistshow=true" placeholder="专业排名" :class="[ranklistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.rank" class="profile_select_287 profile_select_normal select_degree">
-														<div class="box_degree boxUpDown boxUpDown_287 dn" style="width: 288px;" :style="{'display':ranklistshow?'block':'none'}">
+											        	<input name="rank" v-validate="'required'" data-vv-scope="educationbackground" type="text" @click="ranklistshow=true" placeholder="专业排名" :class="[ranklistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.rank" class="profile_select_287 profile_select_normal select_degree">
+											        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.rank')" type="error" v-show="errors.has('educationbackground.rank')"></el-alert>
+														<div class="box_degree boxUpDown boxUpDown_287" style="width: 288px;" :style="{'display':ranklistshow?'block':'none'}">
 												            <ul>
 												            	<li v-for="(item,index) in ranklist" :key="index" @click="pickrank(item)">
 												            		{{item}}
@@ -1140,24 +705,16 @@
 											        	<span class="redstar">*</span>
 											      	</td>
 											      	<div class="fl" style="margin-left: -13px;width: 288px;">
-						            						<el-date-picker class="edudate" v-model="educationtmp.startyear" type="year" placeholder="开始年份" value-format="yyyy"></el-date-picker>
-						            				</div>
-					            					<!--<td>
-						            					<div class="fl">
-						            						<el-date-picker class="edudate" v-model="educationtmp.startyear" type="year" placeholder="开始年份" value-format="yyyy"></el-date-picker>
-						            					</div>
-					            					</td>-->
+						            					<el-date-picker v-validate="'required'" data-vv-scope="educationbackground" class="edudate" v-model="educationtmp.startyear" type="year" placeholder="开始年份" value-format="yyyy"></el-date-picker>
+						            					<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年份不能为空" type="error" v-show="educationtmp.startyear===undefined||educationtmp.startyear===null||educationtmp.startyear===''"></el-alert>
+						            			</div>
 					            					<td valign="top">
 											        	<span class="redstar">*</span>
 											      	</td>
 											      	<div class="fl" style="margin-left: -13px;">
-															<el-date-picker class="edudate" v-model="educationtmp.endyear" type="year" placeholder="结束年份" value-format="yyyy"></el-date-picker>
-						            				</div>
-											      	<!--<td>
-											      		<div class="fl">
-															<el-date-picker class="edudate" v-model="educationtmp.endyear" type="year" placeholder="结束年份" value-format="yyyy"></el-date-picker>
-						            					</div>
-											      	</td>-->
+														<el-date-picker v-validate="'required'" data-vv-scope="educationbackground" class="edudate" v-model="educationtmp.endyear" type="year" placeholder="结束年份" value-format="yyyy"></el-date-picker>
+														<el-alert style="width: 288px;height: auto;" :closable="false" title="结束年份不能为空" type="error" v-show="educationtmp.endyear===undefined||educationtmp.endyear===null||educationtmp.endyear===''"></el-alert>
+						            			</div>
 					            				</tr>
 					            				<tr>
 					            					<td></td>
@@ -1180,24 +737,21 @@
 									        	<span class="redstar">*</span>
 									      	</td> 
 									      	<td>
-									        	<input type="text" v-model="educationtmp.school" placeholder="学校名称" name="schoolName" class="schoolName">
+									        	<input v-validate="'required|nosymbol|max:20'" data-vv-scope="educationbackground" type="text" v-model="educationtmp.school" placeholder="学校名称" name="schoolName" class="schoolName">
+									        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.schoolName')" type="error" v-show="errors.has('educationbackground.schoolName')"></el-alert>
 									      	</td>
 									      	<td valign="top">
 									        	<span class="redstar">*</span>
 									      	</td> 
 									      	<td @mouseleave="edudegreelistshow=false">
 									      		<!--<input type="hidden" class="degree" value="" name="degree">-->
-									        	<input type="text" @click="edudegreelistshow=true" placeholder="学历" :class="[edudegreelistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.degree" class="profile_select_287 profile_select_normal select_degree">
+									        	<input name='select_degree' v-validate="'required'" data-vv-scope="educationbackground" type="text" @click="edudegreelistshow=true" placeholder="学历" :class="[edudegreelistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.degree" class="profile_select_287 profile_select_normal select_degree">
+									        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.select_degree')" type="error" v-show="errors.has('educationbackground.select_degree')"></el-alert>
 												<div class="box_degree boxUpDown boxUpDown_287 dn" style="width: 288px;" :style="{'display':edudegreelistshow?'block':'none'}">
 										            <ul>
 										            	<li v-for="(item,index) in degreelist" :key="index" @click="pickedudegree(item)">
 										            		{{item}}
 										            	</li>
-										        		<!--<li>大专</li>
-										        		<li>本科</li>
-										        		<li>硕士</li>
-										        		<li>博士</li>
-										        		<li>其他</li>-->
 										        	</ul>
 										        </div>
 									        </td>
@@ -1207,14 +761,16 @@
 									        	<span class="redstar">*</span>
 									      	</td> 
 			            					<td>
-			            						<input type="text" placeholder="专业名称" v-model="educationtmp.profession" name="professionalName" class="professionalName">
+			            						<input v-validate="'required|nosymbol|max:10'" data-vv-scope="educationbackground" type="text" placeholder="专业名称" v-model="educationtmp.profession" name="professionalName" class="professionalName">
+			            						<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.professionalName')" type="error" v-show="errors.has('educationbackground.professionalName')"></el-alert>
 			            					</td>
 			            					<td valign="top">
 									        	<span class="redstar"></span>
 									      	</td> 
 			            					<td @mouseleave="ranklistshow=false">
 									      		<!--<input type="hidden" class="degree" value="" name="degree">-->
-									        	<input type="text" @click="ranklistshow=true" placeholder="专业排名" :class="[ranklistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.rank" class="profile_select_287 profile_select_normal select_degree">
+									        	<input name='rank' v-validate="'required'" data-vv-scope="educationbackground" type="text" @click="ranklistshow=true" placeholder="专业排名" :class="[ranklistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.rank" class="profile_select_287 profile_select_normal select_degree">
+									        	<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.rank')" type="error" v-show="errors.has('educationbackground.rank')"></el-alert>
 												<div class="box_degree boxUpDown boxUpDown_287 dn" style="width: 288px;" :style="{'display':ranklistshow?'block':'none'}">
 										            <ul>
 										            	<li v-for="(item,index) in ranklist" :key="index" @click="pickrank(item)">
@@ -1230,23 +786,15 @@
 									      	</td> 
 			            					<td>
 				            					<div class="fl">
-				            						<el-date-picker class="edudate" v-model="educationtmp.startyear" type="year" placeholder="开始年份" value-format="yyyy"></el-date-picker>
-				            						<!--<el-date-picker
-												      v-model="educationtmp.startyear"
-												      type="monthrange"
-												      align="right"
-												      unlink-panels
-												      range-separator="至"
-												      start-placeholder="开始月份"
-												      end-placeholder="结束月份"
-												      :picker-options="pickerOptions">
-												    </el-date-picker> -->
+				            						<el-date-picker v-validate="'required'" data-vv-scope="educationbackground" class="edudate" v-model="educationtmp.startyear" type="year" placeholder="开始年份" value-format="yyyy"></el-date-picker>
+				            						<el-alert style="width: 288px;height: auto;" :closable="false" title="开始年份不能为空" type="error" v-show="educationtmp.startyear===undefined||educationtmp.startyear===null||educationtmp.startyear===''"></el-alert>
 				            					</div>
 				            					<td valign="top">
 									        		<span class="redstar">*</span>
 									      		</td>
 												<div class="fl">
-													<el-date-picker class="edudate" v-model="educationtmp.endyear" type="year" placeholder="结束年份" value-format="yyyy"></el-date-picker>
+													<el-date-picker v-validate="'required'" data-vv-scope="educationbackground" class="edudate" v-model="educationtmp.endyear" type="year" placeholder="结束年份" value-format="yyyy"></el-date-picker>
+													<el-alert style="width: 288px;height: auto;" :closable="false" title="结束年份不能为空" type="error" v-show="educationtmp.endyear===undefined||educationtmp.endyear===null||educationtmp.endyear===''"></el-alert>
 				            					</div>
 			            						<div class="clear"></div>
 			            					</td>
@@ -1259,7 +807,6 @@
 			            					</td>
 			            				</tr>
 			            			</tbody></table>
-			            			<!--<input type="hidden" class="eduId" value="">-->
 		            			</form><!--end .educationalForm-->
 		            		</div><!--end .educationalEdit-->
 		            		<div class="educationalAdd pAdd" v-if="resume.educationlist.length==0&&!addedushow" @click="addeducation">
@@ -1272,7 +819,7 @@
 		            	<div class="profile_box" id="selfDescription">
 		            		<h2>自我描述</h2>
 		            		<span class="c_edit" @click="editdescription" v-show="resume.selfdescription!=null&&resume.selfdescription!=''"></span>
-		            		<div class="descriptionShow" v-show="!editdescriptionshow" v-if="resume.selfdescription!=null&&resume.selfdescription!=''">
+		            		<div class="descriptionShow" v-show="!editdescriptionshow" v-if="resume.selfdescription!==undefined&&resume.selfdescription!=null&&resume.selfdescription!=''">
 		            		    {{resume.selfdescription}} 			
 		            		</div><!--end .descriptionShow-->
 		            		<div class="descriptionEdit" v-show="editdescriptionshow">
@@ -1280,8 +827,9 @@
 			            			<table>
 			            				<tbody><tr>
 											<td colspan="2">
-												<textarea v-model="descriptiontmp" class="selfDescription s_textarea" name="selfDescription" placeholder="请输入自我介绍"></textarea>
+												<textarea data-vv-scope="selfdescription" maxlength="500" v-validate="'required|max:500'" v-model="descriptiontmp" class="selfDescription s_textarea" name="selfDescription" placeholder="请输入自我介绍"></textarea>
 												<div class="word_count" v-if="descriptiontmp!=null">你还可以输入 <span>{{lastlength_des}}</span> 字</div>
+												<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('selfdescription.selfDescription')" type="error" v-show="errors.has('selfdescription.selfDescription')"></el-alert>
 											</td>
 			            				</tr>
 			            				<tr>
@@ -1293,7 +841,7 @@
 			            			</tbody></table>
 		            			</form><!--end .descriptionForm-->
 		            		</div><!--end .descriptionEdit-->
-		            		<div class="descriptionAdd pAdd" v-show="(resume.selfdescription==null||resume.selfdescription=='')&&!editdescriptionshow" @click="adddescription">
+		            		<div class="descriptionAdd pAdd" v-show="(resume.selfdescription==undefined||resume.selfdescription==null||resume.selfdescription=='')&&!editdescriptionshow" @click="adddescription">
 		            		        描述你的性格、爱好以及吸引人的经历等，<br>
 								让企业了解多元化的你！
 								<span>添加自我描述</span>
@@ -1628,6 +1176,7 @@
 				addedushow:false,
 				editdescriptionshow:false,
 				uploadboxshow:false,
+				resumenametmp:null,
 				resume:{
 					name:'person的简历',
 					basicinfo:{
@@ -1796,6 +1345,7 @@
 				this.collapsibleshow = false
 			},
 			rename(){
+				this.resumenametmp = this.resume.name
 				this.renameshow = true
 			},
 			getresumeimg(e){
@@ -1809,14 +1359,44 @@
 				}
 			},
 			saveresumename(){
-				let newresumename = this.$refs.newresumename.value
+				var validateScope = 'resumename'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存简历新名称并关闭编辑页面
+					      	if(this.resumenametmp){
+					      		this.resume.name = this.resumenametmp
+								this.renameshow = false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善简历名称信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善简历名称信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善简历名称信息！'
+						})
+			   	})
+				/*let newresumename = this.$refs.newresumename.value
 				if(newresumename != null && newresumename != ''){
 					this.resume.name =  this.$refs.newresumename.value
 					this.renameshow = false
 				}
 				else{
 					alert("请输入简历名称！")
-				}
+				}*/
 			},
 			cancelrename(){
 				this.renameshow = false
@@ -1826,18 +1406,43 @@
 				window.scrollTo({"behavior":"smooth","top":el.offsetTop})
 			},
 			savebasic(){
-				this.resume.basicinfo = JSON.parse(JSON.stringify(this.basicinfotmp))
-				this.editbasicshow = false
+				var validateScope = 'basicinfo'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存个人基本信息并关闭编辑页面
+					      	if(this.basicinfotmp){
+					      		this.resume.basicinfo = JSON.parse(JSON.stringify(this.basicinfotmp))
+								this.editbasicshow = false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善个人基本信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善个人基本信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善个人基本信息！'
+						})
+			   	})
 			},
 			canceleditbasic(){
 				this.editbasicshow = false
 			},
-			showgender(){
-				
-			},
 			editbasicinfo(){
 				this.basicinfotmp = JSON.parse(JSON.stringify(this.resume.basicinfo))
-				this.editbasicshow=true
+				this.editbasicshow = true
 			},
 			pickdegree(item){
 				this.basicinfotmp.degree=item
@@ -1854,11 +1459,10 @@
 			addexpectjob(){
 				let tmp = {
 					city:'',
-					type:'',
+					type:'全职',
 					post:'',
 					salary:'',
 				}
-//				this.resume.expectjob = JSON.parse(JSON.stringify(tmp))
 				this.expectjobtmp = JSON.parse(JSON.stringify(tmp))
 				this.editexpectjobshow=true
 			},
@@ -1875,8 +1479,36 @@
 				this.salaryboxshow=false
 			},
 			saveexpectjob(){
-				this.resume.expectjob = JSON.parse(JSON.stringify(this.expectjobtmp))
-				this.editexpectjobshow=false
+				var validateScope = 'expectjob'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存期望工作信息并关闭编辑页面
+					      	if(this.expectjobtmp){
+					      		this.resume.expectjob = JSON.parse(JSON.stringify(this.expectjobtmp))
+								this.editexpectjobshow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善期望工作信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善期望工作信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善期望工作信息！'
+						})
+			   	})
 			},
 			canceleditexpectjob(){
 				this.editexpectjobshow=false
@@ -1891,10 +1523,45 @@
 //				this.resume.experience = JSON.parse(JSON.stringify(tmp))
 				this.experiencetmp = JSON.parse(JSON.stringify(tmp))
 				this.addexperienceshow=true
+				/*let a = null
+				if([undefined,null,''].indexOf(a) > -1){
+					console.log('a in it')
+				}
+				else{
+					console.log('a not in  it')
+				}*/
 			},
 			savenewexperience(){
-				this.resume.experiencelist.push(JSON.parse(JSON.stringify(this.experiencetmp)))
-				this.addexperienceshow=false
+				var validateScope = 'workexperience'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存新增的工作经历信息并关闭编辑页面
+					      	if(this.experiencetmp && [undefined,null,''].indexOf(this.experiencetmp.startym) < 0 && [undefined,null,''].indexOf(this.experiencetmp.endym) < 0){
+					      		this.resume.experiencelist.push(JSON.parse(JSON.stringify(this.experiencetmp)))
+								this.addexperienceshow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善工作经历信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善工作经历信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善工作经历信息！'
+						})
+			   	})
 			},
 			canceladdexperience(){
 				this.addexperienceshow=false
@@ -1905,15 +1572,63 @@
 				this.editexperienceshow=true
 			},
 			saveexperience(index){
-				this.resume.experiencelist[index]=JSON.parse(JSON.stringify(this.experiencetmp))
-				this.editexperienceshow=false
+				var validateScope = 'workexperience'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存已有工作经历信息并关闭编辑页面
+					      	if(this.experiencetmp && index >= 0 && index < this.resume.experiencelist.length && [undefined,null,''].indexOf(this.experiencetmp.startym) < 0 && [undefined,null,''].indexOf(this.experiencetmp.endym) < 0){
+					      		this.resume.experiencelist[index]=JSON.parse(JSON.stringify(this.experiencetmp))
+								this.editexperienceshow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善工作经历信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善工作经历信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善工作经历信息！'
+						})
+			   	})
 			},
 			deleteexperience(index){
-				let confirmmsg = confirm("确定删除此条工作经历？")
+				if(index >= 0 && index < this.resume.experiencelist.length){
+					this.$confirm('是否删除这条工作经历?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.resume.experiencelist.splice(index,1)
+			        	  this.editexperienceshow=false
+			        	  this.currentexperience=null
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				}
+				/*let confirmmsg = confirm("确定删除此条工作经历？")
 				if(confirmmsg){
 					this.resume.experiencelist.splice(index,1)
 					this.editexperienceshow=false
-				}
+				}*/
 			},
 			addproject(){
 				let tmp = {
@@ -1932,22 +1647,98 @@
 				this.editprojectshow=true
 			},
 			savenewproject(){
-				this.resume.projectlist.push(JSON.parse(JSON.stringify(this.projecttmp)))
-				this.addprojectshow=false
+				var validateScope = 'projectexperience'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存新添加项目经历信息并关闭编辑页面
+					      	if(this.projecttmp && [undefined,null,''].indexOf(this.projecttmp.startym) < 0 && [undefined,null,''].indexOf(this.projecttmp.endym) < 0){
+					      		this.resume.projectlist.push(JSON.parse(JSON.stringify(this.projecttmp)))
+								this.addprojectshow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善项目经历信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善项目经历信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善项目经历信息！'
+						})
+			   	})
 			},
 			canceladdproject(){
 				this.addprojectshow=false
 			},
 			deleteproject(index){
-				let confirmmsg = confirm("确定删除此条项目经历？")
+				if(index >= 0 && index < this.resume.projectlist.length){
+					this.$confirm('是否删除这条项目经历?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.resume.projectlist.splice(index,1)
+			        	  this.editprojectshow=false
+			        	  this.currentproject=null
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				}
+				/*let confirmmsg = confirm("确定删除此条项目经历？")
 				if(confirmmsg){
 					this.resume.projectlist.splice(index,1)
 					this.editprojectshow=false
-				}
+				}*/
 			},
 			saveproject(index){
-				this.resume.projectlist[index]=JSON.parse(JSON.stringify(this.projecttmp))
-				this.editprojectshow=false
+				var validateScope = 'projectexperience'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存已有项目经历信息并关闭编辑页面
+					      	if(this.projecttmp && index >=0 && index < this.resume.projectlist.length && [undefined,null,''].indexOf(this.projecttmp.startym) < 0 && [undefined,null,''].indexOf(this.projecttmp.endym) < 0){
+					      		this.resume.projectlist[index]=JSON.parse(JSON.stringify(this.projecttmp))
+								this.editprojectshow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善项目经历信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善项目经历信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善项目经历信息！'
+						})
+			   	})
 			},
 			addeducation(){
 				let tmp = {
@@ -1962,15 +1753,71 @@
 				this.addedushow=true
 			},
 			saveneweducation(){
-				this.resume.educationlist.push(JSON.parse(JSON.stringify(this.educationtmp)))
-				this.addedushow=false
+				var validateScope = 'educationbackground'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存新添加教育背景信息并关闭编辑页面
+					      	if(this.educationtmp && [undefined,null,''].indexOf(this.educationtmp.startyear) < 0 && [undefined,null,''].indexOf(this.educationtmp.endyear) < 0){
+					      		this.resume.educationlist.push(JSON.parse(JSON.stringify(this.educationtmp)))
+								this.addedushow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善教育背景信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善教育背景信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善教育背景信息！'
+						})
+			   	})
 			},
 			canceladdeducation(){
 				this.addedushow=false
 			},
 			saveeducation(index){
-				this.resume.educationlist[index]=JSON.parse(JSON.stringify(this.educationtmp))
-				this.editedushow=false
+				var validateScope = 'educationbackground'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存已有教育背景信息并关闭编辑页面
+					      	if(this.educationtmp && index >= 0 && index < this.resume.educationlist.length && [undefined,null,''].indexOf(this.educationtmp.startyear) < 0 && [undefined,null,''].indexOf(this.educationtmp.endyear) < 0){
+					      		this.resume.educationlist[index]=JSON.parse(JSON.stringify(this.educationtmp))
+								this.editedushow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善教育背景信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善教育背景信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善教育背景信息！'
+						})
+			   	})
 			},
 			editeducation(index){
 				this.currenteducation=index
@@ -1978,11 +1825,31 @@
 				this.editedushow=true
 			},
 			deleteeducation(index){
-				let confirmmsg = confirm("确定删除此条教育背景？")
+				if(index >= 0 && index < this.resume.educationlist.length){
+					this.$confirm('是否删除这条教育背景?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+			        	  this.resume.educationlist.splice(index,1)
+						  this.editedushow=false
+			        	  this.currenteducation=null
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
+				}
+				/*let confirmmsg = confirm("确定删除此条教育背景？")
 				if(confirmmsg){
 					this.resume.educationlist.splice(index,1)
 					this.editedushow=false
-				}
+				}*/
 			},
 			pickedudegree(item){
 				this.educationtmp.degree=item
@@ -2000,8 +1867,36 @@
 				this.editdescriptionshow=false
 			},
 			savedescript(){
-				this.resume.selfdescription = JSON.parse(JSON.stringify(this.descriptiontmp))
-				this.editdescriptionshow=false
+				var validateScope = 'selfdescription'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存个人介绍信息并关闭编辑页面
+					      	if(this.descriptiontmp){
+					      		this.resume.selfdescription = JSON.parse(JSON.stringify(this.descriptiontmp))
+								this.editdescriptionshow=false
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善个人介绍信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善个人介绍信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善个人介绍信息！'
+						})
+			   	})
 			},
 			editdescription(){
 				this.descriptiontmp = JSON.parse(JSON.stringify(this.resume.selfdescription))
