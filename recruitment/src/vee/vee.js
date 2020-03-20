@@ -52,7 +52,9 @@ const attributesCh = {
 	select_degree:'学历',
 	professionalName:'专业名称',
 	rank:'专业排名',
-	selfDescription:'自我介绍'
+	selfDescription:'自我介绍',
+	oldpassword:'当前密码',
+	newpassword:'新密码'
 //	editor:'职位描述',
 }
 Validator.updateDictionary({

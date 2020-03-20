@@ -14,8 +14,9 @@
 								        			<span class="redstar">*</span>
 								      			</td> 
 								      			<td>
-								        			<input type="text" placeholder="姓名" v-model="basicinfotmp.username" name="name" id="name">
-								      			</td>
+								        			<input v-validate="'required|username'" data-vv-scope="basicinfo" type="text" placeholder="姓名" v-model="basicinfotmp.username" name="username_s" id="name">
+								        			<!--<el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.username_s')" type="error" v-show="errors.has('basicinfo.username_s')"></el-alert>-->
+								        		</td>
 								      			<td valign="top"></td> 
 								      			<td>
 								          			<ul class="profile_radio clearfix reset">
@@ -31,12 +32,19 @@
 								      			</td>
 								    		</tr>
 								    		<tr>
+								    			<td></td>
+								    			<td colspan="3">
+								    				<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('basicinfo.username_s')" type="error" v-show="errors.has('basicinfo.username_s')"></el-alert>
+								    			</td>
+								    		</tr>
+								    		<tr>
 											    <td valign="top">
 											      	<span class="redstar">*</span>
 											    </td> 
 								     			<td @mouseleave="degreelistshow=false">
-											      	<!--<input type="hidden" id="topDegree" value="大专" name="topDegree">-->
-											        <input type="button" :value="basicinfotmp.degree" @click="degreelistshow=true" :class="[degreelistshow?'select_focus':'']" id="select_topDegree" class="profile_select_190 profile_select_normal">
+											        <input v-validate="'required'" data-vv-scope="basicinfo" type="text" readonly="readonly" placeholder="最高学历" :value="basicinfotmp.degree" name="degreemax" @click="degreelistshow=true" id="select_topDegree" class="profile_select_190 profile_select_normal">
+											        <el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.degreemax')" type="error" v-show="errors.has('basicinfo.degreemax')"></el-alert>
+											        
 													<div class="boxUpDown boxUpDown_190" id="box_topDegree" :style="{'display':degreelistshow?'block':'none'}" style="width: 190px;">
 											        	<ul>
 											        		<li v-for="(item,index) in degreelist" :key='index' @click="pickdegree(item)">
@@ -50,7 +58,9 @@
 								      			</td> 
 											    <td @mouseleave="workyearlistshow=false">
 											        <!--<input type="hidden" id="workyear" value="" name="workyear">-->
-											        <input type="button" :value="basicinfotmp.workyear" id="select_workyear" @click="workyearlistshow=true" :class="[workyearlistshow?'select_focus':'']" class="profile_select_190 profile_select_normal">
+											        <input v-validate="'required'" data-vv-scope="basicinfo" type="text" readonly="readonly" placeholder="工作经验" :value="basicinfotmp.workyear" id="select_workyear" name="select_workyear" @click="workyearlistshow=true" class="profile_select_190 profile_select_normal">
+											        <el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.select_workyear')" type="error" v-show="errors.has('basicinfo.select_workyear')"></el-alert>
+											        
 													<div class="boxUpDown boxUpDown_190" id="box_workyear" style="width: 190px;" :style="{'display':workyearlistshow?'block':'none'}">
 											          	<ul>
 											          		<li v-for="(item,index) in workyearlist" :key='index' @click="pickworkyear(item)">
@@ -65,8 +75,8 @@
 										        	<span class="redstar">*</span>
 										      	</td> 
 								      			<td colspan="3">
-								          			<input type="text" v-validate="'required|min:11|max:11|tel'" placeholder="请输入手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
-								          			<el-alert :closable="false" :title="errors.first('tel')" type="error" v-show="errors.has('tel')"></el-alert>
+								          			<input data-vv-scope="basicinfo" type="text" v-validate="'required|min:11|max:11|tel'" placeholder="请输入手机号码" v-model="basicinfotmp.tel" style="width: 410px;" name="tel" id="tel">
+								          			<el-alert :closable="false" :title="errors.first('basicinfo.tel')" type="error" v-show="errors.has('basicinfo.tel')"></el-alert>
 								      
 								      			</td>
 								   			</tr>
@@ -75,15 +85,17 @@
 								        			<span class="redstar">*</span>
 								      			</td> 
 								      			<td colspan="3">
-								          			<input type="text" v-validate="'required|email'" placeholder="请输入邮箱" v-model="basicinfotmp.email" style="width: 410px;" name="email" id="email">
-								          			<el-alert :closable="false" :title="errors.first('email')" type="error" v-show="errors.has('email')"></el-alert>
+								          			<input data-vv-scope="basicinfo" type="text" v-validate="'required|email'" placeholder="请输入邮箱" v-model="basicinfotmp.email" style="width: 410px;" name="email" id="email">
+								          			<el-alert :closable="false" :title="errors.first('basicinfo.email')" type="error" v-show="errors.has('basicinfo.email')"></el-alert>
 								      			</td>
 								    		</tr>
 								    		<tr>
 								      			<td valign="top"> </td> 
 								      			<td colspan="3" @mouseleave="currentstatelistshow=false">
 								          			<!--<input type="hidden" id="currentState" value="" name="currentState">-->
-								          			<input type="button" @click="currentstatelistshow=true" :value="basicinfotmp.currentstate" id="select_currentState" class="profile_select_410 profile_select_normal" :class="[currentstatelistshow?'select_focus':'']">
+								          			<input style="width: 410px;" v-validate="'required'" data-vv-scope="basicinfo" type="text" readonly="readonly" placeholder="目前状态" @click="currentstatelistshow=true" :value="basicinfotmp.currentstate" id="select_currentState" name="select_currentState" class="profile_select_410 profile_select_normal">
+								          			<el-alert style="width: 190px;height: 46px;" :closable="false" :title="errors.first('basicinfo.select_currentState')" type="error" v-show="errors.has('basicinfo.select_currentState')"></el-alert>
+								          			
 										  			<div class="boxUpDown boxUpDown_410" id="box_currentState" style="width: 410px;" :style="{'display':currentstatelistshow?'block':'none'}">
 											          	<ul>
 											          		<li v-for="(item,index) in currentstatelist" :key='index' @click="pickcurrentstate(item)">
@@ -111,7 +123,7 @@
 								    	<img width="120" height="120" :src="basicinfotmp.img">
 								    	<span>更换头像</span>
 								  	</div>
-								  	<input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
+								  	<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
 									<!-- <input type="hidden" id="headPicHidden" /> -->
 								  	<em>
 								                  尺寸：120*120px <br>   
@@ -144,6 +156,38 @@
 			this.dataInit()
 		},
 		methods:{
+			savebasic(){
+				var validateScope = 'basicinfo'
+				this.$validator.validate(validateScope + '.*').then((result) => {
+					if (result) {
+//					     	console.log(this.$validator)
+					      	// 保存个人基本信息
+					      	if(this.basicinfotmp){
+					      		//把basicinfo数据根据用户id提交到后台保存
+					      		console.log(this.basicinfotmp)
+					      	}
+					      	else{
+					      		this.$message({
+									type:'warn',
+									message:'请先完善个人基本信息！'
+								})
+					      	}
+					}
+					else{
+//					     	console.log(this.$validator)
+					     	this.$message({
+								type:'warn',
+								message:'请先完善个人基本信息！'
+							})
+					}
+			   	}).catch(err => {
+			   			console.log(err)
+			   			this.$message({
+								type:'warn',
+								message:'请先完善个人基本信息！'
+						})
+			   	})
+			},
 			pickdegree(item){
 				this.basicinfotmp.degree = item
 				this.degreelistshow = false
@@ -157,11 +201,19 @@
 				this.currentstatelistshow = false
 			},
 			getresumeimg(e){
-				
+				let _this = this
+				var files = e.target.files[0]
+				if(!e || !window.FileReader) return
+				let reader = new FileReader()
+				reader.readAsDataURL(files)
+				reader.onloadend = function(){
+					_this.basicinfotmp.img = this.result
+				}
 			},
 			dataInit(){
+				//从后台获取basicinfo数据赋给basicinfotmp，这里模拟最终获取数据并展示出来
 				this.basicinfotmp = {
-					username:'person',
+						username:'person',
 						tel:'15813359',
 						email:'1021478@qq.com',
 						gender:'女',

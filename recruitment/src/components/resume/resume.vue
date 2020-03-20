@@ -172,7 +172,7 @@
 								    	<img width="120" height="120" :src="basicinfotmp.img">
 								    	<span>更换头像</span>
 								  	</div>
-								  	<input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
+								  	<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
 									<!-- <input type="hidden" id="headPicHidden" /> -->
 								  	<em>
 								                  尺寸：120*120px <br>   
