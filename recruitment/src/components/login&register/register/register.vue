@@ -22,7 +22,7 @@
 								<em v-show="!job"></em>
 							</li>
 						</ul>
-						<input style="width: 306px;height: 42px;margin-bottom: 0;margin-top: 10px;" v-validate="'required|email'" v-model="register.email" type="text" id="email" name="loginemail" tabindex="1" placeholder="请输入常用邮箱地址"/>
+						<input style="width: 306px;height: 42px;margin-bottom: 0;margin-top: 10px;" v-validate="'required|email|max:30'" v-model="register.email" type="text" id="email" name="loginemail" tabindex="1" placeholder="请输入常用邮箱地址"/>
 						<el-alert style="width: 306px;height: 42px;" :closable="false" :title="errors.first('loginemail')" type="error" v-show="errors.has('loginemail')"></el-alert>
 
 						<input style="width: 306px;height: 42px;margin-bottom: 0;margin-top: 10px;" v-validate="'required|min:8|max:20|password'" v-model="register.password" type="password" id="password" name="password" tabindex="2" placeholder="请输入密码"/>

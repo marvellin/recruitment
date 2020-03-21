@@ -22,7 +22,7 @@
 							<div class="clear"></div>
 							<h1 title="广东公司名称测试" class="fullname">{{comdetail.fullname}}</h1>
 							<form v-if="detailtmp" class="clear editDetail" :class="[editdetailshow?'':'dn']" id="editDetailForm">
-								<input v-validate="'required|companyshortname'" data-vv-scope="scope1" type="text" ref="editshortname" placeholder="请输入公司简称" maxlength="15" v-model="detailtmp.shortname" name="companyshortname" id="companyShortName"/>
+								<input v-validate="'required|companyshortname|max:10'" data-vv-scope="scope1" type="text" ref="editshortname" placeholder="请输入公司简称" maxlength="15" v-model="detailtmp.shortname" name="companyshortname" id="companyShortName"/>
 								<el-alert style="width:400px;" :closable="false" :title="errors.first('scope1.companyshortname')" type="error" v-show="errors.has('scope1.companyshortname')"></el-alert>
 
 								<input data-vv-scope="scope1" v-validate="'required|max:50'" type="text" ref="editfeature" placeholder="一句话描述公司优势，核心键值，限50字" maxlength="50" v-model="detailtmp.feature" name="temptation" id="companyFeatures"/>

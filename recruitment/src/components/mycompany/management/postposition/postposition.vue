@@ -252,7 +252,7 @@
 			                                	<td><span class="redstar">*</span></td>
 			                                	<td>工作地址</td>
 			                                	<td>
-			                                    	<input v-validate="'required'" type="text" style="width: 560px;height: 46px;" placeholder="请输入详细的工作地址" v-model="job.address" name="positionAddress" class="input_520" id="positionAddress">	
+			                                    	<input v-validate="'required|max:50'" type="text" style="width: 560px;height: 46px;" placeholder="请输入详细的工作地址" v-model="job.address" name="positionAddress" class="input_520" id="positionAddress">	
 			                                    	<el-alert style="width: 520px;height: 30px;" :closable="false" :title="errors.first('positionAddress')" type="error" v-show="errors.has('positionAddress')"></el-alert>
 			                                    </td>
 			                                </tr>

@@ -15,11 +15,11 @@
 				<form id="stepForm">
 	                    <!--<h3 @mouseover="showerror">公司全称</h3>-->
 	                    <h3>公司全称</h3>
-	                    <input type="text" v-validate="'required|companyfullname'" placeholder="请输入公司全称，如:广州市第一巴士股份有限公司" v-model="company.comdetail.fullname" name="companyfullname" id="companyfullname" class="valid">
+	                    <input type="text" v-validate="'required|companyfullname|max:20'" placeholder="请输入公司全称，如:广州市第一巴士股份有限公司" v-model="company.comdetail.fullname" name="companyfullname" id="companyfullname" class="valid">
 	                    <el-alert :closable="false" :title="errors.first('companyfullname')" type="error" v-show="errors.has('companyfullname')"></el-alert>
 	                    
 	                    <h3>公司简称</h3> <!--非必填-->
-	                    <input type="text" v-validate="'required|companyshortname'" placeholder="请输入公司简称，如:广州一巴" v-model="company.comdetail.shortname" name="companyshortname" id="companyshortname" class="valid">	
+	                    <input type="text" v-validate="'required|companyshortname|max:10'" placeholder="请输入公司简称，如:广州一巴" v-model="company.comdetail.shortname" name="companyshortname" id="companyshortname" class="valid">	
 	                    <el-alert :closable="false" :title="errors.first('companyshortname')" type="error" v-show="errors.has('companyshortname')"></el-alert>
 	                    
 	                    <h3>公司LOGO</h3> <!--非必填改必填-->

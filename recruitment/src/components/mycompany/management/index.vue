@@ -44,7 +44,7 @@
 					    <td><span class="redstar">*</span></td>
 					    <td>地点</td>
 					    <td>
-					    	<input type="text" v-validate="'required'" v-model="feedbackdetail.address" style="width: 450px;height: 40px;" placeholder="请输入具体面试地点" name="interviewaddress" id="interviewaddress">
+					    	<input type="text" v-validate="'required|max:50'" v-model="feedbackdetail.address" style="width: 450px;height: 40px;" placeholder="请输入具体面试地点" name="interviewaddress" id="interviewaddress">
 					    	<el-alert style="width: 450px;height: 36px;" :closable="false" :title="errors.first('interviewaddress')" type="error" v-show="errors.has('interviewaddress')"></el-alert>
 		                </td>
 					</tr>

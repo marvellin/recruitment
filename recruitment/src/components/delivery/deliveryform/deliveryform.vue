@@ -2,7 +2,7 @@
 	<div id="deliveryForm">
 		<ul class="reset my_delivery">
 		   	<li v-for="(item,index) in deliverylist" :key="index">
-		    	<deliverybox @showbox="showbox" :show="statusboxshow" :position="item.position" :company="item.company" :deliverytime="item.deliverytime" :feedbacktime="item.feedbacktime" :feedback="item.feedback"></deliverybox>
+		    	<deliverybox @showbox="showbox" :show="statusboxshow" :status="item.status" :position="item.position" :company="item.company" :deliverytime="item.deliverytime" :feedbacktime="item.feedbacktime" :feedback="item.feedback"></deliverybox>
 		    	<statusbox @closebox="closebox" :show="statusboxshow" :status="item.status" :deliverytime="item.deliverytime" :feedbacktime="item.feedbacktime" :feedbackdetail="item.feedbackdetail"></statusbox>
 		    </li>
 		</ul>

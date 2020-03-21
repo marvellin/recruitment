@@ -40,7 +40,7 @@
 		        	</ul>
 		        </div>
 		    </li>
-		    <li class="bottom">
+		    <li :class="[status>=3?'bottom':'top']">
 		        <div class="list_time"><em></em>{{deliverytime}}</div>
 		        <div class="list_body">HR已成功接收你的简历</div>
 		    </li>
@@ -62,6 +62,11 @@
 			show:{
 				type:Boolean
 			}
+		},
+		created(){
+			console.log(this.status)
+			console.log(this.status == 3)
+			console.log(this.status instanceof Number)
 		},
 		methods:{
 			closestatusbox(){

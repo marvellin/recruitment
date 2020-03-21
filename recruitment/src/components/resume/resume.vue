@@ -1532,6 +1532,7 @@
 				}*/
 			},
 			savenewexperience(){
+				
 				var validateScope = 'workexperience'
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					if (result) {
@@ -1572,6 +1573,7 @@
 				this.editexperienceshow=true
 			},
 			saveexperience(index){
+				console.log(this.experiencetmp)
 				var validateScope = 'workexperience'
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					if (result) {
@@ -1906,6 +1908,8 @@
 				this.uploadboxshow=true
 			},
 			getresumefile(e){
+				//上传简历附件，返回简历附件对象，内包含文件原名、文件对应的oss文件的id和个人id
+				//这里模拟上传成功后的操作
 				let file = e.target.files[0]
 				this.resume.resumefilelist.push(file)
 				let length = this.resume.resumefilelist.length

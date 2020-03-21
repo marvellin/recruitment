@@ -10,7 +10,7 @@
 				</div>
 				<div class="login_box">
 					<form id="loginForm" action="">
-						<input type="text" v-validate="'required|email'" style="width: 316px;height: 42px;margin-bottom: 0;" id="email" name="loginemail" v-model="login.email" tabindex="1" placeholder="请输入登陆邮箱地址"/>
+						<input type="text" v-validate="'required|email|max:30'" style="width: 316px;height: 42px;margin-bottom: 0;" id="email" name="loginemail" v-model="login.email" tabindex="1" placeholder="请输入登陆邮箱地址"/>
 						<el-alert style="width: 316px;height: 42px;" :closable="false" :title="errors.first('loginemail')" type="error" v-show="errors.has('loginemail')"></el-alert>
 						<input type="password" v-validate="'required|min:8|max:20|password'" style="width: 316px;height: 42px;margin: 20px 0 0 0;" id="password" name="password" v-model="login.password" tabindex="2" placeholder="请输入密码"/>
 						<el-alert style="width: 316px;height: 42px;" :closable="false" :title="errors.first('password')" type="error" v-show="errors.has('password')"></el-alert>

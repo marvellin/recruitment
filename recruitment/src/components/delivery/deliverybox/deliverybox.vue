@@ -20,9 +20,19 @@
 		        </span>
 			</div>-->
 			<span class="d_time fl">投递时间：{{deliverytime}}</span>
-			<a class="btn_showprogress" @click.prevent="showstatusbox" href="javascript:;">
+			<a v-if="status==2" class="btn_showprogress" @click.prevent="showstatusbox" href="javascript:;">
 			    <!--<span>反馈结果：</span>-->
-			    {{feedback}}
+			         已查看
+			    <i :class="[show?'transform':'']"></i>
+			</a>
+			<a v-if="status==1" class="btn_showprogress" href="javascript:;">
+			    <!--<span>反馈结果：</span>-->
+			    	已投递
+			    <!--<i :class="[show?'transform':'']"></i>-->
+			</a>
+			<a v-if="status==3" class="btn_showprogress" @click.prevent="showstatusbox" href="javascript:;">
+			    <span>反馈结果：</span>
+			    	{{feedback}}
 			    <i :class="[show?'transform':'']"></i>
 			</a>
 		</div>
@@ -32,6 +42,7 @@
 	export default{
 		name:"deliverybox",
 		props:{
+			status:{},
 			show:{
 				type:Boolean
 			},
@@ -46,9 +57,13 @@
 				
 			}
 		},
+		created(){
+			console.log(this.status)
+		},
 		methods:{
 			deletedelivery(){},
 			showstatusbox(){
+//				console.log(this.status)
 				this.$emit("showbox",'')
 			}
 		}
