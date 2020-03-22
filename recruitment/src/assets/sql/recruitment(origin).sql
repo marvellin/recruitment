@@ -32,7 +32,7 @@ CREATE TABLE `User` (
   `userId` int(10) NOT NULL AUTO_INCREMENT COMMENT '用户主键',
   `email` varchar(30) NOT NULL UNIQUE COMMENT '登陆邮箱',
   `password` varchar(255) NOT NULL COMMENT '登陆密码',
-  `role` enum('company','person') NOT NULL DEFAULT 'person' COMMENT '用户角色',
+  `role` enum('company','person','admin') NOT NULL DEFAULT 'person' COMMENT '用户角色',
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户';
 
@@ -277,6 +277,7 @@ CREATE TABLE `Position` (
   `post` varchar(20) NOT NULL COMMENT '职位类别',
   `name` varchar(20) NOT NULL COMMENT '职位名称',
   `type` enum('全职','兼职','实习') NOT NULL DEFAULT '全职' COMMENT '职位类型',
+  `department` varchar(20) NOT NULL COMMENT '职位部门',
   `salaryMin` int NOT NULL COMMENT '职位最低工资',
   `salaryMax` int NOT NULL COMMENT '职位最高工资',
   `city` varchar(20) NOT NULL COMMENT '职位所在城市',
@@ -293,12 +294,12 @@ DROP TABLE IF EXISTS `Delivery`;
 CREATE TABLE `Delivery` (
   `deliveryId` int(10) NOT NULL AUTO_INCREMENT COMMENT '投递记录主键',
   `positionId` int(10) COMMENT '职位id',
-  `resumeId` int(10) COMMENT '简历id',
+  `personId` int(10) COMMENT '个人用户id',
   `deliveryTime` varchar(20) NOT NULL COMMENT '投递时间',
   `status` int NOT NULL DEFAULT 1 COMMENT '投递状态',
   PRIMARY KEY (`deliveryId`),
   CONSTRAINT `delivery_fk_1` FOREIGN KEY (`positionId`) REFERENCES `Position` (`positionId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `delivery_fk_2` FOREIGN KEY (`resumeId`) REFERENCES `Resume` (`resumeId`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `delivery_fk_2` FOREIGN KEY (`personId`) REFERENCES `Person` (`personId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='投递记录';
 
 DROP TABLE IF EXISTS `FeedBack`;
