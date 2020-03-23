@@ -685,7 +685,7 @@
 					            						<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.professionalName')" type="error" v-show="errors.has('educationbackground.professionalName')"></el-alert>
 					            					</td>
 					            					<td valign="top">
-											        	<span class="redstar"></span>
+											        	<span class="redstar">*</span>
 											      	</td> 
 					            					<td @mouseleave="ranklistshow=false">
 											      		<!--<input type="hidden" class="degree" value="" name="degree">-->
@@ -765,8 +765,8 @@
 			            						<el-alert style="width: 288px;height: auto;" :closable="false" :title="errors.first('educationbackground.professionalName')" type="error" v-show="errors.has('educationbackground.professionalName')"></el-alert>
 			            					</td>
 			            					<td valign="top">
-									        	<span class="redstar"></span>
-									      	</td> 
+											    <span class="redstar">*</span>
+											</td> 
 			            					<td @mouseleave="ranklistshow=false">
 									      		<!--<input type="hidden" class="degree" value="" name="degree">-->
 									        	<input name='rank' v-validate="'required'" data-vv-scope="educationbackground" type="text" @click="ranklistshow=true" placeholder="专业排名" :class="[ranklistshow?'select_focus':'']" readonly="readonly" v-model="educationtmp.rank" class="profile_select_287 profile_select_normal select_degree">
