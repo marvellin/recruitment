@@ -117,11 +117,12 @@
 			download(){
 				this.$axios({
 					method:'post',
+//					url:'api/oss/download',
 					url:'api/ossdownload',
 					data:this.filedtos[0],
 					headers: {
         				'Content-Type': 'application/json'
-    				},	
+    				},
 					responseType:'arraybuffer'
 				}).then((res) => {
 					const blob = new Blob([res.data])
@@ -129,6 +130,7 @@
 		            if ('download' in document.createElement('a')) { // 非IE下载
 		              const elink = document.createElement('a')
 		              elink.download = fileName
+//					  elink.download = 'd49e0ccc6d2d897960d24677a94c5097.jpeg'
 		              elink.style.display = 'none'
 		              elink.href = URL.createObjectURL(blob)
 		              document.body.appendChild(elink)
