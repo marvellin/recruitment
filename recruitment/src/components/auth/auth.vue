@@ -3,8 +3,8 @@
 		<div id="body">
 			<headert :navlist="2" :isCompany="true"></headert>
 			<div id="container">
-				<!--<input type="file" @change="uploadImgWithPreview" accept="image/jpeg,image/png,image/jp2,image/gif"/>-->
-				<!--<img :src="imgurl" width="190px" height="190px"/>-->
+				<!--<input type="file" @change="uploadImgWithPreview" accept="image/jpeg,image/png,image/jp2,image/gif"/>
+				<img :src="imgurl" width="190px" height="190px"/>-->
 				<div class="content_mid">
 		        	<dl class="c_section c_section_mid">
 		        		<dt>
@@ -16,7 +16,7 @@
 		                    	<li class="list1">公司主页<span>[ 网站处于正常运行状态，且必须具有备案号 ]</span></li>
 		                        <li class="list2">公司名称<span>[ 简称应为企业/产品简称，不可使用简易修饰性词语 ]</span></li>
 		                        <li class="list3">公司logo<span>[ 必须真实有效的体现公司形象 ]</span></li>
-		                        <li class="list4">
+		                        <li class="list4" @click="test">
 		                        	公司的营业执照
 				                <div class="list4_child">
 				                    	<span>*</span>
@@ -69,6 +69,120 @@
 			}
 		},
 		methods:{
+			test(){
+				/*var deliveryIdList = new Array()
+				deliveryIdList.push(9)
+				deliveryIdList.push(11)
+				this.$axios({
+					method:'post',
+					url:"api/delivery/updateListByCompany",
+					params:{
+						deliveryIdList:deliveryIdList + ''
+					}
+				}).then(res => {
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})*/
+				
+				/*var deliveryIdList = new Array()
+				deliveryIdList.push(12)
+				deliveryIdList.push(13)
+				var feedBack = {
+					feedback:"邀请面试"
+				}
+				this.$axios({
+					method:'post',
+					url:"api/feedBack/insertList",
+					data:feedBack,
+					params:{
+						deliveryIdList:deliveryIdList + ''
+					}
+				}).then(res => {
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})*/
+				
+				/*var feedBackDetail = {
+					address:"postmantest990",
+					time:"",
+					tel:"13556677508"
+				}
+				var feedBackIdList = new Array()
+				feedBackIdList.push(21)
+				feedBackIdList.push(22)
+				this.$axios({
+					method:'post',
+					url:"api/feedBackDetail/insertList",
+					data:feedBackDetail,
+					params:{
+						feedBackIdList:feedBackIdList + ''
+					}
+				}).then(res => {
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})*/
+			},
+			sendArray(){
+				//测试前台发送list数据，后台使用arraylist接受
+				var obj1 = {
+					id:"1",
+					name:"linyuanbin",
+					age:"11",
+					tall:"15"
+				}
+				var obj2 = {
+					name:"linyuanbin",
+					tall:"15"
+				}
+				var idList = new Array()
+				idList.push(1)
+				idList.push(2)
+				console.log(idList)
+				var arr = new Array()
+				arr.push(obj1)
+				arr.push(obj2)
+				console.log(arr)
+				
+				/*var params = new URLSearchParams()
+				params.append("resumeid",3)
+				params.append("arr",JSON.stringify(arr))*/
+				this.$axios({
+					method:'post',
+					url:'/api/getlist',
+					data:JSON.stringify(arr),
+					params:{
+						arr:idList + ''
+					},
+					headers:{
+						'dataType':'json',
+						'Content-Type':'application/json;charset=utf-8'
+					},
+				}).then(res => {
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})
+				/*this.$axios({
+					method:'post',
+					url:'/api/getlist',
+					data:JSON.stringify(arr),
+					params:{
+						resumeId:3,
+						idList:JSON.stringify(idList)
+					},
+					headers:{
+						'dataType':'json',
+						'Content-Type':'application/json;charset=utf-8'
+					},
+				}).then(res => {
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})*/
+			},
 			getimg(e){
 				this.img = e.target.files[0]
 				this.uploadImg(this.img)
@@ -78,9 +192,17 @@
 				if(!file){
 					return
 				}
+				var obj = {
+					name:"linyuanbin",
+					age:"11",
+					tall:"15"
+				}
 				var _this = this
 				var formData = new FormData()
 				formData.append("file",file)
+				formData.append("name",obj.name)
+				formData.append("age",obj.age)
+				formData.append("user",JSON.stringify(obj))
 				_this.$axios({
 					method:'post',
 					url:'/api/ossupload2preview',

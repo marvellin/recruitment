@@ -55,7 +55,10 @@
 		created(){
 			this.$axios({
 				method:"get",
-				url:"http://127.0.0.1:3000/resume"
+				url:"http://127.0.0.1:3000/resume",
+				params:{
+					
+				},
 			}).then(res => {
 				this.resume = res.data[0]
 			}).catch(err => {

@@ -848,7 +848,7 @@
 		            		</div><!--end .descriptionAdd-->
 		            	</div><!--end #selfDescription-->
 						
-						<button class="btn_big fr" @click="saveresume">保存</button>
+						<!--<button class="btn_big fr" @click="saveresume">保存</button>-->
 	            	</div><!--end .content_l-->
 	            	<div class="content_r">
 		            	<div class="mycenterR" id="myInfo">
@@ -1351,12 +1351,15 @@
 			getresumeimg(e){
 				let _this = this
 				var files = e.target.files[0]
+//				_this.basicinfotmp.tmpfile = files
+//				console.log(files)
 				if(!e || !window.FileReader) return
 				let reader = new FileReader()
 				reader.readAsDataURL(files)
 				reader.onloadend = function(){
 					_this.basicinfotmp.img = this.result
 				}
+//				console.log(_this.basicinfotmp.img)
 			},
 			saveresumename(){
 				var validateScope = 'resumename'
@@ -1406,6 +1409,7 @@
 				window.scrollTo({"behavior":"smooth","top":el.offsetTop})
 			},
 			savebasic(){
+//				console.log(this.basicinfotmp.tmpfile)
 				var validateScope = 'basicinfo'
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					if (result) {
