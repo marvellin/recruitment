@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<img width="380" height="220" :alt="product.name" :src="product.img">
+		<img v-if="product.img" width="380" height="220" :alt="product.name" :src="product.img">
+		<img v-else src='../../../../static/images/product_default.png' width="380" height="220" :alt="product.name"/>
 		<div class="cp_intro">
 			<h3><a target="_blank" href="http://www.weimob.com">{{product.name}} </a></h3>
 			<div class="scroll-pane" style="overflow: hidden; padding: 0px; width: 260px;">

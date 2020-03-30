@@ -13,36 +13,36 @@
 				<searchbox></searchbox>
 				
 				<dl class="hotSearch">
-					<dt>热门搜索：</dt>
+					<dt @click="clearUser">热门搜索：</dt>
 					<dd>
-						<router-link to="">Java</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'Java'}}">Java</router-link>
 					</dd>
 					<dd>
-						<router-link to="">PHP</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'PHP'}}">PHP</router-link>
 					</dd>
 					<dd>
-						<router-link to="">Android</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'Android'}}">Android</router-link>
 					</dd>
 					<dd>
-						<router-link to="">IOS</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'IOS'}}">IOS</router-link>
 					</dd>
 					<dd>
-						<router-link to="">前端</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'前端'}}">前端</router-link>
 					</dd>
 					<dd>
-						<router-link to="">产品经理</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'产品经理'}}">产品经理</router-link>
 					</dd>
 					<dd>
-						<router-link to="">UI</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'UI'}}">UI</router-link>
 					</dd>
 					<dd>
-						<router-link to="">运营</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'运营'}}">运营</router-link>
 					</dd>
 					<dd>
-						<router-link to="">BD</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'BD'}}">BD</router-link>
 					</dd>
 					<dd>
-						<router-link :to="{name:'companydetail',query:{id:110}}">实习</router-link>
+						<router-link :to="{path:'/positionlist',query:{positionName:'实习'}}">实习</router-link>
 					</dd>	
 				</dl>
 				
@@ -51,8 +51,8 @@
 				<thumbs></thumbs>
 				
 				<ul class="reset hotabbing">
-					<li :class="[hottabbingShow?'current':'']" @click="hotabbingClick1">热门职位</li>
-					<li :class="[hottabbingShow?'':'current']" @click="hotabbingClick2">最新职位</li>
+					<!--<li :class="[hottabbingShow?'current':'']" @click="hotabbingClick1">热门职位</li>-->
+					<li class="current">最新职位</li>
 				</ul>
 				
 				
@@ -131,6 +131,8 @@
 	export default{
 		name:'home',
 		created(){
+//			this.$store.dispatch('userLogin',{loginEmail:"1021478631@qq.com",loginPassword:"root",router:this.$router})
+//			this.$store.commit('person/setPerson',110)
 			/*console.log(this.obj)
 			this.obj.a = {tt:1,dd:2}
 			/*this.$axios.get('/static/data/companylist.json').then((res) => {
@@ -171,6 +173,9 @@
 			}
 		},
 		methods:{
+			clearUser(){
+//				this.$store.commit("clear")
+			},
 			hotabbingClick1(){
 				this.hottabbingShow = true
 //				console.log(this.hottabbingShow)

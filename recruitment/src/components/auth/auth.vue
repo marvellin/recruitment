@@ -8,7 +8,7 @@
 				<div class="content_mid">
 		        	<dl class="c_section c_section_mid">
 		        		<dt>
-		                    <h2 @click="download"><em></em>申请公司认证</h2>
+		                    <h2><em></em>申请公司认证</h2>
 		                </dt>
 		                <dd class="c_certify"> 
 		                	<h4>申请公司认证的标准</h4>

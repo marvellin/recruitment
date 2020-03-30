@@ -128,11 +128,11 @@
 		            </dl>
 					<ul class="hot_pos reset">
 						<li :class="index%2==0?'clearfix':'odd clearfix'" v-for="(item,index) in currentlist" :key="index">
-							<leftbox :job="item.position"></leftbox>
-							<rightbox :company="item.company">
+							<leftbox :job="item"></leftbox>
+							<rightbox :companyId="item.companyId">
 								<div class="apply" slot="slot1">
 									<!--<a href="toudi.html" target="_blank">投个简历</a>-->
-									<router-link target="_blank" to="">投个简历</router-link>
+									<a @click.prevent="delivery(item.positionId)">投个简历</a>
 								</div>
 							</rightbox>
 						</li>
@@ -177,6 +177,7 @@
 		name:"positionlist",
 		data(){
 			return{
+				keyWord:'',
 				cityboxshow:false,
 				citylist:{
 					hotcities:['北京','上海','广州','深圳','成都','杭州','武汉','南京'],
@@ -215,6 +216,41 @@
 			searchbox
 		},
 		methods:{
+			delivery(positionId){
+				var myPersonId = this.$store.state.person.personId()
+				if(eval(this.$store.state.isCompany())){
+					this.$message({
+						type:'warn',
+						message:'您无法投递简历！'
+					})
+				}
+				else if(!eval(this.$store.state.isCompany()) && myPersonId){
+					this.$axios({
+						method:'get',
+						url:'/api/delivery/insert',
+						params:{
+							positionId:positionId,
+							personId:myPersonId
+						}
+					}).then(res => {
+						console.log(res)
+						if(res.data.code == 500){
+							this.$message({
+								type:'warn',
+								message:'您已投递该职位！请勿重复投递'
+							})
+						}
+						else if(res.data.code == 200){
+							this.$message({
+								type:'info',
+								message:'您已成功投递该职位！'
+							})
+						}
+					}).catch(err => {
+						console.log(err)
+					})
+				}
+			},
 			pickcity(city){
 				//根据参数city访问后端获取数据并关闭citybox
 				this.cityboxshow = false
@@ -243,7 +279,24 @@
 					)
 				}
 				else{
-					this.$axios.get("http://127.0.0.1:3000/position2companylist")
+					this.$axios({
+						method:'get',
+						url:'/api/position/search',
+						params:{
+							positionName:this.keyWord
+						}
+					}).then(res => {
+						console.log(res)
+						this.position2companylist = res.data.object
+						this.pagination.total = Math.ceil(this.position2companylist.length / this.pagination.limit)
+						this.currentlist = this.position2companylist.slice(
+							(this.pagination.currentpage - 1) * this.pagination.limit,
+							this.pagination.currentpage * this.pagination.limit
+						)
+					}).catch(err => {
+						console.log(err)
+					})
+					/*this.$axios.get("http://127.0.0.1:3000/position2companylist")
 					.then((res) => {
 						this.position2companylist = res.data
 						this.pagination.total = Math.ceil(this.position2companylist.length / this.pagination.limit)
@@ -251,12 +304,10 @@
 							(this.pagination.currentpage - 1) * this.pagination.limit,
 							this.pagination.currentpage * this.pagination.limit
 						)
-//						console.log(this.currentlist)
-//						console.log(this.position2companylist)
 					})
 					.catch((err) => {
 						console.log(err)
-					})
+					})*/
 				}
 			}
 		},
@@ -303,6 +354,13 @@
 			}
 		},
 		created(){
+			console.log(this.$route)
+			if(this.$route.query.kd!=undefined&&this.$route.query.kd!=null){
+				this.keyWord = this.$route.query.kd
+			}
+			else if(this.$route.query.positionName!=undefined&&this.$route.query.positionName!=null){
+				this.keyWord = this.$route.query.positionName
+			}
 			this.getcurrentlist()
 		}
 	}

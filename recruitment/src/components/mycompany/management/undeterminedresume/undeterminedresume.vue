@@ -25,7 +25,7 @@
 			                    <input type="checkbox" :value="index" v-model="checkmodel">
 			                    <i :style="{'display':showlabel(index)?'inline':'none'}"></i>
 			                </label>
-			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'>
+			                <resumebox :resume='item.resume' :time='item.deliverytime' :position='item.position'>
 			                	<a class="resume_notice" @click.prevent="informperson(item)" href="javascript:void(0)" slot='slot1'>通知面试</a>
 			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2'>不合适</a>	
 			                </resumebox>
@@ -84,6 +84,20 @@
 			}
 		},
 		methods:{
+			dataInit(){
+				this.$axios({
+					method:'get',
+					url:'/api/delivery/getListByPositionIdListStatus2',
+					params:{
+						companyId:this.myCompanyId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.resume2positionlist = res.data.object
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			checkall(){
 				if(this.allcheck){
 					this.checkmodel = []
@@ -118,13 +132,15 @@
 		},
 		created(){
 			//获取resume2positionlist
-			this.$axios.get('/static/data/resume2positionlist.json').then(res => {
+			this.dataInit()
+			/*this.$axios.get('/static/data/resume2positionlist.json').then(res => {
 				this.resume2positionlist = res.data.resume2positionlist
-//				console.log(this.resume2positionlist)
-			});
+			});*/
 		},
 		computed:{
-			
+			myCompanyId(){
+				return this.$store.state.company.companyId()
+			}
 		},
 		watch:{
 			checkmodel(){

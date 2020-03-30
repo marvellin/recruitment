@@ -23,20 +23,20 @@
 		</ul>
 		<ul class="status_list">
 		    <li class="top" v-if="status>=3">
-		        <div class="list_time"><em></em>{{feedbacktime}}</div>
-		        <div class="list_body" v-if="!feedbackdetail">简历被HR标记为不合适
+		        <div class="list_time"><em></em>{{feedBack.feedbacktime}}</div>
+		        <div class="list_body" v-if="!feedBack.feedBackDetail">简历被HR标记为不合适
 		            <div>
 		            	您的简历已收到，但目前您的工作经历与该职位不是很匹配，因此很抱歉地通知您无法进入面试。
 		            </div>                               						                               					
 		        </div>
-		        <div class="list_body" v-if="feedbackdetail">
+		        <div class="list_body" v-if="feedBack.feedBackDetail">
 		        	<div>
 		        		恭喜您的简历已通过HR筛选，现通知您参见下一轮面试！
 		        	</div>
 		        	<ul style="list-style: none;">
-		        		<li>面试地点：{{feedbackdetail.address}}</li>
-		        		<li>面试时间：{{feedbackdetail.time}}</li>
-		        		<li>有疑问请咨询：{{feedbackdetail.tel}}</li>
+		        		<li>面试地点：{{feedBack.feedBackDetail.address}}</li>
+		        		<li>面试时间：{{feedBack.feedBackDetail.time}}</li>
+		        		<li>有疑问请咨询：{{feedBack.feedBackDetail.tel}}</li>
 		        	</ul>
 		        </div>
 		    </li>
@@ -54,19 +54,20 @@
 		name:"statusbox",
 		props:{
 			status:{},
-			feedbackdetail:{
-				default:null
-			},
+			feedBack:{type:Object},
+//			feedbackdetail:{
+//				default:null
+//			},
 			deliverytime:{},
-			feedbacktime:{},
+//			feedbacktime:{},
 			show:{
 				type:Boolean
 			}
 		},
 		created(){
-			console.log(this.status)
+			/*console.log(this.status)
 			console.log(this.status == 3)
-			console.log(this.status instanceof Number)
+			console.log(this.status instanceof Number)*/
 		},
 		methods:{
 			closestatusbox(){

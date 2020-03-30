@@ -31,6 +31,7 @@
 						<input style="width: 306px;height: 42px;margin-bottom: 0;margin-top: 10px;font-size: 16px;" @blur="checkpassword" v-validate="'required|min:8|max:20|password'" v-model="confirmpassword" type="password" id="confirmpassword" name="confirmpassword" tabindex="3" placeholder="请确认密码"/>
 						<el-alert style="width: 306px;height: 42px;" :closable="false" :title="errors.first('confirmpassword')" type="error" v-show="errors.has('confirmpassword')&&passwordIssame"></el-alert>
 						<el-alert style="width: 306px;height: 42px;" :closable="false" title="请确认两次密码输入相同" type="error" v-show="!passwordIssame"></el-alert>
+						<el-alert style="width: 306px;height: 42px;" :closable="false" :title="registerMessage" type="error" v-show="!isRegisterRight"></el-alert>
 						<!--<label class="fl registerJianJu" for="checkbox">
 							<input type="checkbox" id="checkbox" name="checkbox" checked class="checkbox valid"/>
 							我已阅读并同意
@@ -55,6 +56,8 @@
 		name:'register',
 		data(){
 			return{
+				registerMessage:'',
+				isRegisterRight:true,
 				spx:'0px',
 				mpx:'0px',
 				timer:'',
@@ -73,16 +76,73 @@
 				this.$validator.validate().then((result) => {
 			        if (result) {
 			          if(this.passwordIssame){
-			          	//根据用户类别，提交注册数据给后台，并在成功注册后跳转至完善用户信息页面（还没有写个人用户信息完善页面，暂时跳到登录页面）
+			          	//根据用户类别，提交注册数据给后台，并在成功注册后跳转至完善用户信息页面（还没有写个人用户信息完善页面，暂时跳到positionlist页面）
 			          	if(this.job){
-			          		//提交个人用户注册信息到后台，返回成功则跳转
-			          		this.$router.push({path:'/login'})
+			          		//提交个人用户注册信息到后台，返回完善个人信息页面
+			          		this.$axios({
+			          			method:'get',
+			          			url:'/api/register',
+			          			params:{
+			          				email:this.register.email,
+			          				password:this.register.password,
+			          				type:this.job,
+			          			}
+			          		}).then(res => {
+			          			console.log(res)
+			          			if(res.data.code == 200){
+			          				let user = res.data.object
+			          				//注册成功，即登陆成功，注册vuex中的信息，并跳转完善个人信息页面
+			          				this.$store.commit('setUser',{userId:user.userId,role:user.role})
+			          				this.$store.dispatch('person/getPerson',{loginedUserId:user.userId}).then(res=>{
+			          					console.log(res)
+			          				}).catch(err=>{
+			          					console.log(err)
+			          				})
+			          				this.$router.push({path:'/positionlist'})
+			          				this.$message({
+					          			message:'请完善个人基本信息！'
+					          		})
+			          			}
+			          			else if(res.data.code == 500){
+			          				this.registerMessage = res.data.msg
+			          				this.isRegisterRight = false
+			          			}
+			          		}).catch(err => {
+			          			console.log(err)
+			          		})
 			          	}
 			          	else{
-			          		//提交公司用户注册信息到后台，返回成功则跳转
-			          		this.$router.push({path:'/companyinfofillin'})
-			          		this.$message({
-			          			message:'请完善公司信息！'
+			          		//提交公司用户注册信息到后台，返回完善公司信息页面
+			          		this.$axios({
+			          			method:'get',
+			          			url:'/api/register',
+			          			params:{
+			          				email:this.register.email,
+			          				password:this.register.password,
+			          				type:this.job,
+			          			}
+			          		}).then(res => {
+			          			console.log(res)
+			          			if(res.data.code == 200){
+			          				let user = res.data.object
+			          				//注册成功，即登陆成功，注册vuex中的信息，并跳转完善公司信息页面
+			          				this.$store.commit('setUser',{userId:user.userId,role:user.role})
+			          				this.$store.dispatch('company/getCompany',{loginedUserId:user.userId}).then(res=>{
+			          					console.log(res)
+			          				}).catch(err=>{
+			          					console.log(err)
+			          				})
+			          				this.$router.push({path:'/companyinfofillin'})
+					          		this.$message({
+					          			message:'请完善公司信息！'
+					          		})
+			          			}
+			          			else if(res.data.code == 500){
+			          				this.registerMessage = res.data.msg
+			          				this.isRegisterRight = false
+			          			}
+			          		}).catch(err => {
+			          			console.log(err)
 			          		})
 			          	}
 			          }

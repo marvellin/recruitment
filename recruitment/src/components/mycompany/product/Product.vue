@@ -17,7 +17,8 @@
 							                    </div>
 							                </div>
 							                <div class="product_upload productShow">
-							                    <img width="380" height="240" :src="product.img">
+							                    <img v-if="product.img" width="380" height="240" alt="产品图片" :src="product.img">
+							                    <img v-else width="380" height="240" alt="产品图片" src="../../../../static/images/product_default.png"/>
 								                <span>更换产品图片<br>380*220px 小于5M</span>
 								            </div>
 							                <input type="file" @change="getFile" accept="image/jpg,image/jpeg,image/gif,image/png" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" :id="index"><!--:id="'myfiles0'+index"-->
@@ -45,7 +46,8 @@
 					                <h2><em></em>公司产品</h2>
 					            </dt>
 					            <dd style="width: 680px;">
-					                <img width="380" height="220" :alt="product.name" :src="product.img">
+					                <img v-if="product.img" width="380" height="220" alt="产品图片" :src="product.img">
+							        <img v-else width="380" height="220" alt="产品图片" src="../../../../static/images/product_default.png"/>
 				                    <div class="cp_intro">
 				                        <h3>{{product.name}}</h3>
 					                    <div class="scroll-pane" style="overflow: hidden; padding: 0px; width: 260px;">

@@ -6,27 +6,28 @@
 				<div id="comdetail" v-if="company">
 					<div class="c_detail" style="margin:5px 0;">
 							<div style="background-color: #fff;" class="c_logo">
-								<a :title="company.comdetail.shortname" id="logoShow" class="inline cboxElement" >
-									<img width="190" height="190" :alt="company.comdetail.shortname" :src="company.comdetail.img"/>
+								<a :title="company.companyDetail.shortname" id="logoShow" class="inline cboxElement" >
+									<img v-if="company.companyDetail.img" width="190" height="190" :alt="company.companyDetail.shortname" :src="company.companyDetail.img"/>
+									<img v-if="!company.companyDetail.img" width="190" height="190" :alt="company.companyDetail.shortname" src="../../../static/images/logo_default.png"/>
 								</a>
 							</div>
 							<div class="c_box companyName">
-								<h2 style="max-width: 350px;" :title="company.comdetail.shortname">{{company.comdetail.shortname}}</h2>
+								<h2 style="max-width: 350px;" :title="company.companyDetail.shortname">{{company.companyDetail.shortname}}</h2>
 								<em :class="[isvalided?'valid':'unvalid']" class="fr" @mouseover="vashow=true" @mouseout="vashow=false"></em>
 								<span style="margin:-24px 0 0 420px" class="va" :style="{'display':vashow&&!isvalided?'inline':'none'}">未认证企业</span>
 								<span style="margin:-24px 0 0 420px" class="va" :style="{'display':vashow&&isvalided?'inline':'none'}">认证企业</span>
 								<div class="clear"></div>
-								<h1 style="max-width: 350px;" :title="company.comdetail.fullname" class="fullname">{{company.comdetail.fullname}}</h1>
+								<h1 style="max-width: 350px;" :title="company.companyDetail.fullname" class="fullname">{{company.companyDetail.fullname}}</h1>
 								<div style="max-width: 350px;" class="clear oneword">
 									<img width="17" height="15" src="../../../static/images/quote_l.png"/>
 									&nbsp;
-									<span>{{company.comdetail.feature}}</span>
+									<span>{{company.companyDetail.feature}}</span>
 									&nbsp;
 									<img width="17" height="15" src="../../../static/images/quote_r.png"/>
 								</div>
 								<ul style="max-width: 350px;overflow: auto;" id="hasLabels" class="reset clearfix">
-									<li v-for="(item,index) in company.comdetail.labels" :key="index" style="margin-right:18px;">
-										<span>{{item}}</span>
+									<li v-for="(item,index) in company.companyDetail.labelList" :key="index" style="margin-right:18px;">
+										<span>{{item.label}}</span>
 									</li>
 								</ul>
 								<div class="c_tags_s">
@@ -35,20 +36,20 @@
 											<tbody>
 												<tr>
 													<td width="62">地点</td>
-													<td>{{company.comdetail.city}}</td>
+													<td>{{company.companyDetail.city}}</td>
 												</tr>
 												<tr>
 													<td>领域</td>
-													<td :title="company.comdetail.field">{{company.comdetail.field}}</td>
+													<td :title="company.companyDetail.field">{{company.companyDetail.field}}</td>
 												</tr>
 												<tr>
 													<td>规模</td>
-													<td>{{company.comdetail.scale}}</td>
+													<td>{{company.companyDetail.scale}}</td>
 												</tr>
 												<tr>
 													<td>主页</td>
 													<td>
-														<a :href="company.comdetail.comurl" target="_blank">前往公司主页</a>
+														<a :href="company.companyDetail.comurl" target="_blank">前往公司主页</a>
 													</td>
 												</tr>
 											</tbody>
@@ -61,9 +62,9 @@
 				</div>
 				<div class="company_nav">
 					<ul style="list-style: none;">
-						<li><router-link :class="[currentroutername==='company_home'?'current':'']" :to="{name:'company_home',query:{id:company.id}}">公司主页</router-link></li>
-						<li><router-link :class="[currentroutername==='company_product'?'current':'']" :to="{name:'company_product',query:{id:company.id}}">公司产品</router-link></li>
-						<li class="last"><router-link :class="[currentroutername==='company_position'?'current':'']" :to="{name:'company_position',query:{id:company.id}}">招聘职位</router-link></li>
+						<li><router-link :class="[currentroutername==='company_home'?'current':'']" :to="{name:'company_home',query:{companyId:company.companyId}}">公司主页</router-link></li>
+						<li><router-link :class="[currentroutername==='company_product'?'current':'']" :to="{name:'company_product',query:{companyId:company.companyId}}">公司产品</router-link></li>
+						<li class="last"><router-link :class="[currentroutername==='company_position'?'current':'']" :to="{name:'company_position',query:{companyId:company.companyId}}">招聘职位</router-link></li>
 					</ul>
 				</div>
 				<div class="c_breakline"></div>
@@ -153,8 +154,8 @@
 							</dt>
 							<dd>
 								<ul class="reset stageshow">
-		                    		<li>目前阶段：<span class="c5">{{company.stage.currentstage}}</span></li>
-		                    		<li>投资机构：<span class="c5">{{company.stage.org}}</span></li>
+		                    		<li>目前阶段：<span class="c5">{{company.companyStage.currentstage}}</span></li>
+		                    		<li>投资机构：<span class="c5">{{company.companyStage.org}}</span></li>
 		                    </ul>
 							</dd>
 						</dl>
@@ -173,13 +174,14 @@
 										<div class="member_info">
 					                        <div class="m_portrait">
 					                            <div></div>
-					                            <img width="120" height="120" :alt="company.member.name" :src="company.member.img">
+					                            <img v-if="company.companyMember.img" width="120" height="120" :alt="company.companyMember.name" :src="company.companyMember.img">
+					                            <img v-else width="120" height="120" :alt="company.companyMember.name" src="../../../static/images/default_headpic.png"/>
 						                    </div>
 					                        <div class="m_name">
-					                        	{{company.member.name}}
+					                        	{{company.companyMember.name}}
 					                        </div>
-					                        <div class="m_position">{{company.member.post}}</div>
-					                    	<div class="m_intro">{{company.member.intro}}</div>
+					                        <div class="m_position">{{company.companyMember.post}}</div>
+					                    	<div class="m_intro">{{company.companyMember.intro}}</div>
 										</div>
 									</div>
 								</dd>
@@ -221,14 +223,18 @@
 	export default{
 		name:"companydetail",
 		created(){
-			this.companyid = this.$route.query.id
-			this.$axios.get("http://127.0.0.1:3000/company",{params:{
-				id:this.companyid
-			}})
-			.then((res) => {
-				this.company = res.data[0]
-			})
-			.catch((err) => {
+			this.companyId = this.$route.query.companyId
+//			console.log(this.companyId)
+			this.$axios({
+				method:'post',
+				url:'/api/company/get',
+				params:{
+					companyId:this.companyId
+				}
+			}).then(res => {
+				this.company = res.data.object
+				console.log(res)
+			}).catch(err => {
 				console.log(err)
 			})
 		},
@@ -239,7 +245,7 @@
 		},
 		data(){
 			return{
-				companyid:null,
+				companyId:null,
 				vashow:false,
 				company:null,
 			}

@@ -4,14 +4,14 @@
 			<dt>
 				<slot name='slot1'></slot>
 			</dt>
-			<dd id="step2Form">
+			<dd id="step2Form" v-if="company">
 				<div class="c_text_1">简短明了的标签信息让求职者更加方便检索，更快找到你们！</div>
 	            <img width="668" height="56" class="c_steps" alt="第二步" src="../../../../static/images/step2.png">
 	                    
 	            <h3>已添加标签（不多于10个）</h3>
-	            <ul v-if="company.comdetail.labels" class="reset" id="labels">
-	            	<li v-for="(item,index) in company.comdetail.labels" :key="index">
-	            		<span>{{item}}</span>
+	            <ul v-if="company.companyDetail.labelList&&company.companyDetail.labelList.length>0" class="reset" id="labels">
+	            	<li v-for="(item,index) in company.companyDetail.labelList" :key="index">
+	            		<span>{{item.label}}</span>
 	            		<i @click="deletelabel(index)"></i>
 	            	</li>
 	            </ul>
@@ -92,38 +92,61 @@
 <script>
 	export default{
 		name:"index",
+//		inject:['reload'],
 		data(){
 			return{
 				labelslist:null,
 				customlabel:null,
+				company:null
 			}
 		},
 		props:{
-			company:{
+			/*company:{
 				type:Object,
 				required:true
-			}
+			}*/
 		},
 		created(){
 			this.getdatas()
 			this.dataInit()
-//			console.log('from index2 created' + JSON.stringify(this.company))
 		},
 		mounted(){
-			console.log('from index2 mounted' + JSON.stringify(this.company))
+//			console.log('from index2 mounted' + JSON.stringify(this.company))
 		},
 		methods:{
 			pastelabel(){
-				console.log(this.$validator)
-				if(this.company.comdetail.labels.length >= 10){
+//				console.log(this.$validator)
+				if(this.company.companyDetail.labelList.length >= 10){
 					this.$message({
 						type:'info',
 						message:'已选择10个标签，无法再添加新的标签！'
 					})
 					this.customlabel = null
 				}
-				else if(this.customlabel != undefined && this.customlabel != null && this.company.comdetail.labels.length < 10 && !this.$validator.errors.has('label')){
-					this.company.comdetail.labels.push(this.customlabel)
+				else if(this.customlabel != undefined && this.customlabel != null && this.company.companyDetail.labelList.length < 10 && !this.$validator.errors.has('label')){
+					//提交标签信息到后台保存
+//					this.company.companyDetail.labelList.push(this.customlabel)
+					var companyLabel = {
+						label:this.customlabel
+					}
+					this.$axios({
+						method:'post',
+						url:'/api/companyLabel/insert',
+						data:companyLabel,
+						params:{
+							companyDetailId:this.company.companyDetail.companyDetailId
+						},
+						headers:{
+							'Content_Type':'application/json'
+						}
+					}).then(res => {
+						console.log(res)
+						this.dataInit()
+						this.customlabel = null
+					}).catch(err => {
+						console.log(err)
+					})
+					
 				}
 				else if(this.$validator.errors.has('label')){
 					this.$message({
@@ -133,17 +156,29 @@
 				}
 			},
 			deletelabel(index){
-				if(index >= 0 && index < this.company.comdetail.labels.length){
+				if(index >= 0 && index < this.company.companyDetail.labelList.length){
 					this.$confirm('是否删除这个标签?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.company.comdetail.labels.splice(index,1)
-				          this.$message({
-				            type: 'success',
-				            message: '删除成功!'
-				          });
+//			        	  this.company.companyDetail.labelList.splice(index,1)
+						  this.$axios({
+						  	method:'get',
+						  	url:'/api/companyLabel/delete',
+						  	params:{
+						  		companyLabelId:this.company.companyDetail.labelList[index].companyLabelId
+						  	}
+						  }).then(res => {
+						  	console.log(res)
+						  	this.dataInit()
+						  	this.$message({
+					            type: 'success',
+					            message: '删除成功!'
+					          })
+						  }).catch(err => {
+						  	console.log(err)
+						  })
 			        }).catch(() => {
 				          this.$message({
 				            type: 'info',
@@ -153,8 +188,27 @@
 				}
 			},
 			picklabel(label){
-				if(this.company.comdetail.labels.length < 10){
-					this.company.comdetail.labels.push(label)
+				if(this.company.companyDetail.labelList.length < 10){
+//					this.company.companyDetail.labelList.push(label)
+					var companyLabel = {
+						label:label
+					}
+					this.$axios({
+						method:'post',
+						url:'/api/companyLabel/insert',
+						data:companyLabel,
+						params:{
+							companyDetailId:this.company.companyDetail.companyDetailId
+						},
+						headers:{
+							'Content_Type':'application/json'
+						}
+					}).then(res => {
+						console.log(res)
+						this.dataInit()
+					}).catch(err => {
+						console.log(err)
+					})
 				}
 				else{
 					this.$message({
@@ -164,15 +218,28 @@
 				}
 			},
 			haslabel(label){
-				if(this.company.comdetail.labels.indexOf(label) > -1){
+				if(this.company.companyDetail.labelList.indexOf(label) > -1){
 					return true
 				}
 				return false
 			},
 			dataInit(){
-				if(this.company.comdetail.labels === undefined || this.company.comdetail.labels === null || !(this.company.comdetail.labels instanceof Array)){
-					this.company.comdetail.labels = []
-				}
+				/*if(this.company.companyDetail.labelList === undefined || this.company.companyDetail.labelList === null || !(this.company.companyDetail.labelList instanceof Array)){
+					this.company.companyDetail.labelList = []
+				}*/
+				this.$axios({
+					method:'get',
+					url:'/api/company/getByUserId',
+					params:{
+						userId:this.myUserId
+					}
+				}).then(res => {
+					console.log(res)
+					this.company = res.data.object
+				}).catch(err => {
+					console.log(err)
+					this.$router.push({path:'*'})
+				})
 			},
 			getdatas(){
 				this.$axios.get('/static/data/labels.json')
@@ -183,7 +250,7 @@
 				})
 			},
 			goforward(){
-				if(this.company.comdetail.labels.length <= 0){
+				if(this.company.companyDetail.labelList.length <= 0){
 					this.$confirm('还未添加任何公司标签，是否跳过?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
@@ -194,21 +261,19 @@
 				                   
 			        })
 				}
+				else{
+					this.$router.push({path:'/companyinfofillin/step3'})
+				}
 			},
 			goback(){
 				this.$router.push({path:'/companyinfofillin/step1'})
 			}
 		},
-		watch:{
-			/*company:{
-				handler(newcompany,oldcompany){
-//					this.$emit("update:company",newcompany)
-					console.log('from index2' + JSON.stringify(this.company))
-				},
-				immediate:true,
-				deep:true
-			}*/
-		}
+		computed:{
+			myUserId(){
+				return this.$store.state.userId()
+			}
+		},
 	}
 </script>
 

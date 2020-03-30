@@ -9,17 +9,18 @@
                 <img width="668" height="56" class="c_steps" alt="第三步" src="../../../../static/images/step3.png">
                     
                 <!--<form method="post" action="http://www.lagou.com/cl/saveLeaderInfos.json" id="memberForm">-->
-                <form>
+                <form v-if="company">
                     <div id="memberDiv">
 		                <div class="formWrapper">
 		                    <!--<input type="hidden" value="25927" name="leaderInfos[0].companyId">-->
 		                    <div class="new_portrait">
-		                        <div class="portrait_upload" v-show="!company.member.img" id="portraitNo0">
+		                        <!--<div class="portrait_upload" v-if="!company.companyMember.img" id="portraitNo0">
 		                            <span>上传负责人头像</span>
-		                        </div>
-		                        <div class="portraitShow" v-if="company.member.img" id="portraitShow0">
-			                        <img width="120" height="120" :src="company.member.img">
-			                        <span>更换头像</span>
+		                        </div>-->
+		                        <div class="portraitShow" id="portraitShow0">
+			                        <img v-if="company.companyMember.img" width="120" height="120" :src="company.companyMember.img">
+			                        <img v-if="!company.companyMember.img" width="120" height="120" src="../../../../static/images/leader_default.png"/>
+			                        <span>上传负责人头像</span>
 			                    </div>
 			                    <!--<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M" onchange="img_check(this,'http://www.lagou.com/c/upload.json',120,120,5,'myfiles0','myfiles0_error','portraitNo0','portraitShow0','type0','leaderInfos0');" name="myfiles" id="myfiles0" class="myfiles">-->
 			                    <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="myfiles0" class="myfiles">
@@ -32,18 +33,18 @@
 		                        
 		                        
 		                    <h3>负责人姓名</h3>
-		                    <input type="text" v-validate="'required|membername|max:20'" v-model="company.member.name" style="width: 416px;height: 46px;" placeholder="请输入负责人姓名" name="membername" id="name0" class="s_input1 valid">	
+		                    <input type="text" v-validate="'required|membername|max:20'" v-model="company.companyMember.name" style="width: 416px;height: 46px;" placeholder="请输入负责人姓名" name="membername" id="name0" class="s_input1 valid">	
 		                    <el-alert style="width: 416px;height: 46px;" :closable="false" :title="errors.first('membername')" type="error" v-show="errors.has('membername')"></el-alert>
 		                        
 		                    <h3>当前职位</h3>
-		                    <input type="text" v-validate="'required|nosymbol|max:20'" v-model="company.member.post" style="width: 416px;height: 46px;" placeholder="请输入负责人当前职位，如：创始人兼CEO" name="memberposition" id="position0" class="s_input1 valid">	
+		                    <input type="text" v-validate="'required|nosymbol|max:20'" v-model="company.companyMember.post" style="width: 416px;height: 46px;" placeholder="请输入负责人当前职位，如：创始人兼CEO" name="memberposition" id="position0" class="s_input1 valid">	
 		                    <el-alert style="width: 416px;height: 46px;" :closable="false" :title="errors.first('memberposition')" type="error" v-show="errors.has('memberposition')"></el-alert>
 		                        
 		                    <!--<h3>新浪微博</h3>
 		                    <input type="text" placeholder="请输入创始人新浪微博地址" name="leaderInfos[0].weibo" id="weibo0">	-->
 		                        
 		                    <h3>负责人简介</h3> 
-		                    <textarea v-validate="'required|max:500'" v-model="company.member.intro"  placeholder="请输入该负责人的个人简介等，建议按照时间倒序分条展示" maxlength="1000" name="memberintro" id="description0"></textarea>	
+		                    <textarea v-validate="'required|max:500'" v-model="company.companyMember.intro"  placeholder="请输入该负责人的个人简介等，建议按照时间倒序分条展示" maxlength="1000" name="memberintro" id="description0"></textarea>	
 		                    <el-alert style="height: 46px;width: 600px;" :closable="false" :title="errors.first('memberintro')" type="error" v-show="errors.has('memberintro')"></el-alert>
 		                    <div class="word_count">你还可以输入 <span>{{remainingwords}}</span> 字</div>
 		                </div>
@@ -63,31 +64,39 @@
 	export default{
 		name:"index",
 		props:{
-			company:{
+			/*company:{
 				type:Object,
 				required:true
-			}
+			}*/
 		},
 		computed:{
+			myUserId(){
+				return this.$store.state.userId()
+			},
 			remainingwords(){
-				if(this.company.member.intro){
-					return 500 - this.company.member.intro.length
+				if(this.company.companyMember.intro){
+					return 500 - this.company.companyMember.intro.length
 				}
 				else{
 					return 500
 				}
 			}
 		},
+		data(){
+			return{
+				company:null
+			}
+		},
 		mounted(){
-			console.log('from index3 mounted' + JSON.stringify(this.company))
+//			console.log('from index3 mounted' + JSON.stringify(this.company))
 		},
 		created(){
 			this.dataInit()
 		},
 		methods:{
 			getmemberimg(e){
-				var memberimg = e.target.files[0]
-				this.uploadimg(memberimg)
+				this.company.companyMember.imgfile = e.target.files[0]
+//				this.uploadimg(memberimg)
 			},
 			uploadimg(file){
 				if(!file){
@@ -106,9 +115,9 @@
 				}).then(res => {
 					const blob = new Blob([res.data])
 //					console.log('beforeupdate')
-					this.company.member.img = URL.createObjectURL(blob)
+					this.company.companyMember.img = URL.createObjectURL(blob)
 //					console.log('afterupdate')
-					console.log(this.company.member.img)
+					console.log(this.company.companyMember.img)
 					this.$message("上传成功!")
 				}).catch(err => {
 					this.$message("上传失败!")
@@ -118,7 +127,21 @@
 			goforward(){
 				this.$validator.validate().then((result) => {
 			        if (result) {
-			          this.$router.push({path:'/companyinfofillin/step4'})
+			        	this.$axios({
+			        		method:'post',
+			        		url:'/api/companyMember/insert',
+			        		data:this.company.companyMember,
+			        		params:{
+			        			companyId:this.company.companyId
+			        		},
+			        		headers:{
+			        			'Content-Type':'application/json'
+			        		}
+			        	}).then(res => {
+			        		this.$router.push({path:'/companyinfofillin/step4'})
+			        	}).catch(err => {
+			        		console.log(err)
+			        	})
 			        }
 			        else{
 				        this.$message({
@@ -138,25 +161,37 @@
 				this.$router.push({path:'/companyinfofillin/step2'})
 			},
 			dataInit(){
-				if(!this.company.member || this.company.member == {}){
-					this.company.member = {
+				/*if(!this.company.companyMember || this.company.companyMember == {}){
+					this.company.companyMember = {
 						name:null,
 						img:null,
 						post:null,
 						intro:null
 					}
-				}
+				}*/
+				this.$axios({
+					method:'get',
+					url:'/api/company/getByUserId',
+					params:{
+						userId:this.myUserId
+					}
+				}).then(res => {
+					console.log(res)
+					this.company = res.data.object
+					if(this.company.companyMember==undefined||this.company.companyMember==null){
+						this.company.companyMember={
+							name:null,
+							img:null,
+							post:null,
+							intro:null
+						}
+					}
+				}).catch(err => {
+					console.log(err)
+					this.$router.push({path:'*'})
+				})
 			}
 		},
-		watch:{
-			/*company:{
-				handler(newcompany,oldcompany){
-					this.$emit("update:company",newcompany)
-				},
-				immediate:true,
-				deep:true
-			}*/
-		}
 	}
 </script>
 

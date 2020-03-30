@@ -1,11 +1,11 @@
 <template>
 	<div id="search_box">
 		<form id="searchForm" name="searchForm">
-			<!--<ul id="searchType" @mouseover="mouseOver" @mouseout="mouseOut" v-else="!comshow">
-				<li data-searchtype="1" :class="comshow?'':'type-selected'" :style="{'display': show?'block':comshow?'none':'block'}" @click="changeofpos">职位</li>
-				<li data-searchtype="4" :class="comshow?'type-selected':''" :style="{'display': show?'list-item':comshow?'list-item':'none'}" @click="changeofcom">公司</li>
+			<!--<ul id="searchType" @mouseover="mouseOver" @mouseout="mouseOut" v-else="!isCompany">
+				<li data-searchtype="1" :class="isCompany?'':'type-selected'" :style="{'display': show?'block':isCompany?'none':'block'}" @click="changeofpos">职位</li>
+				<li data-searchtype="4" :class="isCompany?'type-selected':''" :style="{'display': show?'list-item':isCompany?'list-item':'none'}" @click="changeofcom">公司</li>
 			</ul>-->
-			<ul id="searchType" v-if="comshow" @mouseover="mouseOver" @mouseout="mouseOut">
+			<ul id="searchType" v-if="isCompany" @mouseover="mouseOver" @mouseout="mouseOut">
 				<li data-searchtype="4" class="type-selected" style="display:list-item;" @click="changeofcom">公司</li>
 				<li data-searchtype="1" class="" :style="{'display': show?'block':'none'}" @click="changeofpos">职位</li>
 			</ul>
@@ -14,8 +14,8 @@
 				<li data-searchtype="4" class="" :style="{'display': show?'list-item':'none'}" @click="changeofcom">公司</li>
 			</ul>
 			<div :class="[searchtype_arrow,show?'transform':'']"></div>
-			<input type="text" id="search_input" name="kd" tabindex="1" value="" :placeholder="placeholder"/>
-			<input type="submit" @click="topositionlist" id="search_button" value="搜索"/>
+			<input type="text" id="search_input" name="kd" tabindex="1" v-model="keyWord" :placeholder="placeholder"/>
+			<input type="submit" @click="search" id="search_button" value="搜索"/>
 		</form>
 	</div>
 </template>
@@ -25,10 +25,12 @@
 		name:'searchbox',
 		data(){
 			return{
+				keyWord:null,
 				show:false,
-				comshow:false,
+				isCompany:false,
 				searchtype_arrow:'searchtype_arrow',
-				placeholder:'请输入职位名称'
+				placeholder:'请输入职位名称',
+//				type:'position'
 			}
 		},
 		methods:{
@@ -40,16 +42,33 @@
 			},
 			changeofpos(){
 //				console.log("click position")
-				this.comshow=false
-				this.placeholder='  请输入职位名称'
+//				this.type = 'position'
+				this.isCompany=false
+				this.placeholder='请输入职位名称'
 			},
 			changeofcom(){
 //				console.log("click company")
-				this.comshow=true
-				this.placeholder='  请输入公司名称'
+//				this.type = 'company'
+				this.isCompany=true
+				this.placeholder='请输入公司名称'
 			},
-			topositionlist(){
-				this.$router.push({path:"/positionlist"})
+			search(){
+				if(this.isCompany){
+					this.$router.push({
+						path:'/companylist',
+						query:{
+							companyName:this.keyWord
+						}
+					})
+				}
+				else{
+					this.$router.push({
+						path:'/positionlist',
+						query:{
+							positionName:this.keyWord
+						}
+					})
+				}
 			}
 		}
 	}

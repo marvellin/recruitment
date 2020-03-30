@@ -11,14 +11,14 @@
                 </h1>
             </dt>
             <dd>
-                <form id="searchForm">
+                <form id="searchForm" v-if="position2resumelist">
 			        <ul class="reset my_jobs">
 				        <li v-for="(item,index) in position2resumelist" :key='index'>
-				        	<positionbox :time='item.time' :position='item.position'>
-				        		<span class="receivedResumeNo" slot="slot1">
+				        	<positionbox :position='item'>
+				        		<!--<span class="receivedResumeNo" slot="slot1">
 								    <a href="unHandleResumes.html?positionId=149594">应聘简历（{{item.resume.length}}）</a>
-								</span>
-								<a class="job_offline" href="javascript:void(0)" slot="slot2">下线</a> 
+								</span>-->
+								<a class="job_offline" @click.prevent="offline(item)" href="javascript:void(0)" slot="slot2">下线</a> 
 				        	</positionbox>
 		                </li>
 	                </ul>
@@ -38,12 +38,43 @@
 				position2resumelist:[],
 			}
 		},
+		computed:{
+			myCompanyId(){
+				return this.$store.state.company.companyId()
+			}
+		},
+		methods:{
+			offline(item){
+				this.$axios({
+					method:'get',
+					url:'/api/position/toOffline',
+					params:{
+						positionId:item.positionId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.dataInit()
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			dataInit(){
+				this.$axios({
+					method:'get',
+					url:'/api/position/getOnlineByCompanyId',
+					params:{
+						companyId:this.myCompanyId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.position2resumelist = res.data.object
+				}).catch(err=>{
+					console.log(err)
+				})
+				}
+		},
 		created(){
-			this.$axios.get('/static/data/position2resumelist.json').then(res => {
-				this.position2resumelist = res.data.position2resumelist
-			}).catch(err => {
-				console.log(err)
-			})
+			this.dataInit()
 		}
 	}
 </script>

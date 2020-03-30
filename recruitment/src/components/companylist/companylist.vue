@@ -149,7 +149,7 @@
 		                </dl>
 		                
 		               	<ul class="hc_list reset">
-		               		<li v-for="(item,index) in currentlist" :style="{'clear':index % 3 === 0?'both':''}" :key='index'>
+		               		<li v-if="!isEmpty(item)" v-for="(item,index) in currentlist" :style="{'clear':index % 3 === 0?'both':''}" :key='index'>
 		               			<companybox :company='item'></companybox>
 		               		</li>
 			            </ul>
@@ -225,6 +225,7 @@
 		},
 		data(){
 			return{
+				keyWord:'',
 				cityboxshow:false,
 				companylist:null,
 				currentlist:null,
@@ -247,6 +248,14 @@
 			}
 		},
 		methods:{
+			isEmpty(item){
+				if(item.companyDetail==null||item.companyStage==null){
+					return true
+				}
+				else{
+					return false;
+				}
+			},
 			pickcity(item){
 				this.cityboxshow = false
 			},
@@ -282,7 +291,24 @@
 					)
 				}
 				else{
-					this.$axios.get('/static/data/companylist.json').then(res => {
+					this.$axios({
+						method:'get',
+						url:'/api/company/search',
+						params:{
+							companyName:this.keyWord
+						}
+					}).then(res => {
+						console.log(res)
+						this.companylist = res.data.object
+						this.pagination.total = Math.ceil(this.companylist.length / this.pagination.limit)
+						this.currentlist = this.companylist.slice(
+							(this.pagination.currentpage - 1) * this.pagination.limit,
+							this.pagination.currentpage * this.pagination.limit
+						)
+					}).catch(err => {
+						console.log(err)
+					})
+					/*this.$axios.get('/static/data/companylist.json').then(res => {
 						this.companylist = res.data.companylist
 //						console.log('in getcurrentlist')
 						this.pagination.total = Math.ceil(this.companylist.length / this.pagination.limit)
@@ -290,7 +316,7 @@
 							(this.pagination.currentpage - 1) * this.pagination.limit,
 							this.pagination.currentpage * this.pagination.limit
 						)
-					});
+					});*/
 				}
 			}
 		},
@@ -344,6 +370,10 @@
 			}
 		},
 		created(){
+			console.log(this.$route)
+			if(this.$route.query.companyName!=undefined&&this.$route.query.companyName!=null){
+				this.keyWord = this.$route.query.companyName
+			}
 			this.getcurrentlist()
 			document.addEventListener('click',e => {
 				let citybox = document.getElementById('box_expectCity')

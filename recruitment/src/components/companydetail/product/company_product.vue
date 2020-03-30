@@ -26,7 +26,7 @@
 		data(){
 			return{
 //				products:null,
-				companyid:null,
+				companyId:null,
 				products:null,
 				currentlist:null,
 				limit:3,
@@ -57,18 +57,34 @@
 					)
 				}
 				else{
-					this.$axios.get('http://127.0.0.1:3000/company',{params:{id:this.companyid}}).then(res => {
+					/*this.$axios.get('http://127.0.0.1:3000/company',{params:{id:this.companyid}}).then(res => {
 						this.products = res.data[0].products
 						this.currentlist = this.products.slice(
 							(this.currentpage - 1) * this.limit,
 							this.currentpage * this.limit
 						)
-					});
+					});*/
+					this.$axios({
+						method:'get',
+						url:'/api/companyProduct/getByCompanyId',
+						params:{
+							companyId:this.companyId
+						}
+					}).then(res => {
+						console.log(res)
+						this.products = res.data.object
+						this.currentlist = this.products.slice(
+							(this.currentpage - 1) * this.limit,
+							this.currentpage * this.limit
+						)
+					}).catch(err => {
+						console.log(err)
+					})
 				}
 			}
 		},
 		created(){
-			this.companyid = this.$route.query.id
+			this.companyId = this.$route.query.companyId
 			this.getcurrentlist()
 			/*this.$axios.get("http://127.0.0.1:3000/company",{params:{id:this.companyid}})
 			.then((res) => {

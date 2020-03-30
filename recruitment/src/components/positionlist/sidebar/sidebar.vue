@@ -11,57 +11,6 @@
 	    			</div>
 	    		</dd>
 	    	</dl>
-	       <!-- <dl>
-	            <dt>月薪范围 <em ></em></dt>
-		        <dd>
-		            <div>2k以下</div>
-		            <div>2k-5k</div>
-		            <div>5k-10k</div>
-		            <div>10k-15k</div>
-		            <div>15k-25k</div>
-		            <div>25k-50k</div>
-		            <div>50k以上</div>
-		        </dd> 
-	        </dl>
-	        <dl>
-	            <dt>工作经验 <em ></em></dt>
-		        <dd>
-		                    	                    	<div>不限</div>
-		                    	                    	<div>应届毕业生</div>
-		                    	                    	<div>1年以下</div>
-		                    	                    	<div>1-3年</div>
-		                    	                    	<div>3-5年</div>
-		                    	                    	<div>5-10年</div>
-		                    	                    	<div>10年以上</div>
-		        </dd> 
-	        </dl>
-	        <dl>
-	            <dt>最低学历 <em ></em></dt>
-		        <dd>
-		                    	                    	<div>不限</div>
-		                    	                    	<div>大专</div>
-		                    	                    	<div>本科</div>
-		                    	                    	<div>硕士</div>
-		                    	                    	<div>博士</div>
-		        </dd> 
-	        </dl>
-	        <dl>
-	        <dt>工作性质 <em ></em></dt>
-		    	<dd>
-		                    	                    	<div>全职</div>
-		                    	                    	<div>兼职</div>
-		                    	                    	<div>实习</div>
-		    	</dd> 
-	        </dl>
-	        <dl>
-	            <dt>发布时间 <em ></em></dt>
-		        <dd>
-		                    	                    	<div>今天</div>
-		                    	                    	<div>3天内</div>
-		                    	                    	<div>一周内</div>
-		                    	                    	<div>一月内</div>
-		        </dd> 
-	        </dl>-->
 	    </div>
 	    <slot name="slot1"></slot>
 	    <slot></slot>
@@ -78,7 +27,6 @@
 			}
 		},
 		created(){
-//			console.log(this)
 			this.$axios.get('/static/data/optionlist.json').then((res) => {
 				this.optionlist = res.data.optionlist
 				this.initarr()
@@ -88,7 +36,6 @@
 		},
 		methods:{
 			initarr(){
-//				console.log(this.optionlist.length)
 				for(let i = 0; i < this.optionlist.length; i++){
 					this.currentoption.push(i)
 				}
@@ -100,7 +47,6 @@
 				else{
 					this.currentoption.push(index)
 				}
-//				console.log(this.currentoption)
 			},
 			pickoption(item){
 				//访问后台根据item条件查找返回符合条件的职位list

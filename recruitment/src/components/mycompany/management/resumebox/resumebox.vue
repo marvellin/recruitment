@@ -3,7 +3,8 @@
 		<div class="resumeShow">
 			<a title="预览在线简历" target="_blank" class="resumeImg" href="javascript:void(0)">
 			    <!--<img src="../../../../../static/images/default_headpic.png">-->
-			    <img :src="resume.basicinfo.img">
+			    <img v-if="resume.basicinfo.img" :src="resume.basicinfo.img">
+			    <img v-else src="../../../../../static/images/default_headpic.png"/>
 			</a>
 			<div class="resumeIntro">
 			    <h3 class="unread">
@@ -15,11 +16,11 @@
 			    <span class="fr">投递时间：{{time}}</span>
 			    <div> 
 			        {{resume.basicinfo.username}} / {{resume.basicinfo.gender}} / {{resume.basicinfo.degree}} / {{resume.basicinfo.workyear}}<br>
-			        {{resume.experiencelist[0].post}} . {{resume.experiencelist[0].comname}} | {{resume.educationlist[0].degree}} . {{resume.educationlist[0].school}}
+			        {{resume.workExperienceList[0].post}} . {{resume.workExperienceList[0].comname}} | {{resume.educationList[0].degree}} . {{resume.educationList[0].schoole}}
 			    </div>
 			    <div class="jdpublisher">
 					<span>
-				        应聘职位：<a title="position.name" target="_blank" href="javascript:void(0)">{{position.name}}</a>
+				        应聘职位：<a :title="position.name" target="_blank" href="javascript:void(0)">{{position.name}}</a>
 				    </span>
 			    </div>
 			</div>

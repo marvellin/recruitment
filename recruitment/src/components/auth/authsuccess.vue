@@ -21,8 +21,8 @@
 								</ul>
 							</div>
 							<div class="breakdotted"></div>
-		                   	<router-link class="greenlink" to="/management/postposition">发布新职位</router-link>
-		                    <router-link class="greenlink" to="/mycompany"> 进入我的公司主页</router-link>
+		                   	<router-link class="greenlink" :to="{path:'/management/postposition',query:{companyId:myCompanyId}}">发布新职位</router-link>
+		                    <router-link class="greenlink" :to="{path:'/mycompany',query:{companyId:myCompanyId}}"> 进入我的公司主页</router-link>
 		                </dd>
 		            </dl>
 		       	</div>
@@ -45,6 +45,14 @@
 			footert ,
 			totop,
 		},
+		computed:{
+			myCompanyId(){
+				return this.$store.state.company.companyId()
+			}
+		},
+		created(){
+//			console.log(this.$store.state.company.companyId())
+		}
 	}
 </script>
 

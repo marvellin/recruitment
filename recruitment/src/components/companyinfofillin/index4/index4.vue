@@ -8,9 +8,9 @@
 				<div class="c_text_1">目标明确、前途光明的产品是吸引求职者的制胜法宝哦！</div>
                 <img width="668" height="56" class="c_steps" alt="第四步" src="../../../../static/images/step4.png">
                 <!--<form method="post" action="http://www.lagou.com/cp/saveCompanyProducts.json" id="productForm">-->
-                <form>
+                <form v-if="company">
                     <div id="productDiv">
-		                <div class="formWrapper" style="border-bottom: solid 1px rgb(85,85,85);padding-bottom: 20px;" v-for="(product,index) in company.products" :key="index">
+		                <div class="formWrapper" style="border-bottom: solid 1px rgb(85,85,85);padding-bottom: 20px;" v-for="(product,index) in company.productList" :key="index">
 		                    <h3>产品海报</h3>
 		                    <span class="fr btn_delete" @click="deleteproduct(index)" v-show="index>0">删除</span>
 		                    <div class="new_product mt20">
@@ -40,9 +40,10 @@
 		                    <textarea @click="pickcurrentproduct(index)" v-validate="'required|max:500'" style="width: 624px;height: 275px;" placeholder="请简短描述该产品定位、产品特色、用户群体等" v-model="product.info" maxlength="500" :name="'产品'+(index+1)+'的介绍'"></textarea>	
 		                    <div class="word_count">你还可以输入 <span>{{remainingwords(index)}}</span> 字</div>
 		                    <el-alert style="width: 624px;height: 46px;" :closable="false" :title="errors.first('产品'+(index+1)+'的介绍')" type="error" v-show="errors.has('产品'+(index+1)+'的介绍')"></el-alert>
+		                    <!--<button class="btn_big fr">保存</button>-->
 		                </div>
 	                </div>
-                    <a id="addMember" class="add_member" @click="addproduct" href="javascript:void(0)"><i></i>继续添加公司产品</a>
+                    <a id="addMember" class="add_member" @click="addproduct" href="javascript:void(0)"><i></i>添加公司产品</a>
                    	<div class="clear"></div>
                    	<input type="submit" @click.prevent="goback" value="上一步" class="btn_big fl">
                     <input type="submit" @click.prevent="goforward" value="下一步" id="step4Submit" class="btn_big fr">
@@ -57,36 +58,34 @@
 		name:"index",
 		data(){
 			return{
-				currentproduct:null
+				currentproduct:null,
+				company:null
 			}
 		},
 		props:{
-			company:{
+			/*company:{
 				type:Object,
 				required:true,
-			},
-//			producttmp:null,
+			},*/
 		},
 		created(){
 			this.dataInit()
-//			console.log(this.company.products)
 		},
 		mounted(){
-			console.log('from index4 mounted' + JSON.stringify(this.company))
+//			console.log('from index4 mounted' + JSON.stringify(this.company))
 		},
 		methods:{
 			pickcurrentproduct(index){
 				this.currentproduct = index
-//				console.log(this.currentproduct)
 			},
 			deleteproduct(index){
-				if(index >= 0 && index < this.company.products.length){
+				if(index >= 0 && index < this.company.productList.length){
 					this.$confirm('是否删除这个产品?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.company.products.splice(index,1)
+			        	  this.company.productList.splice(index,1)
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -100,17 +99,18 @@
 				}
 			},
 			remainingwords(index){
-				if(this.company.products[index].info === undefined || this.company.products[index].info === null){
+				if(this.company.productList[index].info === undefined || this.company.productList[index].info === null){
 					return 500
 				}
 				else{
-					return 500 - this.company.products[index].info.length
+					return 500 - this.company.productList[index].info.length
 				}
 			},
 			goforward(){
 				this.$validator.validate().then((result) => {
 			        if (result) {
-			          this.$router.push({path:'/companyinfofillin/step5'})
+			         	this.insert()
+						this.$router.push({path:'/companyinfofillin/step5'})
 			        }
 			        else{
 				        this.$message({
@@ -126,28 +126,66 @@
 			      		console.log(err)
 			      })
 			},
+			async insert(){
+				for ( var i = this.company.productList.length - 1; i >= 0 ; i-- ) {
+							await this.$axios({
+								method:'post',
+								url:'/api/companyProduct/insert',
+								data:this.company.productList[i],
+								params:{
+									companyId:this.company.companyId
+								}
+							}).then(res => {
+								console.log(res)
+							}).catch(err => {
+								console.log(err)
+							})
+				}
+			},
 			goback(){
 				this.$router.push({path:'/companyinfofillin/step3'})
 			},
 			addproduct(){
-				this.company.products.push({
+				this.company.productList.push({
 						name:null,
 						img:null,
 						info:null,
 				})
 			},
 			dataInit(){
-				if(!this.company.products || this.company.products.length === 0){
-					this.company.products.push({
+				/*if(!this.company.productList || this.company.productList.length === 0){
+					this.company.productList.push({
 						name:null,
 						img:null,
 						info:null,
 					})
-				}
+				}*/
+				this.$axios({
+					method:'get',
+					url:'/api/company/getByUserId',
+					params:{
+						userId:this.myUserId
+					}
+				}).then(res => {
+					console.log(res)
+					this.company = res.data.object
+					if(this.company.productList==undefined||this.company.productList==null||this.company.productList.length<=0){
+						this.company.productList.push(
+							{
+								name:null,
+								img:null,
+								info:null,
+							}
+						)
+					}
+				}).catch(err => {
+					console.log(err)
+					this.$router.push({path:'*'})
+				})
 			},
 			getproductimg(e,index){
-				var productimg = e.target.files[0]
-				this.uploadimg(productimg,index)
+				this.company.productList[index].filetmp = e.target.files[0]
+//				this.uploadimg(productimg,index)
 			},
 			uploadimg(file,index){
 				if(!file){
@@ -166,9 +204,9 @@
 				}).then(res => {
 					const blob = new Blob([res.data])
 //					console.log('beforeupdate')
-					this.company.products[index].img = URL.createObjectURL(blob)
+					this.company.productList[index].img = URL.createObjectURL(blob)
 //					console.log('afterupdate')
-					console.log(this.company.products[index].img)
+					console.log(this.company.productList[index].img)
 					this.$message("上传成功!")
 				}).catch(err => {
 					this.$message("上传失败!")
@@ -177,17 +215,10 @@
 			},
 		},
 		computed:{
-			
+			myUserId(){
+				return this.$store.state.userId()
+			},
 		},
-		watch:{
-			/*company:{
-				handler(newcompany,oldcompany){
-					this.$emit("update:company",newcompany)
-				},
-				immediate:true,
-				deep:true
-			}*/
-		}
 	}
 </script>
 

@@ -21,48 +21,16 @@
 		                <a id="resumeRefuseAll" href="javascript:void(0);">不合适</a>
 		            </div><!-- end .filter_actions -->
                     <ul class="reset resumeLists">
-		                <li class="onlineResume" v-for="(item,index) in resume2positionlist" :key='index'>
+		                <li class="onlineResume" v-for="(item,index) in resume2positionlist" :key='item.deliveryId'>
 			                <label class="checkbox">
 			                    <input type="checkbox" :value="index" v-model="checkmodel">
 			                    <i :style="{'display':showlabel(index)?'inline':'none'}"></i>
 			                </label>
-			                <resumebox :resume='item.resume' :time='item.time' :position='item.position'>
+			                <resumebox :resume='item.resume' :time='item.deliverytime' :position='item.position'>
 			                	<a class="resume_notice" @click.prevent="informperson(item)" href="javascript:void(0)" slot='slot1'>通知面试</a>
 			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>待定</a>
 			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2'>不合适</a>	
 			                </resumebox>
-			                <!--<div class="resumeShow">
-			                    <a title="预览在线简历" target="_blank" class="resumeImg" href="resumeView.html?deliverId=1686182">
-			                        <img src="../../../../../static/images/default_headpic.png">
-			                    </a>
-			                    <div class="resumeIntro">
-			                        <h3 class="unread">
-										<a target="_blank" title="预览jason的简历" href="resumeView.html?deliverId=1686182">
-			                                jason的简历
-			                            </a>
-			                  		    <em></em>
-			                        </h3> 
-			                        <span class="fr">投递时间：2014-07-01 17:08</span>
-			                        <div> 
-			                            jason / 男 / 大专 / 3年 / 广州<br>
-			                                                                         高级产品经理 · 上海辉硕科技有限公司 | 本科 · 北京大学
-			                        </div>
-			                        <div class="jdpublisher">
-				                        <span>
-				                                                                         应聘职位：<a title="随便写" target="_blank" href="http://www.lagou.com/jobs/149594.html">随便写</a>
-				                        </span>
-			                        </div>
-			                    </div>
-			                    <div class="links">
-			                        <a data-deliverid="1686182" data-name="jason" data-positionid="149594" data-email="888888888@qq.com" class="resume_notice" href="javascript:void(0)">通知面试</a>
-			                        <a data-deliverid="1686182" class="resume_refuse" href="javascript:void(0)">不合适</a>
-			                        
-			                    </div>
-			                </div>
-			                <div class="contactInfo">
-			                    <span class="c9">电话：</span>18650216666   &nbsp;&nbsp;&nbsp;   
-			                    <span class="c9">邮箱：</span><a href="mailto:888888888@qq.com">888888888@qq.com</a>
-			                </div>-->
 			            </li>
 		            </ul><!-- end .resumeLists -->
 		        </form>
@@ -86,6 +54,32 @@
 			}
 		},
 		methods:{
+			/*async getPositionIdList(){
+				var positionList = new Array()
+				await this.$axios({
+					method:'get',
+					url:'api/position/getPositionListBycompanyId',
+					params:{
+						companyId:this.myCompanyId
+					}
+				}).then(res=>{
+					console.log()
+				})
+			},*/
+			dataInit(){
+				this.$axios({
+					method:'get',
+					url:'/api/delivery/getListByPositionIdListStatus1',
+					params:{
+						companyId:this.myCompanyId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.resume2positionlist = res.data.object
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			informperson(item){
 				this.$emit("informperson",item)
 			},
@@ -120,13 +114,15 @@
 		},
 		created(){
 			//获取resume2positionlist
-			this.$axios.get('/static/data/resume2positionlist.json').then(res => {
+			this.dataInit()
+			/*this.$axios.get('/static/data/resume2positionlist.json').then(res => {
 				this.resume2positionlist = res.data.resume2positionlist
-//				console.log(this.resume2positionlist)
-			});
+			});*/
 		},
 		computed:{
-			
+			myCompanyId(){
+				return this.$store.state.company.companyId()
+			}
 		},
 		watch:{
 			checkmodel(){

@@ -1,19 +1,19 @@
 <template>
 	<div id="hotList">
 		<ul class="hot_pos reset" :style="{'display':hottabbingShow?'block':'none'}">
-			<li v-for="(item,index) in list" :class="index%2==0?'clearfix':'odd clearfix'" :key="index">
-				<hotlistl :job="item.job"></hotlistl>
-				<hotlistr :company="item.company"></hotlistr>
+			<li v-for="(item,index) in postionlist" :class="index%2==0?'clearfix':'odd clearfix'" :key="index">
+				<hotlistl :job="item"></hotlistl>
+				<hotlistr :companyId="item.companyId"></hotlistr>
 			</li>
 			<router-link to="" class="btn fr">查看更多</router-link>
 		</ul>
-		<ul class="hot_pos hot_posHotPosition reset" :style="{'display':hottabbingShow?'none':'block'}" >
+		<!--<ul class="hot_pos hot_posHotPosition reset" :style="{'display':hottabbingShow?'none':'block'}" >
 			<li v-for="(item,index) in list2" :class="index%2==0?'clearfix':'odd clearfix'" :key="index">
 				<hotlistl :job="item.job"></hotlistl>
 				<hotlistr :company="item.company"></hotlistr>
 			</li>
 			<router-link to="" class="btn fr">查看更多</router-link>
-		</ul>
+		</ul>-->
 	</div>
 </template>
 
@@ -29,8 +29,24 @@
 //				console.log(this.hottabbingShow)
 			}
 		},
+		created(){
+			this.$axios({
+				method:'post',
+				url:'api/position/getByDescending',
+				params:{
+					limitNum:10
+				}
+			}).then(res => {
+				console.log(res)
+				this.postionlist = res.data.object
+				console.log(this.postionlist)
+			}).catch(err => {
+				console.log(err)
+			})
+		},
 		data(){
 			return{
+				postionlist:null,
 				list:[
 					{
 						job:{

@@ -3,7 +3,7 @@
 	<div id="body">
 		<headert :navlist='2' :isCompany='true'></headert>
 		<div id="container">
-			<router-view :company="company">
+			<router-view>
 				<h2 slot="slot1"><em></em>填写公司信息</h2>
 			</router-view>
 			<div class="clear"></div>
@@ -27,17 +27,34 @@
 		},
 		data(){
 			return{
-				company:null,
+//				company:{},
 			}
 		},
 		created(){
-			this.dataInit()
+			/*this.$axios({
+				method:'get',
+				url:'/api/company/getByUserId',
+				params:{
+					userId:this.myUserId
+				}
+			}).then(res => {
+				console.log(res)
+				this.company = res.data.object
+			}).catch(err => {
+				console.log(err)
+			})*/
+//			this.dataInit()
+		},
+		computed:{
+			myUserId(){
+				return this.$store.state.userId()
+			}
 		},
 		methods:{
 			dataInit(){
 				if(!this.company){
 					this.company = {
-						comdetail:{
+						companyDetail:{
 							fullname:null,
 							shortname:null,
 							feature:null,
@@ -48,31 +65,31 @@
 							scale:null,
 							img:'../../../../static/images/logo_default.png',
 	//						img:null,
-							labels:[]
+							labelList:[]
 						},
-						products:[],
+						productList:[],
 						intro:"",
-						positions:[],
-						stage:{},
-						member:{
+						positionList:[],
+						companyStage:{},
+						companyMember:{
 							name:null,
 							img:null,
 							post:null,
 							intro:null
 						},
-						repolist:[]
+						reportList:[]
 					}
 				}
 			}
 			/*companyinit(){
 				this.company = {
-					comdetail:{},
-					products:[],
+					companyDetail:{},
+					productList:[],
 					intro:"",
-					positions:[],
-					stage:{},
-					member:{},
-					repolist:[]
+					positionList:[],
+					companyStage:{},
+					companyMember:{},
+					reportList:[]
 				}
 			}*/
 		},

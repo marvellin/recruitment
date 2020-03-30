@@ -27,12 +27,14 @@
 			pagination
 		},
 		created(){
-			this.companyid = this.$route.query.id
+//			console.log(this.$route)
+			this.companyId = this.$route.query.companyId
+//			console.log(this.companyId)
 			this.getcurrentlist()
 		},
 		data(){
 			return{
-				companyid:null,
+				companyId:null,
 				positions:null,
 				currentlist:null,
 				limit:8,
@@ -62,15 +64,31 @@
 					)
 				}
 				else{
-					this.$axios.get('http://127.0.0.1:3000/company',{params:{id:this.companyid}}).then(res => {
+					/*this.$axios.get('http://127.0.0.1:3000/company',{params:{id:this.companyid}}).then(res => {
 						this.positions = res.data[0].positions
 						this.currentlist = this.positions.slice(
 							(this.currentpage - 1) * this.limit,
 							this.currentpage * this.limit
 						)
-					});
-				}
-			}
+					});*/
+					this.$axios({
+						method:'get',
+						url:'/api/position/getByCompanyId',
+						params:{
+							companyId:this.companyId
+						}
+					}).then(res => {
+						console.log(res)
+						this.positions = res.data.object
+						this.currentlist = this.positions.slice(
+							(this.currentpage - 1) * this.limit,
+							this.currentpage * this.limit
+						)
+					}).catch(err => {
+						console.log(err)
+					})
+						}
+					}
 		}
 	}
 </script>

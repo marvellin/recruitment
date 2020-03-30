@@ -22,8 +22,8 @@
 				</dt>
 			    <dd>
 		            <ul class="reset" style="color: #555;">
-		                <li v-for="(item,index) in company.repolist" :key="index">
-		                    <a class="article" :title="item.repotitle" target="_blank" :href="item.repolink">{{item.repotitle}}</a>
+		                <li v-for="(item,index) in company.reportList" :key="index">
+		                    <a class="article" :title="item.reportitle" target="_blank" :href="item.repolink">{{item.repotitle}}</a>
 				        </li>
 		            </ul>
 			    </dd>
@@ -37,13 +37,25 @@
 		name:"company_home",
 		data(){
 			return{
-				companyid:null,
+				companyId:null,
 				company:null
 			}
 		},
 		created(){
-			this.companyid = this.$route.query.id
-			this.$axios.get("http://127.0.0.1:3000/company",{params:{
+			this.companyId = this.$route.query.companyId
+			this.$axios({
+				method:'get',
+				url:'/api/company/get',
+				params:{
+					companyId:this.companyId
+				}
+			}).then(res => {
+				console.log(res)
+				this.company=res.data.object
+			}).catch(err => {
+				console.log(err)
+			})
+			/*this.$axios.get("http://127.0.0.1:3000/company",{params:{
 				id:this.companyid
 			}})
 			.then((res) => {
@@ -51,7 +63,7 @@
 			})
 			.catch((err) => {
 				console.log(err)
-			})
+			})*/
 		}
 	}
 </script>

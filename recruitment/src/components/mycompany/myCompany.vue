@@ -3,24 +3,25 @@
 	<div id="body">
 		<headert :navlist='2' :isCompany='true'></headert>
 		<div id="container">
-			<div class="clearfix">
+			<div class="clearfix" v-if="company">
 				<div class="content_l">
 					<div class="c_detail" :class="[editlabel?'c_detail_bg':'']">
 						<div style="background-color: #fff;" class="c_logo">
 							<a title="上传公司LOGO" id="logoShow" class="inline cboxElement" >
-								<img width="190" height="190" alt="公司logo" :src="comdetail.img"/>
+								<img v-if="company.companyDetail&&company.companyDetail.img" width="190" height="190" alt="公司logo" :src="company.companyDetail.img"/>
+								<img v-else width="190" height="190" alt="公司logo" src="../../../static/images/logo_default.png"/>
 								<span>更换公司图片<br />190px*190px 小于5M</span>
 								<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg"/>
 							</a>
 						</div>
 						
 						<div class="c_box companyName">
-							<h2 title="公司名称测试">{{comdetail.shortname}}</h2>
+							<h2 title="公司名称测试">{{company.companyDetail.shortname}}</h2>
 							<em class="unvalid" @mouseover="vaon" @mouseout="vaout"></em>
 							<span class="va dn" :style="{'display':vashow?'inline':'none'}">未认证企业</span>
 							<router-link target="_blank" class="applyC" to="auth">申请认证</router-link>
 							<div class="clear"></div>
-							<h1 title="广东公司名称测试" class="fullname">{{comdetail.fullname}}</h1>
+							<h1 title="广东公司名称测试" class="fullname">{{company.companyDetail.fullname}}</h1>
 							<form v-if="detailtmp" class="clear editDetail" :class="[editdetailshow?'':'dn']" id="editDetailForm">
 								<input v-validate="'required|companyshortname|max:10'" data-vv-scope="scope1" type="text" ref="editshortname" placeholder="请输入公司简称" maxlength="15" v-model="detailtmp.shortname" name="companyshortname" id="companyShortName"/>
 								<el-alert style="width:400px;" :closable="false" :title="errors.first('scope1.companyshortname')" type="error" v-show="errors.has('scope1.companyshortname')"></el-alert>
@@ -35,14 +36,14 @@
 							<div class="clear oneword" :style="{'display':editdetailshow?'none':'block'}">
 								<img width="17" height="15" src="../../../static/images/quote_l.png"/>
 								&nbsp;
-								<span>{{comdetail.feature}}</span>
+								<span>{{company.companyDetail.feature}}</span>
 								&nbsp;
 								<img width="17" height="15" src="../../../static/images/quote_r.png"/>
 							</div>
 							<h3 class="dn" :style="{'display':editlabel?'block':'none'}">已选择标签</h3>
 							<ul style="overflow: auto;" id="hasLabels" class="reset clearfix">
-								<li v-for="(item,index) in comdetail.labels" :key="index" @click="deletelabel(index)" :style="{'margin-right':index==labelcurrent?'6px':'18px'}" style="margin-right:18px;cursor: pointer;" @mouseover="mouseonlabel(index)" @mouseout="mouseoutlabel">
-									<span>{{item}}</span>
+								<li v-for="(item,index) in company.companyDetail.labelList" :key="index" @click="deletelabel(index)" :style="{'margin-right':index==labelcurrent?'6px':'18px'}" style="margin-right:18px;cursor: pointer;" @mouseover="mouseonlabel(index)" @mouseout="mouseoutlabel">
+									<span>{{item.label}}</span>
 									<i>x</i>
 								</li>
 								<!--<li><span>年终分红</span></li>
@@ -52,9 +53,6 @@
 								<li class="link" v-show="!editlabel" @click="editlabelshow">编辑标签</li>
 							</ul>
 							<div class="dn" id="addLabels" :style="{'display':editlabel?'block':'none'}">
-								<!--<label id="changeLabels" class="change">点击标签进行删除</label>-->
-								<!--<router-link id="changeLabels" class="change" to="">换一换</router-link>-->
-								<!--<input type="hidden" value="1" id="labelPageNo"/>-->
 								
 								<input data-vv-scope="labelscope" v-validate="'max:6'" v-model="labeltmp" type="text" ref="newlabel" placeholder="添加自定义标签" name="label" id="label" class="label_form"/>
 								<input type="button" value="贴上" class="" id="add_label" @click="pastelabel"/>
@@ -77,7 +75,7 @@
 					<div id="Product">
 						<div>
 							<!--无产品 -->
-							<dl class="c_section" v-if="!products.length">
+							<dl class="c_section" v-if="!company.productList.length">
 					            <dt>
 					                <h2><em></em>公司产品</h2>
 					            </dt>
@@ -90,7 +88,7 @@
 					            </dd>
 					        </dl>
 						</div>
-						<div v-for="(item,index) in products" :key="index" v-if="products.length">
+						<div v-for="(item,index) in company.productList" :key="index" v-if="company.productList.length">
 							<Product :product="item" :index="index" @delete="handleItemDelete" @insert="addproduct"></Product>
 						</div>
 					</div>
@@ -98,7 +96,7 @@
 					<div id="Profile">
 						<div class="profile_wrap">
 					        <!--无介绍 -->
-							<dl class="c_section nointro" v-show="!editintroshow" v-if="intro===undefined||intro===null||intro===''">
+							<dl class="c_section nointro" v-show="!editintroshow" v-if="company.intro===undefined||company.intro===null||company.intro===''">
 					            <dt>
 					                <h2><em></em>公司介绍</h2>
 					            </dt>
@@ -131,12 +129,12 @@
 					        </dl>
 					            
 					        <!--有介绍-->
-					        <dl class="c_section" v-if="intro!==undefined&&intro!==null&&intro!==''" v-show="!editintroshow">
+					        <dl class="c_section" v-if="company.intro!==undefined&&company.intro!==null&&company.intro!==''" v-show="!editintroshow">
 					            <dt>
 					                <h2><em></em>公司介绍</h2>
 					            </dt>
 					            <dd>
-					                <div class="c_intro">{{intro}}</div>
+					                <div class="c_intro">{{company.intro}}</div>
 					                <a title="编辑公司介绍" id="editIntro" class="c_edit" href="javascript:void(0)" @click.prevent="editIntro"></a>
 					            </dd>
 					        </dl>
@@ -170,21 +168,21 @@
 								<tbody>
 									<tr>
 										<td width="62">地点</td>
-										<td>{{comdetail.city}}</td>
+										<td>{{company.companyDetail.city}}</td>
 									</tr>
 									<tr>
 										<td>领域</td>
-										<td title="移动互联网">{{comdetail.field}}</td>
+										<td title="移动互联网">{{company.companyDetail.field}}</td>
 									</tr>
 									<tr>
 										<td>规模</td>
-										<td>{{comdetail.scale}}</td>
+										<td>{{company.companyDetail.scale}}</td>
 									</tr>
 									<tr>
 										<td>主页</td>
 										<td>
 											<!--<router-link to="" target="_blank"></router-link>-->
-											<a :href="comdetail.comurl" target="_blank">前往公司主页</a>
+											<a :href="company.companyDetail.comurl" target="_blank">前往公司主页</a>
 										</td>
 									</tr>
 								</tbody>
@@ -199,8 +197,8 @@
 		                            		<td>地点</td>
 		                            		<td @mouseleave="cityboxshow=false">
 		                            		<!--<td>-->
-		                            			<!--<input type="text" placeholder="请输入地点" v-model="comdetail.city" name="city" id="city">-->	
-		                            			<input data-vv-scope="tags" v-validate="'required'" type="text" placeholder="请输入地点" readonly="readonly" @click="cityboxshow=true" :value="comdetail.city" name="companycity" id="city">
+		                            			<!--<input type="text" placeholder="请输入地点" v-model="company.companyDetail.city" name="city" id="city">-->	
+		                            			<input data-vv-scope="tags" v-validate="'required'" type="text" placeholder="请输入地点" readonly="readonly" @click="cityboxshow=true" :value="company.companyDetail.city" name="companycity" id="city">
 		                            			<el-alert style="width: 184px;height: 36px;" :closable="false" :title="errors.first('tags.companycity')" type="error" v-show="errors.has('tags.companycity')"></el-alert>
 		                            			<div class="boxUpDown_s boxUpDown_596" id="box_expectCity_s" :style="{'display':cityboxshow?'block':'none'}">
 										          		<dl>
@@ -263,9 +261,9 @@
 		                        		<tr>
 		                            		<td>领域</td><!-- 支持多选 -->
 		                            		<td>
-		                            			<!--<input type="hidden" v-model="comdetail.field" id="industryField" name="industryField">-->
-		                            			<!--<input type="text" v-model="comdetail.field" style="background:none;cursor:default;border:none !important;" value="移动互联网" id="select_ind" class="select_tags">-->
-		                            			<input data-vv-scope="tags" type="text" v-validate="'required|industry|max:15'" v-model="comdetail.field" id="select_ind" name="select_industry">
+		                            			<!--<input type="hidden" v-model="company.companyDetail.field" id="industryField" name="industryField">-->
+		                            			<!--<input type="text" v-model="company.companyDetail.field" style="background:none;cursor:default;border:none !important;" value="移动互联网" id="select_ind" class="select_tags">-->
+		                            			<input data-vv-scope="tags" type="text" v-validate="'required|industry|max:15'" v-model="company.companyDetail.field" id="select_ind" name="select_industry">
 		                            			<el-alert style="width: 184px;height: 36px;" :closable="false" :title="errors.first('tags.select_industry')" type="error" v-show="errors.has('tags.select_industry')"></el-alert>
 		                            		</td>
 		                        		</tr>
@@ -273,7 +271,7 @@
 		                            		<td>规模</td>
 		                            		<td @mouseleave="outscalelist">
 		                            			<!--<input type="hidden" value="" id="companySize" name="companySize">-->
-		                            			<input data-vv-scope="tags" name="select_scale" v-validate="'required'" type="button" :value="comdetail.scale" id="select_sca" class="select_tags" :class="[selecttagshow?'select_tags_focus':'']" @click="overscalelist">
+		                            			<input data-vv-scope="tags" name="select_scale" v-validate="'required'" type="button" :value="company.companyDetail.scale" id="select_sca" class="select_tags" :class="[selecttagshow?'select_tags_focus':'']" @click="overscalelist">
 		                            			<el-alert style="width: 184px;height: 36px;" :closable="false" :title="errors.first('tags.select_scale')" type="error" v-show="errors.has('tags.select_scale')"></el-alert>
 		                                		<div class="selectBox dn" id="box_sca" :style="{'display': selecttagshow?'block':'none'}">
 			                                    	<ul class="reset">
@@ -293,16 +291,16 @@
 				                        <tr>
 				                            <td>主页</td>
 				                            <td>
-		                            			<input data-vv-scope="tags" v-validate="'required|website'" type="text" placeholder="请输入网址" v-model="comdetail.comurl" name="website" id="companyUrl">	
+		                            			<input data-vv-scope="tags" v-validate="'required|website'" type="text" placeholder="请输入网址" v-model="company.companyDetail.comurl" name="website" id="companyUrl">	
 		                            			<el-alert style="width: 184px;height: 46px;" :closable="false" :title="errors.first('tags.website')" type="error" v-show="errors.has('tags.website')"></el-alert>
 				                            </td>
 				                        </tr>
 		                    		</tbody>
 								</table>
-								<!--<input type="hidden" id="comCity" :value="comdetail.city"/>
-								<input type="hidden" id="comInd" :value="comdetail.field"/>
-								<input type="hidden" id="comSize" :value="comdetail.scale"/>
-								<input type="hidden" id="comUrl" :value="comdetail.comurl"/>-->
+								<!--<input type="hidden" id="comCity" :value="company.companyDetail.city"/>
+								<input type="hidden" id="comInd" :value="company.companyDetail.field"/>
+								<input type="hidden" id="comSize" :value="company.companyDetail.scale"/>
+								<input type="hidden" id="comUrl" :value="company.companyDetail.comurl"/>-->
 								<input type="button" value="保存" id="submitFeatures" class="btn_small" @click="savetags"/>
 								<!--<router-link id="cancelFeatures" class="btn_cancel_s" to="">取消</router-link>-->
 								<div class="clear"></div>
@@ -320,9 +318,9 @@
 						</dt>
 						
 						<dd>
-							<ul v-if="stage" class="reset stageshow" :style="{'display':editstageshow?'none':'block'}">
-	                    		<li>目前阶段：<span class="c5">{{stage.currentstage}}</span></li>
-	                    		<li v-if="stage.org&&stage.org !== ''">投资机构：<span class="c5">{{stage.org}}</span></li>
+							<ul v-if="company.companyStage" class="reset stageshow" :style="{'display':editstageshow?'none':'block'}">
+	                    		<li>目前阶段：<span class="c5">{{company.companyStage.currentstage}}</span></li>
+	                    		<li v-if="company.companyStage.org&&company.companyStage.org !== ''">投资机构：<span class="c5">{{company.companyStage.org}}</span></li>
 	                    	</ul>
 	                    	<form v-if="stagetmp" class="dn" id="stageform" :style="{'display':editstageshow?'block':'none'}">
 	                    		<div class="stageSelect" @mouseleave="currentstagelistshow = false">
@@ -363,7 +361,7 @@
 							<dd>
 								<div class="member_wrap">
 									<!--无创始人-->
-									<div class="member_info addnew_right" v-show="!addmembershow&&!editmembershow" v-if="member===undefined||member===null||member===''||member.name===undefined||member.name===null||member.name===''">
+									<div class="member_info addnew_right" v-show="!addmembershow&&!editmembershow" v-if="company.companyMember===undefined||company.companyMember===null||company.companyMember===''||company.companyMember.name===undefined||company.companyMember.name===null||company.companyMember.name===''">
 										展示公司领导团体，<br>提升诱人指数<br>
 										<a class="member_edit" @click.prevent="addcommember">+添加成员</a>
 									</div>
@@ -415,7 +413,8 @@
 						                                <span>上传创始人头像</span>
 						                            </div>
 						                            <div class="portraitShow">
-						                            	<img width="120" height="120" :src="member.img">
+						                            	<img v-if="membertmp.img" width="120" height="120" :src="membertmp.img">
+						                            	<img v-else width="120" height="120" src="../../../static/images/default_headpic.png">
 							                        	<span>更换头像</span>
 							                        </div>
 							                        <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="profiles1">
@@ -442,18 +441,19 @@
 									</div>
 									
 									<!--显示创始人-->
-									<div class="member_info" v-if="member!==undefined&&member!==null&&member!==''&&member.name!==undefined&&member.name!==null&&member.name!==''" v-show="!editmembershow&!addmembershow">
+									<div class="member_info" v-if="company.companyMember!==undefined&&company.companyMember!==null&&company.companyMember!==''&&company.companyMember.name!==undefined&&company.companyMember.name!==null&&company.companyMember.name!==''" v-show="!editmembershow&!addmembershow">
 										<!--<a title="编辑创始人" class="c_edit member_edit" href="javascript:void(0)"></a>-->
 										<a title="编辑创始人" class="c_edit member_edit" @click.prevent="editmember"></a>
 				                        <div class="m_portrait">
 				                            <div></div>
-				                            <img width="120" height="120" :alt="member.name" :src="member.img">
+				                            <img v-if="company.companyMember&&company.companyMember.img" width="120" height="120" :alt="company.companyMember.name" :src="company.companyMember.img">
+				                            <img v-else width="120" height="120" src="../../../static/images/leader_default.png"/>
 					                    </div>
 				                        <div class="m_name">
-				                        	{{member.name}}
+				                        	{{company.companyMember.name}}
 				                        </div>
-				                        <div class="m_position">{{member.post}}</div>
-				                    	<div class="m_intro">{{member.intro}}</div>
+				                        <div class="m_position">{{company.companyMember.post}}</div>
+				                    	<div class="m_intro">{{company.companyMember.intro}}</div>
 									</div>
 								</div>
 							</dd>
@@ -468,12 +468,12 @@
 			                		公司新闻报道
 			                	</h2>
 	                   			<!--<a title="添加报道" class="c_add" href="javascript:void(0)"></a>-->
-	                   			<a v-show="repolist&&repolist.length!=0&&!addreposhow&&!editreposhow&&repolist.length<3" title="添加报道" class="c_add" @click.prevent="addrepo"></a>
+	                   			<a v-show="company.reportList&&company.reportList.length!=0&&!addreposhow&&!editreposhow&&company.reportList.length<3" title="添加报道" class="c_add" @click.prevent="addrepo"></a>
 			                </dt>
 		                	<dd>
 			                	<!-- 编辑报道 -->
 	                       		<ul class="reset">
-	                       			<li v-for="(item,index) in repolist" :key="index">
+	                       			<li v-for="(item,index) in company.reportList" :key="index">
 	                       				<a :style="{'display':editreposhow&&index==repocurrent?'none':''}" class="article" :title="item.repotitle" target="_blank" :href="item.repolink">{{item.repotitle}}</a>
 			                			<a title="编辑报道" v-show="!addreposhow" class="c_edit dn" @click.prevent="editrepo(index)" :style="{'display':editreposhow?'none':'inline'}"></a>
 			                			<form class="reportForm" v-if="repotmp" v-show="index==repocurrent&&editreposhow&&!addreposhow">
@@ -490,7 +490,7 @@
 	                       		</ul>
 		                	
 			                	<!-- 无报道 -->
-		                        <div class="addnew_right reported_info" v-show="repolist.length==0&&!addreposhow">
+		                        <div class="addnew_right reported_info" v-show="company.reportList.length==0&&!addreposhow">
 		                        	展示外界对公司的深度报道，<br>便于求职者了解公司！<br>
 		                            <a class="report_edit" @click.prevent="addrepo">+添加报道</a>
 		                        </div>
@@ -534,7 +534,7 @@
 	export default{
 		name:'myCompany',
 		created(){
-			
+			this.dataInit()
 		},
 		components:{
 			Product,
@@ -547,6 +547,7 @@
 		},
 		data(){
 			return{
+				company:null,
 				isMounted:null,
 				citylist:{
 					hotcities:['北京','上海','广州','深圳','成都','杭州'],
@@ -570,7 +571,6 @@
 				collapsibleshow:false,
 				currentstagelistshow:false,
 				hasIntro:false,
-//				hasmember:false,
 				editstageshow:false,
 				editmembershow:false,
 				detailtmp:null,
@@ -578,63 +578,73 @@
 				stagetmp:null,
 				membertmp:null,
 				repotmp:null,
-				comdetail:{
-					fullname:'公司全名',
-					shortname:'公司简称',
-					feature:'公司特征',
-					labels:['年终分红','五险一金','弹性工作','岗位晋升'],
-					img:'../../../static/images/logo_default.png',
-					city:'上海',
-					field:'移动互联网',
-					scale:'150-500人',
-					comurl:'http://www.baidu.com'
-				},
-				/*comdetail:{
-					city:'上海',
-					field:'移动互联网',
-					scale:'150-500人',
-					comurl:'http://www.baidu.com'
-				},*/
-				stage:{
-					currentstage:'天使轮',
-					org:null
-				},
-				member:{
-					name:null,
-					img:'../../../static/images/leader_default.png',
-					post:null,
-					intro:null,
-				},
-				newmemberimg:'../../../static/images/leader_default.png',
-				repolist:[
-					{
-						repotitle:'随便写1',
-						repolink:'http://www.baidu.com'
+				/*company:{
+					intro:'',
+					companyDetail:{
+						fullname:'公司全名',
+						shortname:'公司简称',
+						feature:'公司特征',
+						labels:['年终分红','五险一金','弹性工作','岗位晋升'],
+						img:'../../../static/images/logo_default.png',
+						city:'上海',
+						field:'移动互联网',
+						scale:'150-500人',
+						comurl:'http://www.baidu.com'
 					},
-					{
-						repotitle:'随便写2',
-						repolink:'http://www.alibaba.com'
-					}
-				],
+					companyStage:{
+						currentstage:'天使轮',
+						org:null
+					},
+					companyMember:{
+						name:null,
+						img:'../../../static/images/leader_default.png',
+						post:null,
+						intro:null,
+					},
+					reportList:[
+						{
+							repotitle:'随便写1',
+							repolink:'http://www.baidu.com'
+						},
+						{
+							repotitle:'随便写2',
+							repolink:'http://www.alibaba.com'
+						}
+					],
+					productList:[
+						{
+							name:'',
+							info:'',
+							img:'../../../../static/images/product_default.png'
+						}
+					],
+				}*/
+				newmemberimg:'../../../static/images/leader_default.png',
 				scalelist:['少于15人','15-50人','50-150人','150-500人','500-2000人','2000人以上'],
 				stagelist:['未融资','天使轮','A轮','B轮','C轮','D轮及以上','上市公司'],
 				scalecurrent:null,
 				stagecurrent:null,
 				repocurrent:null,
 				labelcurrent:null,
-				products:[
-					{
-						name:'',
-						info:'',
-						img:'../../../../static/images/product_default.png'
-					}
-				],
-				intro:'',
 				comintrotmp:'',
 				newlabel:''
 			}
 		},
 		methods:{
+			dataInit(){
+				this.$axios({
+					method:'get',
+					url:'/api/company/getByUserId',
+					params:{
+						userId:this.myUserId
+					}
+				}).then(res => {
+					console.log(res)
+					this.company = res.data.object
+				}).catch(err => {
+					console.log(err)
+				})
+			},
 			mouseonlabel(index){
 				this.labelcurrent = index
 				/*console.log(this.editlabel)
@@ -650,20 +660,32 @@
 				this.vashow=false
 			},
 			addproduct(){
-				this.products.push({
+				this.company.productList.push({
 					name:'',
 					info:'',
 					img:'../../../../static/images/product_default.png'
 				})
 			},
 			handleItemDelete(index){
-				if(index >= 0 && index < this.products.length){
+				if(index >= 0 && index < this.company.productList.length){
 					this.$confirm('是否删除这个产品?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.products.splice(index,1)
+			        	  this.$axios({
+			        	  	method:'get',
+			        	  	url:'/api/companyProduct/delete',
+			        	  	params:{
+			        	  		companyProductId:this.company.productList[index].companyProductId
+			        	  	}
+			        	  }).then(res=>{
+			        	  	console.log(res)
+			        	  	this.dataInit()
+			        	  }).catch(err=>{
+			        	  	console.log(err)
+			        	  })
+			        	  this.company.productList.splice(index,1)
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -675,19 +697,13 @@
 				          });          
 			        })
 				}
-				/*let confirmmsg = confirm("确认删除该公司产品信息？")
-				if(confirmmsg){
-					this.products.splice(index,1)
-				}
-				else{}*/
 			},
 			editIntro(){
-				this.comintrotmp = this.intro
+				this.comintrotmp = this.company.intro
 				this.editintroshow = true
 			},
 			addIntro(){
 				this.editintroshow = true
-//				this.hasIntro = true
 			},
 			saveintro(){
 				var validateScope = 'comintro'
@@ -696,7 +712,20 @@
 //					     	console.log(this.$validator)
 					      	// 保存公司介绍并关闭编辑页面
 					      	this.editintroshow = false
-							this.intro = this.comintrotmp
+							this.company.intro = this.comintrotmp
+							this.$axios({
+								method:'post',
+								url:'/api/company/update',
+								data:this.company,
+								headers:{
+									'Content-Type':'application/json'
+								}
+							}).then(res => {
+								console.log(res)
+								this.dataInit()
+							}).catch(err => {
+								console.log(err)
+							})
 					}
 					else{
 //					     	console.log(this.$validator)
@@ -714,25 +743,34 @@
 			   	})
 			},
 			cancelintro(){
-//				this.hasIntro = false
 				this.editintroshow = false
 			},
 			editdetail(){
 				this.editdetailshow = true
-				this.detailtmp = JSON.parse(JSON.stringify(this.comdetail))
+				this.detailtmp = JSON.parse(JSON.stringify(this.company.companyDetail))
 			},
 			savedetail(){
-//				var _self = this
 				    var validateScope = 'scope1'
 				    this.$validator.validate(validateScope + '.*').then((result) => {
 					     if (result) {
-//					     	console.log(this.$validator)
 					      	// 保存数据
-					      	this.comdetail = JSON.parse(JSON.stringify(this.detailtmp))
+					      	this.company.companyDetail = JSON.parse(JSON.stringify(this.detailtmp))
 							this.editdetailshow = false
+							this.$axios({
+								method:'post',
+								url:'/api/companyDetail/update',
+								data:this.company.companyDetail,
+								headers:{
+									'Content-Type':'application/json'
+								}
+							}).then(res=>{
+								console.log(res)
+								this.dataInit()
+							}).catch(err=>{
+								console.log(err)
+							})
 					     }
 					     else{
-//					     	console.log(this.$validator)
 					     	this.$message({
 								type:'warn',
 								message:'请先完善页面信息！'
@@ -741,18 +779,6 @@
 			   		}).catch(err => {
 			   			console.log(err)
 			   		})
-				/*if(this.$validator.validate('companyshortname') && this.$validator.validate('temptation')){
-					this.comdetail = JSON.parse(JSON.stringify(this.detailtmp))
-					this.editdetailshow = false
-				}
-				else{
-					this.$message({
-						type:'warn',
-						message:'请先完善页面信息！'
-					})
-				}*/
-//				this.comdetail.shortname = this.$refs.editshortname.value
-//				this.comdetail.feature = this.$refs.editfeature.value
 			},
 			canceldetail(){
 				this.editdetailshow = false
@@ -768,7 +794,7 @@
 			},
 			choosescale(index){
 				this.scalecurrent = index
-				this.comdetail.scale = this.scalelist[index]
+				this.company.companyDetail.scale = this.scalelist[index]
 				this.selecttagshow = false
 			},
 			entercollapsible(){
@@ -782,8 +808,21 @@
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					     if (result) {
 //					     	console.log(this.$validator)
-					      	// 保存comdetail数据并关闭编辑页面
+					      	// 保存company.companyDetail数据并关闭编辑页面
 						    this.edittagshow = false
+						    this.$axios({
+								method:'post',
+								url:'/api/companyDetail/update',
+								data:this.company.companyDetail,
+								headers:{
+									'Content-Type':'application/json'
+								}
+							}).then(res=>{
+								console.log(res)
+								this.dataInit()
+							}).catch(err=>{
+								console.log(err)
+							})
 					     }
 					     else{
 //					     	console.log(this.$validator)
@@ -805,8 +844,27 @@
 					     if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存数据
-					      	if(this.labeltmp && this.comdetail.labels.length < 10){
-					      		this.comdetail.labels.push(this.labeltmp)
+					      	if(this.labeltmp && this.company.companyDetail.labelList.length < 10){
+//					      		this.company.companyDetail.labelList.push(this.labeltmp)
+								var label = {
+									label:this.labeltmp
+								}
+					      		this.$axios({
+									method:'post',
+									url:'/api/companyLabel/insert',
+									data:label,
+									params:{
+										companyDetailId:this.company.companyDetail.companyDetailId
+									},
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -833,21 +891,34 @@
 				this.labeltmp = null
 			},
 			pastelabel(){
-				/*if(this.$refs.newlabel.value != null && this.$refs.newlabel.value != ''){
-					this.comdetail.labels.push(this.$refs.newlabel.value)
-					this.$refs.newlabel.value = null
-				}
-				else{
-					alert("请输入标签内容！")
-				}*/
 				var validateScope = 'labelscope'
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					     if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存数据
-					      	if(this.labeltmp && this.comdetail.labels.length < 10){
-					      		this.comdetail.labels.push(this.labeltmp)
-					      		this.labeltmp = null
+					      	if(this.labeltmp && this.company.companyDetail.labelList.length < 10){
+					      		/*this.company.companyDetail.labelList.push(this.labeltmp)
+					      		this.labeltmp = null*/
+					      		var label = {
+									label:this.labeltmp
+								}
+					      		this.$axios({
+									method:'post',
+									url:'/api/companyLabel/insert',
+									data:label,
+									params:{
+										companyDetailId:this.company.companyDetail.companyDetailId
+									},
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+								}).catch(err=>{
+									console.log(err)
+								})
+								this.labeltmp = null
 					      	}
 					      	else{
 					      		this.$message({
@@ -868,13 +939,25 @@
 			   	})
 			},
 			deletelabel(index){
-				if(index >= 0 && index < this.comdetail.labels.length){
+				if(index >= 0 && index < this.company.companyDetail.labelList.length){
 					this.$confirm('是否删除这个标签?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.comdetail.labels.splice(index,1)
+//			        	  this.company.companyDetail.labelList.splice(index,1)
+							this.$axios({
+									method:'get',
+									url:'/api/companyLabel/delete',
+									params:{
+										companyLabelId:this.company.companyDetail.labelList[index].companyLabelId
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+								}).catch(err=>{
+									console.log(err)
+								})
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -886,14 +969,9 @@
 				          });          
 			        })
 				}
-				/*let confirmmsg = confirm("确认删除标签？")
-				if(confirmmsg == true){
-					this.comdetail.labels.splice(index,1)
-				}
-				else{}*/
 			},
 			editstage(){
-				this.stagetmp = JSON.parse(JSON.stringify(this.stage))
+				this.stagetmp = JSON.parse(JSON.stringify(this.company.companyStage))
 				this.editstageshow = true
 			},
 			choosestage(index){
@@ -907,8 +985,24 @@
 					     if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存融资阶段数据并关闭编辑页
-					      	this.stage = JSON.parse(JSON.stringify(this.stagetmp))
-							this.editstageshow = false
+					      	this.company.companyStage = JSON.parse(JSON.stringify(this.stagetmp))
+							this.$axios({
+									method:'post',
+									url:'/api/companyStage/insert',
+									data:this.company.companyStage,
+									headers:{
+										'Content-Type':'application/json'
+									},
+									params:{
+										companyId:this.company.companyId
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editstageshow = false
+								}).catch(err=>{
+									console.log(err)
+								})
 					     }
 					     else{
 //					     	console.log(this.$validator)
@@ -927,9 +1021,25 @@
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.member=null
-			        	  this.membertmp=null
-			        	  this.editmembershow=false
+			        	this.$axios({
+									method:'get',
+									url:'/api/companyMember/delete',
+									/*data:this.company.companyStage,
+									headers:{
+										'Content-Type':'application/json'
+									},*/
+									params:{
+										companyMemberId:this.company.companyMember.companyMemberId
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.membertmp=null
+			        	  			this.editmembershow=false
+								}).catch(err=>{
+									console.log(err)
+								})
+			        	  
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -940,19 +1050,6 @@
 				            message: '已取消删除'
 				          });          
 			        })
-				/*let confirmmsg = confirm("确认删除该创始人资料？")
-				if(confirmmsg){
-					this.member = {
-						name:null,
-						img:'../../../static/images/leader_default.png',
-						post:null,
-						intro:null,
-					}
-//					this.hasmember=false
-					this.editmembershow=false
-				}
-				else{
-				}*/
 			},
 			addcommember(){
 				this.membertmp = {
@@ -964,7 +1061,7 @@
 				this.addmembershow = true
 			},
 			editmember(){
-				this.membertmp = JSON.parse(JSON.stringify(this.member))
+				this.membertmp = JSON.parse(JSON.stringify(this.company.companyMember))
 				this.editmembershow = true
 			},
 			getmemberimg(e){
@@ -974,7 +1071,7 @@
 				let reader = new FileReader()
 				reader.readAsDataURL(files)//这里是关键一步，转换就在这里
 				reader.onloadend = function(){
-					_this.member.img = this.result
+					_this.company.companyMember.img = this.result
 				}
 			},
 			getcomimg(e){
@@ -984,11 +1081,11 @@
 				let reader = new FileReader()
 				reader.readAsDataURL(files)//这里是关键一步，转换就在这里
 				reader.onloadend = function(){
-					_this.comdetail.img = this.result
+					_this.company.companyDetail.img = this.result
 				}
 			},
 			addrepo(){
-				if(this.repolist.length < 5){
+				if(this.company.reportList.length < 5){
 					this.repotmp = {
 						repotitle:null,
 						repolink:null
@@ -1002,23 +1099,40 @@
 				}
 			},
 			editrepo(index){
-				if(index >= 0 && index < this.repolist.length){
-					this.repotmp = JSON.parse(JSON.stringify(this.repolist[index]))
+				if(index >= 0 && index < this.company.reportList.length){
+					this.repotmp = JSON.parse(JSON.stringify(this.company.reportList[index]))
 					this.repocurrent = index
 					this.editreposhow = true
 				}
 			},
 			deleterepo(index){
-				if(index >= 0 && index < this.repolist.length){
+				if(index >= 0 && index < this.company.reportList.length){
 					this.$confirm('是否删除这条新闻报道?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.repolist.splice(index,1)
-			        	  this.repocurrent = null
-			        	  this.editreposhow = false
-			        	  this.addreposhow = false
+//			        	  this.company.reportList.splice(index,1)
+						  this.$axios({
+									method:'get',
+									url:'/api/companyReport/delete',
+									/*data:this.company.companyStage,
+									headers:{
+										'Content-Type':'application/json'
+									},*/
+									params:{
+										companyReportId:this.company.reportList[index].companyReportId
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.repocurrent = null
+			        	  			this.editreposhow = false
+			        	  			this.addreposhow = false
+								}).catch(err=>{
+									console.log(err)
+								})
+			        	  
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -1036,9 +1150,22 @@
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					     if (result) {
 					      	// 保存新闻报道数据并关闭编辑页
-					      	if(index >= 0 && index < this.repolist.length){
-					      		this.repolist[index] = JSON.parse(JSON.stringify(this.repotmp))
-					      		this.editreposhow = false
+					      	if(index >= 0 && index < this.company.reportList.length){
+					      		this.company.reportList[index] = JSON.parse(JSON.stringify(this.repotmp))
+					      		this.$axios({
+									method:'post',
+									url:'/api/companyReport/update',
+									data:this.company.reportList[index],
+									headers:{
+										'Content-Type':'application/json'
+									},
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editreposhow = false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					     }
 					     else{
@@ -1057,10 +1184,26 @@
 				this.$validator.validate(validateScope + '.*').then((result) => {
 					     if (result) {
 					      	// 保存新添加的新闻报道数据并关闭编辑页
-					      	if(this.repolist.length < 3){
+					      	if(this.company.reportList.length < 3){
 					      		if(this.repotmp){
-					      			this.repolist.push(JSON.parse(JSON.stringify(this.repotmp)))
-					      			this.addreposhow = false
+					      			var report = JSON.parse(JSON.stringify(this.repotmp))
+					      			this.$axios({
+										method:'post',
+										url:'/api/companyReport/insert',
+										data:report,
+										headers:{
+											'Content-Type':'application/json'
+										},
+										params:{
+											companyId:this.company.companyId
+										}
+									}).then(res=>{
+										console.log(res)
+										this.dataInit()
+										this.addreposhow = false
+									}).catch(err=>{
+										console.log(err)
+									})
 					      		}
 					      	}
 					      	else{
@@ -1082,19 +1225,30 @@
 			},
 			savenewmember(){
 				//添加新的member和编译保存已有member相同
-				/*this.member.name = this.$refs.newmembername.value
-				this.member.post = this.$refs.newmemberpost.value
-				this.member.intro = this.$refs.newmemberintro.value
-				this.member.img = this.newmemberimg
-				this.newmemberimg = '../../../static/images/leader_default.png'*/
 				var validateScope = 'member'
 				    this.$validator.validate(validateScope + '.*').then((result) => {
 					     if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存member数据并关闭编辑页面
-					      	this.member = JSON.parse(JSON.stringify(this.membertmp))
-							this.addmembershow = false
-							this.editmembershow = false
+					      	this.company.companyMember = JSON.parse(JSON.stringify(this.membertmp))
+					      	this.$axios({
+										method:'post',
+										url:'/api/companyMember/insert',
+										data:this.company.companyMember,
+										headers:{
+											'Content-Type':'application/json'
+										},
+										params:{
+											companyId:this.company.companyId
+										}
+									}).then(res=>{
+										console.log(res)
+										this.dataInit()
+										this.addmembershow = false
+										this.editmembershow = false
+									}).catch(err=>{
+										console.log(err)
+									})
 					     }
 					     else{
 //					     	console.log(this.$validator)
@@ -1131,7 +1285,7 @@
 				body.scrollIntoView({behavior:'smooth'})
 			},
 			pickcity(item){
-				this.comdetail.city = item
+				this.company.companyDetail.city = item
 				this.cityboxshow = false
 			},
 			hascomintro(){
@@ -1143,19 +1297,10 @@
 				}
 			}
 		},
-		watch:{
-			/*comintro(){
-				if(this.comintro === ''){
-					this.hasIntro = false
-				}
-			},
-			member(){
-				if(this.member == null){
-//					this.hasmember = false
-				}
-			},*/
-		},
 		computed:{
+			myUserId(){
+				return this.$store.state.userId()
+			}
 		}
 	}
 </script>

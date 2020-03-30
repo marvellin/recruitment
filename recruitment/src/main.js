@@ -41,11 +41,32 @@ Vue.use(VueLazyLoad,{
 //	error:'../static/images/ajax-loader.gif',
 	loading:'../static/images/ajax-loader.gif'
 })
+
+axios.interceptors.response.use(response => {
+//	console.log('enter interceptors response')
+	if(response.status===200){
+		return response
+	}
+	else{
+		router.push({
+			path:'*'
+		})
+		return response
+	}
+},error => {
+//	console.log('enter interceptors error')
+	router.push({
+		path:'*'
+	})
+	return error
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   axios,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -12,7 +12,7 @@
 						<router-link :to="item.path">{{item.name}}</router-link>
 					</li>
 				</ul>
-				<ul v-if="!isLogined&&isCompany" class="loginTop">
+				<ul v-if="!isLogined" class="loginTop">
 					<li>
 						<router-link to="/login">登陆</router-link>
 					</li>
@@ -21,9 +21,9 @@
 						<router-link to='/register'>注册</router-link>
 					</li>
 				</ul>
-				<dl v-if="isCompany" class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
+				<dl v-if="isLogined&&isCompany" class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
 					<dt>
-						<span>test&nbsp;</span>
+						<span>我的菜单&nbsp;</span>
 						<span class="red dn" id="noticeDot-1"></span>
 						<i></i>
 					</dt>
@@ -32,11 +32,11 @@
 					<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/mycompany">我的公司主页</router-link></dd>
 					<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要找工作</router-link></dd>-->
 					<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">账号设置</router-link></dd>-->
-					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
+					<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout" @click="logout"><a @click.prevent="logout">退出</a></dd>
 				</dl>
-				<dl v-if="!isCompany" class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
+				<dl v-if="isLogined&&!isCompany" class="collapsible_menu" style="width: 165px;" :class="collapsibleshow?'expend':''" @mouseenter="entercollapsible" @mouseleave="leavecollapsible">
 						<dt>
-							<span>person&nbsp;</span>
+							<span>我的菜单&nbsp;</span>
 							<span class="red dn" id="noticeDot-1"></span>
 							<i></i>
 						</dt>
@@ -45,7 +45,7 @@
 						<dd :style="{'display':collapsibleshow?'block':'none'}" class="btm"><router-link to="/delivery">我的投递</router-link></dd>
 						<!--<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="">我要招人</router-link></dd>-->
 						<dd :style="{'display':collapsibleshow?'block':'none'}"><router-link to="/setting">账号设置</router-link></dd>
-						<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout"><router-link to="">退出</router-link></dd>
+						<dd :style="{'display':collapsibleshow?'block':'none'}" class="logout" ><a @click.prevent="logout">退出</a></dd>
 				</dl>
 			</div>
 		</div>
@@ -56,27 +56,30 @@
 		name:'headert',
 		props:{
 			navlist:{},
-			isCompany:{//用于决定用户类型
+			/*isCompany:{//用于决定用户类型
 				type:Boolean,
 				default:true
-			}
+			}*/
 		},
 		computed:{
 			getpath(){
 				return this.$route.path
 			},
 			isLogined(){
-				return false
+				return eval(this.$store.state.isLogined())
+			},
+			isCompany(){
+				return eval(this.$store.state.isCompany())
 			}
 		},
 		created(){
-			if(this.navlist == '0'){//代表用户未登录时
+			if(!this.isLogined){//代表用户未登录时
 				this.varnavlist = [{path:'/myresume',name:'我的简历'},{path:'/management/postposition',name:'发布职位'}]
 			}
-			else if(this.navlist == '1'){//代表个人用户页面
-				this.varnavlist = [{path:'/myresume',name:'我的简历'}]
+			else if(this.isLogined&&!this.isCompany){//代表个人用户页面
+				this.varnavlist = [{path:'/myresume',name:'我的简历'},{path:'/delivery',name:'我的投递'}]
 			}
-			else if(this.navlist == '2'){//代表公司用户
+			else if(this.isLogined&&this.isCompany){//代表公司用户
 				this.varnavlist = [{path:'/management',name:'简历管理'},{path:'/management/postposition',name:'发布职位'}]
 			}
 		},
@@ -96,9 +99,9 @@
 						name:'公司'
 					},
 					{
-						path:'',
-						name:'论坛'
-					},
+						path:'/positionlist',
+						name:'职位'
+					}
 				]
 			}
 		},
@@ -108,6 +111,10 @@
 			},
 			leavecollapsible(){
 				this.collapsibleshow = false
+			},
+			logout(){
+				this.$store.commit('clear')
+				this.$router.push({path:'/login'})
 			}
 		}
 	}

@@ -14,13 +14,13 @@
 		                    	<div class="delivery_tabs">
 		                    		<ul class="reset">
 		                    			<li :class="[currentroute === 'all'?'current':'']">
-		                    				<router-link to="/delivery/all">全部</router-link>
+		                    				<router-link :to="{path:'/delivery/all',query:{type:'getListByPersonId'}}">全部</router-link>
 		                    			</li>
 		                    			<li :class="[currentroute === 'interview'?'current':'']">
-		                    				<router-link to="/delivery/interview">邀请面试</router-link>
+		                    				<router-link :to="{path:'/delivery/interview',query:{type:'getInteviewDeliveryListBypersonId'}}">邀请面试</router-link>
 		                    			</li>
 		                    			<li :class="[currentroute === 'improper'?'current':'']">
-		                    				<router-link style="border-right: none;" to="/delivery/improper">不合适</router-link>
+		                    				<router-link style="border-right: none;" :to="{path:'/delivery/improper',query:{type:'getUnsuitableDeliveryListBypersonId'}}">不合适</router-link>
 		                    			</li>
 		                    		</ul>
 		                    	</div>
@@ -31,13 +31,13 @@
 		            <div class="content_r">
 		            	<div class="mycenterR" id="myInfo">
 		            		<h2>我的信息</h2>
-		            		<router-link to="">我收藏的职位</router-link>
+		            		<router-link :to="{path:'/collection',query:{personId:myPersonId}}">我收藏的职位</router-link>
 		            		<br>
-		            		<router-link to="" target="_blank">我订阅的职位<span id="noticeNoPage" class="red dn">&nbsp;(0)</span></router-link>
+		            		<!--<router-link to="" target="_blank">我订阅的职位<span id="noticeNoPage" class="red dn">&nbsp;(0)</span></router-link>
+		            		<br>-->
+		            		<router-link :to="{path:'/delivery',query:{type:'getListByPersonId'}}">我投递的职位</router-link>
 		            		<br>
-		            		<router-link target="_blank" to="">我投递的职位</router-link>
-		            		<br>
-		            		<router-link to="">我的简历</router-link>
+		            		<router-link :to="{path:'/myresume'}">我的简历</router-link>
 		            	</div><!--end #myInfo-->
 		            	
 		            </div>
@@ -74,7 +74,13 @@
 		computed:{
 			currentroute(){
 				return this.$route.name
+			},
+			myPersonId(){
+				return this.$store.state.person.personId()
 			}
+		},
+		created(){
+			
 		}
 	}
 </script>

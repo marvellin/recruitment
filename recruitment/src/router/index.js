@@ -42,61 +42,133 @@ import resumesetting from '@/components/setting/resumesetting/resumesetting'
 import attachment from '@/components/setting/resumesetting/attachment'
 import online from '@/components/setting/resumesetting/online'
 import infosetting from '@/components/setting/infosetting/infosetting'
+import errorpage from '@/components/error/error'
 
+import ElementUI from 'element-ui'
+import {Message} from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import store from '../vuex/vuex'
 Vue.use(Router)
+Vue.use(ElementUI)
 
-export default new Router({
+
+const router = new Router({
 	mode:"history",
   routes: [
+  {
+  	path:'*',
+  	name:'error',
+  	component:errorpage
+  },
     {
       path: '/',
       redirect:'/home',
-      component: home
+      component: home,
+      meta:{
+      	title:'全国招聘第一站',
+//    	requiresLogin:true,
+//    	requiresUser:true,
+//    	requiresCompany:true
+      }
     },
     {
     	path:'/home',
     	name:'home',
-    	component:home
+    	component:home,
+    	meta:{
+	      	title:'全国招聘第一站',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/login',
     	name:'login',
-    	component:login
+    	component:login,
+    	meta:{
+	      	title:'登陆',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/register',
     	name:'register',
-    	component:register
+    	component:register,
+    	meta:{
+	      	title:'注册',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/mycompany',
     	name:'mycompany',
     	component:myCompany,
+    	meta:{
+	      	title:'我的公司',
+	      	requiresLogin:true,
+//	      	requiresUser:true,
+	      	requiresCompany:true
+	      }
     },
     {
     	path:'/companylist',
     	name:'companylist',
-    	component:companylist
+    	component:companylist,
+    	meta:{
+	      	title:'公司列表',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
-    {
+    /*{
     	path:'/hotlist',
     	name:'hotlist',
-    	component:hotlist
-    },
+    	component:hotlist,
+    	meta:{
+	      	title:'全国招聘第一站',
+	      	requiresLogin:true,
+	      	requiresUser:true,
+	      	requiresCompany:true
+	      }
+    },*/
     {
     	path:'/resumepreview',
     	name:'resumepreview',
     	component:preview,
+    	meta:{
+	      	title:'预览简历',
+	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/myresume',
     	name:'myresume',
     	component:myresume,
+    	meta:{
+	      	title:'我的简历',
+	      	requiresLogin:true,
+	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/management',
     	name:'management',
     	component:management,
+    	meta:{
+	      	title:'公司管理',
+	      	requiresLogin:true,
+//	      	requiresUser:true,
+	      	requiresCompany:true
+	    },
     	redirect:'/management/pendingresume',
     	children:[
     		{path:'expiredposition',name:'expiredposition',component:expiredposition},
@@ -127,22 +199,46 @@ export default new Router({
     {
     	path:'/positiondetail',
     	name:'positiondetail',
-    	component:positiondetail
+    	component:positiondetail,
+    	meta:{
+	      	title:'职位详情',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	    }
     },
     {
     	path:'/collection',
     	name:'collection',
-    	component:collection
+    	component:collection,
+    	meta:{
+	      	title:'我的收藏',
+	      	requiresLogin:true,
+	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/positionlist',
     	name:'positionlist',
-    	component:positionlist
+    	component:positionlist,
+    	meta:{
+	      	title:'职位列表',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	    }
     },
     {
     	path:'/companydetail',
     	name:'companydetail',
     	component:companydetail,
+    	meta:{
+	      	title:'公司详情',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	     },
     	redirect:"/companydetail/company_home",
     	children:[
     		{
@@ -175,6 +271,12 @@ export default new Router({
     	path:'/delivery',
     	name:'delivery',
     	component:delivery,
+    	meta:{
+	      	title:'我的投递',
+	      	requiresLogin:true,
+	      	requiresUser:true,
+//	      	requiresCompany:true
+	    },
     	redirect:'/delivery/all',
     	children:[
     		{
@@ -197,22 +299,46 @@ export default new Router({
     {
     	path:'/auth',
     	name:'auth',
-    	component:auth
+    	component:auth,
+    	meta:{
+	      	title:'公司认证',
+	      	requiresLogin:true,
+//	      	requiresUser:true,
+	      	requiresCompany:true
+	    }
     },
     {
     	path:'/authsuccess',
     	name:'authsuccess',
-    	component:authsuccess
+    	component:authsuccess,
+    	meta:{
+	      	title:'公司认证',
+	      	requiresLogin:true,
+//	      	requiresUser:true,
+	      	requiresCompany:true
+	      }
     },
     {
     	path:'/about',
     	name:'about',
-    	component:about
+    	component:about,
+    	meta:{
+	      	title:'关于我们',
+//	      	requiresLogin:true,
+//	      	requiresUser:true,
+//	      	requiresCompany:true
+	      }
     },
     {
     	path:'/companyinfofillin',
     	name:'companyinfofillin',
     	component:companyinfofillin,
+    	meta:{
+	      	title:'完善公司信息',
+	      	requiresLogin:true,
+//	      	requiresUser:true,
+	      	requiresCompany:true
+	     },
     	redirect:'/companyinfofillin/step1',
     	children:[
 	    	{
@@ -251,6 +377,12 @@ export default new Router({
     	path:'/setting',
     	name:'setting',
     	component:setting,
+    	meta:{
+	      	title:'我的设置',
+	      	requiresLogin:true,
+	      	requiresUser:true,
+//	      	requiresCompany:true
+	     },
     	redirect:'/setting/pwdsetting',
     	children:[
     		{
@@ -285,3 +417,62 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to,from,next) => {
+	let isCompany = eval(store.state.isCompany())
+	let isLogined = eval(store.state.isLogined())
+	if(to.path === '/login' && isLogined){
+		next({
+			path:'/'
+		})
+	}
+	else if(to.matched.some(record => record.meta.requiresLogin) && !isLogined){
+		next({
+			path:'/login'
+		})
+		Message({
+			type:'warn',
+			message:"请先登陆！",
+			duration:1000
+		})
+	}
+	else{
+		if(to.matched.some(record => record.meta.requiresCompany)){
+			if(!isCompany){
+				next({
+					path:'/error'
+				})
+				Message({
+					type:'warn',
+					message:"找不到页面！",duration:1000
+				})
+			}
+			else if(isCompany){
+				next()
+			}
+		}
+		if(to.matched.some(record => record.meta.requiresUser)){
+			if(isCompany){
+				next({
+					path:'/error'
+				})
+				Message({
+					type:'warn',
+					message:"找不到页面！",
+					duration:1000
+				})
+			}
+			else if(!isCompany){
+				next()
+			}
+		}
+		else{
+			next()
+		}
+	}
+
+	document.title = to.matched[0].meta.title
+//	next()
+})
+
+export default router
