@@ -5,18 +5,17 @@
 			
 			<headert :navlist='1' :isCompany="false"></headert>
 			<div id="container">       
-	  			<div class="clearfix">
+	  			<div class="clearfix" v-if="resume">
 	            	<div class="content_l">
 		            	<div class="fl" id="resume_name">
 			            	<div class="nameShow fl" :class="[renameshow?'dn':'']">
-			            		<h1 :title="resume.name">{{resume.name}}</h1>
+			            		<h1 :title="resume.resumename">{{resume.resumename}}</h1>
 			            		<span class="rename" @click="rename">重命名</span> | 
 			            		<!--<a @click.prevent="topreview" target="_blank" >预览</a>-->
-			            		<router-link :to="{name:'resumepreview'}" @click.native="topreview" target="_blank">预览</router-link>
+			            		<a @click="topreview" target="_blank">预览</a>
 		            		</div>
 		            		<form class="fl" :class="[renameshow?'':'dn']" id="resumeNameForm">
-		            			<input data-vv-scope="resumename" v-validate="'required|max:10'" type="text" ref="newresumename" v-model="resumenametmp" name="resumeName" class="nameEdit c9">	
-		            			<!--<el-alert style="width: auto;height: auto;" :closable="false" :title="errors.first('resumename.resumeName')" type="error" v-show="errors.has('resumename.resumeName')"></el-alert>-->
+		            			<input data-vv-scope="resumename" v-validate="'required|max:10'" type="text" ref="newresumename" v-model="resumenametmp" name="resumeName" class="nameEdit c9">
 		            			
 		            			<input type="button" value="保存" @click="saveresumename"> |
 		            			<input type="button" value="取消" @click="cancelrename"/>
@@ -24,8 +23,7 @@
 		            			<!--<a target="_blank" href="h/resume/preview.html">预览</a>-->
 		            		</form>
 		            	</div><!--end #resume_name-->
-		            	<!--<div class="fr c5" id="lastChangedTime">最后一次更新：<span>2014-07-01 15:14 </span></div><!--end #lastChangedTime-->
-		            	
+		      
 		            	<div id="resumeScore">
 		            		<div class="score fl">
 		            			<!--<canvas height="120" width="120" id="doughnutChartCanvas" style="width: 120px; height: 120px;"></canvas>-->
@@ -44,13 +42,14 @@
 		            		<span class="c_edit" v-show="!editbasicshow" @click="editbasicinfo"></span>
 		            		<div class="basicShow" v-show="!editbasicshow" style="height: 100px;">
 		            			<span>
-			            			{{resume.basicinfo.username}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.basicinfo.degree}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.basicinfo.workyear}}工作经验<br>
+			            			{{resume.basicinfo.username}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.basicinfo.gender}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.basicinfo.degree}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.basicinfo.workyear}}工作经验<br>
 			            			{{resume.basicinfo.tel}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.basicinfo.email}}<br>
 			            			{{resume.basicinfo.currentstate}}
 		            			</span>
 		            			<div class="m_portrait">
 			                    	<div></div>
-			                    	<img width="120" height="120" alt="jason" :src="resume.basicinfo.img">
+			                    	<img v-if="resume.basicinfo.personImg&&resume.basicinfo.personImg.img" width="120" height="120" :alt="resume.basicinfo.username" :src="resume.basicinfo.personImg.img">
+			                    	<img v-else width="120" height="120" :alt="resume.basicinfo.username" src="../../../static/images/leader_default.png">
 			                    </div>
 		            		</div><!--end .basicShow-->
 		
@@ -169,7 +168,8 @@
 								      	<span>上传自己的头像</span>
 								  	</div>
 								  	<div class="portraitShow " id="portraitShow">
-								    	<img width="120" height="120" :src="basicinfotmp.img">
+								    	<img v-if="basicinfotmp.personImg&&basicinfotmp.personImg.img" width="120" height="120" :src="basicinfotmp.personImg.img">
+								    	<img v-else width="120" height="120" src="../../../static/images/default_headpic.png">
 								    	<span>更换头像</span>
 								  	</div>
 								  	<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
@@ -181,23 +181,16 @@
 								  	<span style="display:none;" id="headPic_error" class="error"></span>
 								</div><!--end .new_portrait-->
 		            		</div><!--end .basicEdit-->
-		            		<!--<input type="hidden" id="nameVal" value="jason">
-		            		<input type="hidden" id="genderVal" value="男">
-		            		<input type="hidden" id="topDegreeVal" value="大专">
-		            		<input type="hidden" id="workyearVal" value="3年">
-		            		<input type="hidden" id="currentStateVal" value="">
-		            		<input type="hidden" id="emailVal" value="jason@qq.com">
-		            		<input type="hidden" id="telVal" value="18644444444">
-		            		<input type="hidden" id="pageType" value="1">--> 
+		            		
 		            	</div><!--end #basicInfo-->
 		
 		            	<div class="profile_box" id="expectJob">
 		            		<h2>期望工作</h2>
-		            		<span class="c_edit" @click="editexpectjob" v-show="resume.expectjob!=null" :class="[editexpectjobshow?'dn':'']"></span>
-		            		<div class="expectShow" :class="[editexpectjobshow?'dn':'']" v-if="resume.expectjob!=null">
+		            		<span class="c_edit" @click="editexpectjob" v-show="resume.expectJob!=null" :class="[editexpectjobshow?'dn':'']"></span>
+		            		<div class="expectShow" :class="[editexpectjobshow?'dn':'']" v-if="resume.expectJob!=null">
 		            		    <span>
-		            		    	{{resume.expectjob.post}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.expectjob.salary}}<br>
-		            		    	{{resume.expectjob.city}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.expectjob.type}}<br>
+		            		    	{{resume.expectJob.post}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.expectJob.salary}}<br>
+		            		    	{{resume.expectJob.city}}&nbsp;&nbsp;|&nbsp;&nbsp;{{resume.expectJob.type}}<br>
 		            		    </span>
 		            		</div><!--end .expectShow-->
 		            		<div class="expectEdit" :class="[editexpectjobshow?'':'dn']" v-if="expectjobtmp!=null">
@@ -356,7 +349,7 @@
 			            			</table>
 		            			</form><!--end #expectForm-->
 		            		</div><!--end .expectEdit-->
-		            		<div class="expectAdd pAdd" v-show="resume.expectjob==null&&!editexpectjobshow"  @click="addexpectjob"><!--v-show="!hasexpectjob&&!editexpectjobshow"-->
+		            		<div class="expectAdd pAdd" v-show="resume.expectJob==null&&!editexpectjobshow"  @click="addexpectjob"><!--v-show="!hasexpectjob&&!editexpectjobshow"-->
 		            			填写准确的期望工作能大大提高求职成功率哦…<br>
 								快来添加期望工作吧！
 								<span>添加期望工作</span>
@@ -371,10 +364,10 @@
 		            	 			（投递简历时必填）
 		            			</span>
 		            		</h2>
-		            		<span class="c_add" @click="addexperience" title="添加工作经历" v-show="resume.experiencelist.length!=0&&!addexperienceshow&&!editexperienceshow"></span> <!--:class="[editexperienceshow?'dn':'']"-->
-		            		<div class="experienceShow" v-if="resume.experiencelist.length!=0"><!--:class="[editexperienceshow?'dn':'']"-->
+		            		<span class="c_add" @click="addexperience" title="添加工作经历" v-show="resume.workExperienceList.length!=0&&!addexperienceshow&&!editexperienceshow"></span> <!--:class="[editexperienceshow?'dn':'']"-->
+		            		<div class="experienceShow" v-if="resume.workExperienceList.length!=0"><!--:class="[editexperienceshow?'dn':'']"-->
 		            		    <ul class="wlist clearfix">
-		            				<li v-for="(item,index) in resume.experiencelist" :key='index'>
+		            				<li v-for="(item,index) in resume.workExperienceList" :key='index'>
 		            					<a class="c_edit fr" v-show="(index!=currentexperience||!editexperienceshow)&&!addexperienceshow" @click="editexperience(index)"></a>
 		            					<div v-show="!editexperienceshow||index!=currentexperience">
 		            		    			<h3>{{item.post}}</h3><h4>{{item.comname}}</h4>
@@ -489,7 +482,7 @@
 			            			</table>
 		            			</form><!--end .experienceForm-->
 		            		</div><!--end .experienceEdit-->
-		            		<div class="experienceAdd pAdd" v-show="resume.experiencelist.length==0&&!addexperienceshow" @click="addexperience">
+		            		<div class="experienceAdd pAdd" v-show="resume.workExperienceList.length==0&&!addexperienceshow" @click="addexperience">
 		            		        工作经历最能体现自己的工作能力,<br>
 		            		        来展示你的工作经历吧！
 								且完善后才可投递简历哦！
@@ -499,10 +492,10 @@
 					
 		            	<div class="profile_box" id="projectExperience">
 		            		<h2>项目经验</h2>
-		            		<span class="c_add" style="position: absolute;" @click="addproject" title="添加项目经历" v-show="resume.projectlist.length!=0&&!addprojectshow&&!editprojectshow"></span>
-		            		<div class="projectShow" v-if="resume.projectlist.length!=0">
+		            		<span class="c_add" style="position: absolute;" @click="addproject" title="添加项目经历" v-show="resume.projectExperienceList.length!=0&&!addprojectshow&&!editprojectshow"></span>
+		            		<div class="projectShow" v-if="resume.projectExperienceList.length!=0">
 		            		    <ul class="plist clearfix">
-		            		    	<li v-for="(item,index) in resume.projectlist" :key='index'>
+		            		    	<li v-for="(item,index) in resume.projectExperienceList" :key='index'>
 		            		    		<a class="c_edit fr" style="position: relative;" v-show="(index!=currentproject||!editprojectshow)&&!addprojectshow" @click="editproject(index)"></a>
 		            		    		
 		            		    		<div v-show="!editprojectshow||index!=currentproject" style="margin-left: 30px;">
@@ -631,7 +624,7 @@
 			            			</tbody></table>
 		            			</form><!--end .projectForm-->
 		            		</div><!--end .projectEdit-->
-		            		<div class="projectAdd pAdd" v-show="resume.projectlist.length==0&&!addprojectshow" @click="addproject">
+		            		<div class="projectAdd pAdd" v-show="resume.projectExperienceList.length==0&&!addprojectshow" @click="addproject">
 		            		        项目经验是用人单位衡量人才能力的重要指标哦！<br>
 								来说说让你难忘的项目吧！
 								<span>添加项目经验</span>
@@ -640,10 +633,10 @@
 		
 		            	<div class="profile_box" id="educationalBackground">
 		            		<h2>教育背景<span>（投递简历时必填）</span></h2>
-		            		<span class="c_add" @click="addeducation" title="添加教育经历" v-if="resume.educationlist.length!=0&&!addedushow&&!editedushow"></span>
-		            		<div class="educationalShow" v-if="resume.educationlist.length!=0">
+		            		<span class="c_add" @click="addeducation" title="添加教育经历" v-if="resume.educationList.length!=0&&!addedushow&&!editedushow"></span>
+		            		<div class="educationalShow" v-if="resume.educationList.length!=0">
 		            			<ul class="elist clearfix">
-		            				<li v-for="(item,index) in resume.educationlist" :key='index'>
+		            				<li v-for="(item,index) in resume.educationList" :key='index'>
 		            					<a class="c_edit fr" v-show="(index!=currenteducation||!editedushow)&&!addedushow" @click="editeducation(index)"></a>
 		            					<div v-show="!editedushow||index!=currenteducation">
 		            		    			<h3>{{item.school}}&nbsp;&nbsp;|&nbsp;&nbsp;{{item.degree}}</h3>
@@ -809,7 +802,7 @@
 			            			</tbody></table>
 		            			</form><!--end .educationalForm-->
 		            		</div><!--end .educationalEdit-->
-		            		<div class="educationalAdd pAdd" v-if="resume.educationlist.length==0&&!addedushow" @click="addeducation">
+		            		<div class="educationalAdd pAdd" v-if="resume.educationList.length==0&&!addedushow" @click="addeducation">
 		            		        教育背景可以充分体现你的学习和专业能力，<br>
 								且完善后才可投递简历哦！
 								<span>添加教育经历</span>
@@ -854,14 +847,14 @@
 		            	<div class="mycenterR" id="myInfo">
 		            		<h2>我的信息</h2>
 		            		<!--<a target="_blank" href="collections.html">我收藏的职位</a>-->
-		            		<router-link to="" target="_blank">我收藏的职位</router-link>
+		            		<router-link to="/collection" target="_blank">我收藏的职位</router-link>
 		            		<br>
 		            		<!--<a target="_blank" href="subscribe.html">我订阅的职位</a>-->
-		            		<router-link to="" target="_blank">我订阅的职位</router-link>
+		            		<!--<router-link to="" target="_blank">我订阅的职位</router-link>
+		            		<br />-->
+		            		<router-link to="/delivery" target="_blank">我投递的职位<!--<span id="noticeNoPage" class="red dn">&nbsp;(0)</span>--></router-link>
 		            		<br />
-		            		<router-link to="" target="_blank">我投递的职位<!--<span id="noticeNoPage" class="red dn">&nbsp;(0)</span>--></router-link>
-		            		<br />
-		            		<router-link to="">我的简历</router-link>
+		            		<router-link to="/myresume">我的简历</router-link>
 		            	</div><!--end #myInfo-->
 		
 						<div class="mycenterR" id="myResume">
@@ -871,10 +864,10 @@
 		            				上传附件简历
 		            			</a>
 		            		</h2>
-		            		<div class="resumeUploadDiv" v-show="resume.resumefilelist.length==0">
+		            		<div class="resumeUploadDiv" v-if="!resume.resumefilelist||resume.resumefilelist.length==0">
 			            		暂无附件简历
 			            	</div>
-			            	<div class="resumefileDiv" v-show="resume.resumefilelist.length!=0">
+			            	<div class="resumefileDiv" v-if="resume.resumefilelist&&resume.resumefilelist.length!=0">
 			            		<ul>
 			            			<li v-for="(item,index) in resume.resumefilelist" :key='index'>
 			            				<a :href="item" :download="item.name">{{item.name}}</a>
@@ -1031,22 +1024,11 @@
 			        </tbody></table>
 			    </div><!--/#deliverResumeConfirm--> 
 				</div>
-				<!--<div class="popup" id="uploadFile">
-					<div class="cloud">
-						<img width="134" height="134" src="">
-						<a class="close" href="javascript:;"></a>
-					</div>
-				</div>-->
+				
 				<div class="clear"></div>
-				<!--<input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken">-->
-		   	 	<!--<a rel="nofollow" @click.prevent="toTop" title="回到顶部" id="backtop" style="display: inline;"></a>-->
 		   	 	<toTop></toTop>
 		    </div><!-- end #container -->
 		</div>
-		<!--<div id="footer">
-			<div class="wrapper">
-			</div>
-		</div>-->
 		<footert></footert>
 		<div id="cboxOverlay" :style="{'display':uploadboxshow?'block':'none','opacity':uploadboxshow?'0.9':'1','cursor':uploadboxshow?'pointer':'auto'}" style="visibility: visible;"></div>
 		<div id="colorbox" class="" role="dialog" tabindex="-1" :style="{'display':uploadboxshow?'block':'none'}" style="visibility: visible;top: 307px;left: 370.8px;position: absolute;width: 528px;height: 308px;opacity: 1;cursor: suto;">
@@ -1123,6 +1105,8 @@
 //			console.log('bc' + JSON.stringify(this.resume))
 		},
 		created(){
+			//获取简历
+			this.dataInit()
 //			sessionStorage.removeItem('myresume')
 //			console.log('c' + JSON.stringify(this.resume))
 			/*if(sessionStorage.getItem('myresume') != null){
@@ -1177,7 +1161,8 @@
 				editdescriptionshow:false,
 				uploadboxshow:false,
 				resumenametmp:null,
-				resume:{
+				resume:null,
+				/*resume:{
 					name:'person的简历',
 					basicinfo:{
 						username:'person',
@@ -1195,7 +1180,7 @@
 					educationlist:[],
 					resumefilelist:[],
 					selfdescription:null,
-				},
+				},*/
 				watcher:[false,false,false,false,false],
 				degreelist:['大专','本科','硕士','博士','其他'],
 				workyearlist:['应届毕业生','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年','10年以上'],
@@ -1268,14 +1253,16 @@
 			}
 		},
 		beforeMount(){
-			this.initchartdata()
-//			console.log('bm' + JSON.stringify(this.resume))
+//			this.initchartdata()
 		},
 		mounted(){
 //			console.log('m' + JSON.stringify(this.resume))
 //			console.log(this.resume.educationlist[0].school)
 		},
 		computed:{
+			myPersonId(){
+				return this.$store.state.person.personId()
+			},
 			lastlength_des(){
 				return 500-this.descriptiontmp.length
 			},
@@ -1291,8 +1278,48 @@
 			}
 		},
 		methods:{
-			saveresume(){
+			dataInit(){
 				this.$axios({
+					method:'get',
+					url:'/api/resume/getByPersonId',
+					params:{
+						personId:this.myPersonId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.resume = res.data.object
+					this.initchartdata()
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			saveresume(){
+				/*this.$axios({
+					method:'get',
+					url:'/api/',
+					params:{
+						
+					}
+				}).then(res=>{
+					console.log(res)
+					this.dataInit()
+				}).catch(err=>{
+					console.log(err)
+				})*/
+				this.$axios({
+					method:'post',
+					url:'/api/resume/update',
+					data:this.resume,
+					headers:{
+						'Content-Type':'application/json'
+					}
+				}).then(res=>{
+					console.log(res)
+					this.dataInit()
+				}).catch(err=>{
+					console.log(err)
+				})
+				/*this.$axios({
 					method:"post",
 					url:"http://127.0.0.1:3000/resume",
 					data:this.resume
@@ -1305,38 +1332,47 @@
 						type:"warn",
 						message:"保存失败！"
 					})
-				})
+				})*/
 			},
 			chartdata_inc(index){
 				this.chartdata.rows[0].precent += index
 				this.chartdata.rows[1].precent -= index
+				if(this.chartdata.rows[0].precent>=100){
+					this.chartdata.rows[0].precent = 100
+				}
+				if(this.chartdata.rows[1].precent<=0){
+					this.chartdata.rows[1].precent = 0
+				}
 			},
 			chartdata_dec(index){
 				this.chartdata.rows[0].precent -= index
 				this.chartdata.rows[1].precent += index
+				if(this.chartdata.rows[0].precent>=100){
+					this.chartdata.rows[0].precent = 100
+				}
+				if(this.chartdata.rows[1].precent<=0){
+					this.chartdata.rows[1].precent = 0
+				}
 			},
 			initchartdata(){
-//				console.log('inside init')
-//				console.log(this.chartdata.rows[0].precent)
 				if(this.resume.basicinfo !== undefined && this.resume.basicinfo !== null){
 					this.chartdata_inc(15)
 				}
 				if(this.resume.expectJob !== undefined && this.resume.expectJob !== null){
 					this.chartdata_inc(20)
 				}
-				if(this.resume.experiencelist !== undefined && this.resume.experiencelist !== null && this.resume.experiencelist.length !== 0){
+				if(this.resume.workExperienceList !== undefined && this.resume.workExperienceList !== null && this.resume.workExperienceList.length !== 0){
 					this.chartdata_inc(30)
 				}
-				if(this.resume.projectlist !== undefined && this.resume.projectlist !== null && this.resume.projectlist.length !== 0){
+				if(this.resume.projectExperienceList !== undefined && this.resume.projectExperienceList !== null && this.resume.projectExperienceList.length !== 0){
 					this.chartdata_inc(20)
 				}
-				if(this.resume.educationlist !== undefined && this.resume.educationlist !== null && this.resume.educationlist.length !== 0){
+				if(this.resume.educationList !== undefined && this.resume.educationList !== null && this.resume.educationList.length !== 0){
 					this.chartdata_inc(10)
 				}
 				if(this.resume.selfdescription !== undefined && this.resume.selfdescription !== null && this.resume.selfdescription !== ''){
 					this.chartdata_inc(5)
 				}
-//				console.log(this.chartdata.rows[0].precent)
 			},
 			entercollapsible(){
 				this.collapsibleshow = true
@@ -1345,7 +1381,7 @@
 				this.collapsibleshow = false
 			},
 			rename(){
-				this.resumenametmp = this.resume.name
+				this.resumenametmp = this.resume.resumename
 				this.renameshow = true
 			},
 			getresumeimg(e){
@@ -1368,8 +1404,21 @@
 //					     	console.log(this.$validator)
 					      	// 保存简历新名称并关闭编辑页面
 					      	if(this.resumenametmp){
-					      		this.resume.name = this.resumenametmp
-								this.renameshow = false
+					      		this.resume.resumename = this.resumenametmp
+								this.$axios({
+									method:'post',
+									url:'/api/resume/update',
+									data:this.resume,
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.renameshow = false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1417,7 +1466,20 @@
 					      	// 保存个人基本信息并关闭编辑页面
 					      	if(this.basicinfotmp){
 					      		this.resume.basicinfo = JSON.parse(JSON.stringify(this.basicinfotmp))
-								this.editbasicshow = false
+								this.$axios({
+									method:'post',
+									url:'/api/personDetail/update',
+									data:this.resume.basicinfo,
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editbasicshow = false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1471,7 +1533,7 @@
 				this.editexpectjobshow=true
 			},
 			editexpectjob(){
-				this.expectjobtmp = JSON.parse(JSON.stringify(this.resume.expectjob))
+				this.expectjobtmp = JSON.parse(JSON.stringify(this.resume.expectJob))
 				this.editexpectjobshow=true
 			},
 			pickcity(item){
@@ -1489,8 +1551,24 @@
 //					     	console.log(this.$validator)
 					      	// 保存期望工作信息并关闭编辑页面
 					      	if(this.expectjobtmp){
-					      		this.resume.expectjob = JSON.parse(JSON.stringify(this.expectjobtmp))
-								this.editexpectjobshow=false
+					      		this.resume.expectJob = JSON.parse(JSON.stringify(this.expectjobtmp))
+								this.$axios({
+									method:'post',
+									url:'/api/expectJob/insert',
+									data:this.resume.expectJob,
+									params:{
+										resumeId:this.resume.resumeId
+									},
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editexpectjobshow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1543,8 +1621,24 @@
 //					     	console.log(this.$validator)
 					      	// 保存新增的工作经历信息并关闭编辑页面
 					      	if(this.experiencetmp && [undefined,null,''].indexOf(this.experiencetmp.startym) < 0 && [undefined,null,''].indexOf(this.experiencetmp.endym) < 0){
-					      		this.resume.experiencelist.push(JSON.parse(JSON.stringify(this.experiencetmp)))
-								this.addexperienceshow=false
+//					      		this.resume.workExperienceList.push(JSON.parse(JSON.stringify(this.experiencetmp)))
+								this.$axios({
+									method:'post',
+									url:'/api/workExperience/insert',
+									data:this.experiencetmp,
+									params:{
+										resumeId:this.resume.resumeId
+									},
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.addexperienceshow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1573,7 +1667,7 @@
 			},
 			editexperience(index){
 				this.currentexperience=index
-				this.experiencetmp = JSON.parse(JSON.stringify(this.resume.experiencelist[index]))
+				this.experiencetmp = JSON.parse(JSON.stringify(this.resume.workExperienceList[index]))
 				this.editexperienceshow=true
 			},
 			saveexperience(index){
@@ -1583,9 +1677,22 @@
 					if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存已有工作经历信息并关闭编辑页面
-					      	if(this.experiencetmp && index >= 0 && index < this.resume.experiencelist.length && [undefined,null,''].indexOf(this.experiencetmp.startym) < 0 && [undefined,null,''].indexOf(this.experiencetmp.endym) < 0){
-					      		this.resume.experiencelist[index]=JSON.parse(JSON.stringify(this.experiencetmp))
-								this.editexperienceshow=false
+					      	if(this.experiencetmp && index >= 0 && index < this.resume.workExperienceList.length && [undefined,null,''].indexOf(this.experiencetmp.startym) < 0 && [undefined,null,''].indexOf(this.experiencetmp.endym) < 0){
+					      		this.resume.workExperienceList[index]=JSON.parse(JSON.stringify(this.experiencetmp))
+								this.$axios({
+									method:'post',
+									url:'/api/workExperience/update',
+									data:this.resume.workExperienceList[index],
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editexperienceshow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1610,15 +1717,28 @@
 			   	})
 			},
 			deleteexperience(index){
-				if(index >= 0 && index < this.resume.experiencelist.length){
+				if(index >= 0 && index < this.resume.workExperienceList.length){
 					this.$confirm('是否删除这条工作经历?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.resume.experiencelist.splice(index,1)
-			        	  this.editexperienceshow=false
-			        	  this.currentexperience=null
+//			        	  this.resume.experiencelist.splice(index,1)
+							this.$axios({
+									method:'post',
+									url:'/api/workExperience/delete',
+									data:this.resume.workExperienceList[index],
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editexperienceshow=false
+			        	  			this.currentexperience=null
+								}).catch(err=>{
+									console.log(err)
+								})
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -1649,7 +1769,7 @@
 			},
 			editproject(index){
 				this.currentproject=index
-				this.projecttmp = JSON.parse(JSON.stringify(this.resume.projectlist[index]))
+				this.projecttmp = JSON.parse(JSON.stringify(this.resume.projectExperienceList[index]))
 				this.editprojectshow=true
 			},
 			savenewproject(){
@@ -1659,8 +1779,24 @@
 //					     	console.log(this.$validator)
 					      	// 保存新添加项目经历信息并关闭编辑页面
 					      	if(this.projecttmp && [undefined,null,''].indexOf(this.projecttmp.startym) < 0 && [undefined,null,''].indexOf(this.projecttmp.endym) < 0){
-					      		this.resume.projectlist.push(JSON.parse(JSON.stringify(this.projecttmp)))
-								this.addprojectshow=false
+//					      		this.resume.projectExperienceList.push(JSON.parse(JSON.stringify(this.projecttmp)))
+					      		this.$axios({
+									method:'post',
+									url:'/api/projectExperience/insert',
+									data:this.projecttmp,
+									params:{
+										resumeId:this.resume.resumeId
+									},
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.addprojectshow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1688,15 +1824,28 @@
 				this.addprojectshow=false
 			},
 			deleteproject(index){
-				if(index >= 0 && index < this.resume.projectlist.length){
+				if(index >= 0 && index < this.resume.projectExperienceList.length){
 					this.$confirm('是否删除这条项目经历?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.resume.projectlist.splice(index,1)
-			        	  this.editprojectshow=false
-			        	  this.currentproject=null
+//			        	  this.resume.projectlist.splice(index,1)
+							this.$axios({
+									method:'post',
+									url:'/api/projectExperience/delete',
+									data:this.projecttmp,
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editprojectshow=false
+			        	 			this.currentproject=null
+								}).catch(err=>{
+									console.log(err)
+								})
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -1720,9 +1869,22 @@
 					if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存已有项目经历信息并关闭编辑页面
-					      	if(this.projecttmp && index >=0 && index < this.resume.projectlist.length && [undefined,null,''].indexOf(this.projecttmp.startym) < 0 && [undefined,null,''].indexOf(this.projecttmp.endym) < 0){
-					      		this.resume.projectlist[index]=JSON.parse(JSON.stringify(this.projecttmp))
-								this.editprojectshow=false
+					      	if(this.projecttmp && index >=0 && index < this.resume.projectExperienceList.length && [undefined,null,''].indexOf(this.projecttmp.startym) < 0 && [undefined,null,''].indexOf(this.projecttmp.endym) < 0){
+					      		this.resume.projectExperienceList[index]=JSON.parse(JSON.stringify(this.projecttmp))
+								this.$axios({
+									method:'post',
+									url:'/api/projectExperience/update',
+									data:this.resume.projectExperienceList[index],
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editprojectshow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1765,8 +1927,24 @@
 //					     	console.log(this.$validator)
 					      	// 保存新添加教育背景信息并关闭编辑页面
 					      	if(this.educationtmp && [undefined,null,''].indexOf(this.educationtmp.startyear) < 0 && [undefined,null,''].indexOf(this.educationtmp.endyear) < 0){
-					      		this.resume.educationlist.push(JSON.parse(JSON.stringify(this.educationtmp)))
-								this.addedushow=false
+//					      		this.resume.educationList.push(JSON.parse(JSON.stringify(this.educationtmp)))
+								this.$axios({
+									method:'post',
+									url:'/api/education/insert',
+									data:this.educationtmp,
+									params:{
+										resumeId:this.resume.resumeId
+									},
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.addedushow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1799,9 +1977,22 @@
 					if (result) {
 //					     	console.log(this.$validator)
 					      	// 保存已有教育背景信息并关闭编辑页面
-					      	if(this.educationtmp && index >= 0 && index < this.resume.educationlist.length && [undefined,null,''].indexOf(this.educationtmp.startyear) < 0 && [undefined,null,''].indexOf(this.educationtmp.endyear) < 0){
-					      		this.resume.educationlist[index]=JSON.parse(JSON.stringify(this.educationtmp))
-								this.editedushow=false
+					      	if(this.educationtmp && index >= 0 && index < this.resume.educationList.length && [undefined,null,''].indexOf(this.educationtmp.startyear) < 0 && [undefined,null,''].indexOf(this.educationtmp.endyear) < 0){
+					      		this.resume.educationList[index]=JSON.parse(JSON.stringify(this.educationtmp))
+								this.$axios({
+									method:'post',
+									url:'/api/education/update',
+									data:this.resume.educationList[index],
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editedushow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1827,19 +2018,31 @@
 			},
 			editeducation(index){
 				this.currenteducation=index
-				this.educationtmp = JSON.parse(JSON.stringify(this.resume.educationlist[index]))
+				this.educationtmp = JSON.parse(JSON.stringify(this.resume.educationList[index]))
 				this.editedushow=true
 			},
 			deleteeducation(index){
-				if(index >= 0 && index < this.resume.educationlist.length){
+				if(index >= 0 && index < this.resume.educationList.length){
 					this.$confirm('是否删除这条教育背景?', '提示', {
 				          confirmButtonText: '确定',
 				          cancelButtonText: '取消',
 				          type: 'warning'
 			        }).then(() => {
-			        	  this.resume.educationlist.splice(index,1)
-						  this.editedushow=false
-			        	  this.currenteducation=null
+//			        	  this.resume.educationlist.splice(index,1)
+			        	  this.$axios({
+									method:'get',
+									url:'/api/education/delete',
+									params:{
+										educationId:this.resume.educationList[index].educationId
+									},
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									 this.editedushow=false
+			        	  			 this.currenteducation=null
+								}).catch(err=>{
+									console.log(err)
+								})
 				          this.$message({
 				            type: 'success',
 				            message: '删除成功!'
@@ -1880,7 +2083,20 @@
 					      	// 保存个人介绍信息并关闭编辑页面
 					      	if(this.descriptiontmp){
 					      		this.resume.selfdescription = JSON.parse(JSON.stringify(this.descriptiontmp))
-								this.editdescriptionshow=false
+								this.$axios({
+									method:'post',
+									url:'/api/resume/update',
+									data:this.resume,
+									headers:{
+										'Content-Type':'application/json'
+									}
+								}).then(res=>{
+									console.log(res)
+									this.dataInit()
+									this.editdescriptionshow=false
+								}).catch(err=>{
+									console.log(err)
+								})
 					      	}
 					      	else{
 					      		this.$message({
@@ -1914,6 +2130,9 @@
 			getresumefile(e){
 				//上传简历附件，返回简历附件对象，内包含文件原名、文件对应的oss文件的id和个人id
 				//这里模拟上传成功后的操作
+				if(this.resume.resumefilelist==undefined||this.resume.resumefilelist==undefined==null){
+					this.resume.resumefilelist = new Array()
+				}
 				let file = e.target.files[0]
 				this.resume.resumefilelist.push(file)
 				let length = this.resume.resumefilelist.length
@@ -1929,9 +2148,9 @@
 				body.scrollIntoView({behavior:'smooth'})
 			},
 			topreview(){
-//				this.$router.push({name:'resumepreview',params:{resume:this.resume}})
-				sessionStorage.removeItem('myresume')
-				sessionStorage.setItem('myresume',JSON.stringify(this.resume))
+				this.$router.push({path:'/resumepreview',query:{resumeId:this.resume.resumeId}})
+				/*sessionStorage.removeItem('myresume')
+				sessionStorage.setItem('myresume',JSON.stringify(this.resume))*/
 			}
 		},
 		watch:{

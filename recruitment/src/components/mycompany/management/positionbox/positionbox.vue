@@ -2,7 +2,7 @@
 	<div v-if="position">
 		<h3>
 		    <!--<a target="_blank" title="随便写" href="">随便写</a>--> 
-		    <router-link target="_blank" title="" to="">{{position.name}}</router-link>
+		    <router-link target="_blank" :title="position.name" :to="{path:'/positiondetail',query:{positionId:position.positionId}}">{{position.name}}</router-link>
 		    <span>[{{position.city}}]</span>
 		</h3>
 		<slot name="slot1"></slot>

@@ -1,14 +1,14 @@
 <template>
 		<div class="d_item">
 		    <h2 :title="position.name">
-			    <router-link target="_blank" to="/positiondetail">
+			    <router-link target="_blank" :to="{path:'/positiondetail',query:{positionId:position.positionId}}">
 			        <em>{{position.name}}</em> 
 			        <span>（{{position.salarymin}}k-{{position.salarymax}}k）</span>
 			    </router-link>
 			</h2>
 			<a class="fr" @click.prevent="deletedelivery">删除</a>
 		    <div class="clear"></div>
-			<a v-if="company" title="公司名称" class="d_jobname" target="_blank" href="http://www.lagou.com/c/25927.html">
+			<a v-if="company" title="公司名称" class="d_jobname" target="_blank" @click="toCompany(company.companyId)">
 			    {{company.companyDetail.shortname}}<span>[{{company.companyDetail.city}}]</span> 
 			</a>
 			<span class="d_time" v-if="status>=2">反馈时间：{{feedback.feedbacktime}}</span>
@@ -74,6 +74,14 @@
 			})
 		},
 		methods:{
+			toCompany(companyId){
+				this.$router.push({
+					path:'/companydetail',
+					query:{
+						companyId:companyId
+					}
+				})
+			},
 			deletedelivery(){
 				this.$axios({
 					method:'get',

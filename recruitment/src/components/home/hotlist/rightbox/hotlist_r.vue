@@ -4,12 +4,12 @@
 		<div class="mb10 recompany">
 			<a @click.prevent="toCompanyDetail(company.companyId)" target="_blank">{{company.companyDetail.shortname}}</a>
 		</div>
-		<span><em class="c7">领域：</em>{{company.companyDetail.field}}</span>
-		<span><em class="c7" v-if="company.companyMember">创始人：</em>{{company.companyMember.name}}</span>
+		<span v-if="company.companyDetail.field"><em class="c7">领域：</em>{{company.companyDetail.field}}</span>
+		<span v-if="company.companyMember.name"><em class="c7">负责人人：</em>{{company.companyMember.name}}</span>
 		<br />
-		<span><em class="c7">阶段：</em>{{company.companyStage.currentstage}}</span>
-		<span><em class="c7">规模：</em>{{company.companyDetail.scale}}</span>
-		<ul class="companyTags reset">
+		<span v-if="company.companyStage.currentstage"><em class="c7">阶段：</em>{{company.companyStage.currentstage}}</span>
+		<span v-if="company.companyDetail.scale"><em class="c7">规模：</em>{{company.companyDetail.scale}}</span>
+		<ul class="companyTags reset" v-if="company.companyDetail.labelList">
 			<li v-for="(item,index) in company.companyDetail.labelList" :key="index">
 				{{item.label}}
 			</li>
