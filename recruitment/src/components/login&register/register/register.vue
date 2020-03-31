@@ -92,16 +92,16 @@
 			          			if(res.data.code == 200){
 			          				let user = res.data.object
 			          				//注册成功，即登陆成功，注册vuex中的信息，并跳转完善个人信息页面
-			          				this.$store.commit('setUser',{userId:user.userId,role:user.role})
+			          				this.$store.commit('setUser',{userId:user.userId,email:user.email,role:user.role})
 			          				this.$store.dispatch('person/getPerson',{loginedUserId:user.userId}).then(res=>{
 			          					console.log(res)
 			          				}).catch(err=>{
 			          					console.log(err)
 			          				})
-			          				this.$router.push({path:'/positionlist'})
+			          				/*this.$router.push({path:'/personinfofillin'})
 			          				this.$message({
 					          			message:'请完善个人基本信息！'
-					          		})
+					          		})*/
 			          			}
 			          			else if(res.data.code == 500){
 			          				this.registerMessage = res.data.msg
@@ -126,7 +126,7 @@
 			          			if(res.data.code == 200){
 			          				let user = res.data.object
 			          				//注册成功，即登陆成功，注册vuex中的信息，并跳转完善公司信息页面
-			          				this.$store.commit('setUser',{userId:user.userId,role:user.role})
+			          				this.$store.commit('setUser',{userId:user.userId,email:user.email,role:user.role})
 			          				this.$store.dispatch('company/getCompany',{loginedUserId:user.userId}).then(res=>{
 			          					console.log(res)
 			          				}).catch(err=>{

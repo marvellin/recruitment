@@ -8,9 +8,9 @@
             	<form id="updatePswForm">
             		<table class="savePassword">
             			<tbody>
-	            			<tr>
+	            			<tr  v-if="myEmail">
 	            				<td>登录邮箱</td>
-	            				<td class="c7">jason@qq.com</td>
+	            				<td class="c7">{{myEmail}}</td>
 	            			</tr>
 	            			<tr>
 	            				<td class="label">当前密码</td>
@@ -56,6 +56,14 @@
 				confirpwd:null,
 			}
 		},
+		computed:{
+			myUserId(){
+				return this.$store.state.userId()
+			},
+			myEmail(){
+				return this.$store.state.email()
+			}
+		},
 		methods:{
 			savenewpassword(){
 				this.$validator.validate().then((result) => {
@@ -64,7 +72,33 @@
 					      	// 保存新密码
 					      	if(this.confirpwd===this.newpwd){
 					      		//将新密码提交到后台
-					      		console.log(this.newpwd)
+					      		this.$axios({
+					      			method:'get',
+					      			url:'/api/reset',
+					      			params:{
+					      				userId:this.myUserId,
+					      				oldPassword:this.oldpwd,
+					      				newPassword:this.newpwd,
+					      			}
+					      		}).then(res=>{
+					      			console.log(res)
+					      			if(res.data.code==500){
+					      				this.$message({
+					      					type:'warn',
+					      					message:res.data.msg
+					      				})
+					      			}
+					      			else{
+					      				this.$message({
+					      					message:res.data.msg
+					      				})
+					      				/*this.oldpwd = this.newpwd = this.confirpwd = null
+					      				this.errors.clear()*/
+					      			}
+					      		}).catch(err=>{
+					      			console.log(err)
+					      		})
+//					      		console.log(this.newpwd)
 					      	}
 					      	else{
 					      		this.$message({

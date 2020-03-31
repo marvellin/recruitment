@@ -1107,12 +1107,6 @@
 		created(){
 			//获取简历
 			this.dataInit()
-//			sessionStorage.removeItem('myresume')
-//			console.log('c' + JSON.stringify(this.resume))
-			/*if(sessionStorage.getItem('myresume') != null){
-				this.resume = JSON.parse(sessionStorage.getItem('myresume'))
-				sessionStorage.removeItem('myresume')
-			}*/
 		},
 		data(){
 			this.chartsettings = {
@@ -1162,26 +1156,7 @@
 				uploadboxshow:false,
 				resumenametmp:null,
 				resume:null,
-				/*resume:{
-					name:'person的简历',
-					basicinfo:{
-						username:'person',
-						tel:'15813359',
-						email:'1021478@qq.com',
-						gender:'女',
-						degree:'大专',
-						workyear:'3年',
-						currentstate:'我是应届毕业生',
-						img:'../../../static/images/default_headpic.png'
-					},
-					expectjob:null,
-					experiencelist:[],
-					projectlist:[],
-					educationlist:[],
-					resumefilelist:[],
-					selfdescription:null,
-				},*/
-				watcher:[false,false,false,false,false],
+				watcher:[false,false,false,false,false,false],
 				degreelist:['大专','本科','硕士','博士','其他'],
 				workyearlist:['应届毕业生','1年','2年','3年','4年','5年','6年','7年','8年','9年','10年','10年以上'],
 				currentstatelist:['我目前已离职，可快速到岗','我目前正在职，正考虑换个新环境','我暂时不想找工作','我是应届毕业生'],
@@ -1288,7 +1263,7 @@
 				}).then(res=>{
 					console.log(res)
 					this.resume = res.data.object
-					this.initchartdata()
+//					this.initchartdata()
 				}).catch(err=>{
 					console.log(err)
 				})
@@ -1336,41 +1311,49 @@
 			},
 			chartdata_inc(index){
 				this.chartdata.rows[0].precent += index
-				this.chartdata.rows[1].precent -= index
+				this.chartdata.rows[1].precent = 100 - this.chartdata.rows[0].precent
+				/*this.chartdata.rows[1].precent -= index
 				if(this.chartdata.rows[0].precent>=100){
 					this.chartdata.rows[0].precent = 100
 				}
 				if(this.chartdata.rows[1].precent<=0){
 					this.chartdata.rows[1].precent = 0
-				}
+				}*/
 			},
 			chartdata_dec(index){
 				this.chartdata.rows[0].precent -= index
-				this.chartdata.rows[1].precent += index
-				if(this.chartdata.rows[0].precent>=100){
-					this.chartdata.rows[0].precent = 100
+				this.chartdata.rows[1].precent = 100 - this.chartdata.rows[0].precent
+				/*this.chartdata.rows[1].precent += index
+				if(this.chartdata.rows[0].precent<=0){
+					this.chartdata.rows[0].precent = 0
 				}
-				if(this.chartdata.rows[1].precent<=0){
-					this.chartdata.rows[1].precent = 0
-				}
+				if(this.chartdata.rows[1].precent>=100){
+					this.chartdata.rows[1].precent = 100
+				}*/
 			},
 			initchartdata(){
 				if(this.resume.basicinfo !== undefined && this.resume.basicinfo !== null){
+					console.log('basicinfo')
 					this.chartdata_inc(15)
 				}
 				if(this.resume.expectJob !== undefined && this.resume.expectJob !== null){
+					console.log('expectJob')
 					this.chartdata_inc(20)
 				}
 				if(this.resume.workExperienceList !== undefined && this.resume.workExperienceList !== null && this.resume.workExperienceList.length !== 0){
+					console.log('workExperienceList')
 					this.chartdata_inc(30)
 				}
 				if(this.resume.projectExperienceList !== undefined && this.resume.projectExperienceList !== null && this.resume.projectExperienceList.length !== 0){
+					console.log('projectExperienceList')
 					this.chartdata_inc(20)
 				}
 				if(this.resume.educationList !== undefined && this.resume.educationList !== null && this.resume.educationList.length !== 0){
+					console.log('educationList')
 					this.chartdata_inc(10)
 				}
 				if(this.resume.selfdescription !== undefined && this.resume.selfdescription !== null && this.resume.selfdescription !== ''){
+					console.log('selfdescription')
 					this.chartdata_inc(5)
 				}
 			},
@@ -2154,45 +2137,57 @@
 			}
 		},
 		watch:{
-			'resume.expectjob':{
-				handler(newval){
-					if(newval !== undefined && newval !== null && !this.watcher[0]){
+			'resume.basicinfo':{
+				handler(){
+					if(this.resume.basicinfo!==undefined&&this.resume.basicinfo!==null&&!this.watcher[5]){
+						this.chartdata_inc(15)
+						this.watcher[5] = true
+					}
+				}
+			},
+			'resume.expectJob':{
+				handler(){
+					if(this.resume.expectJob !== undefined && this.resume.expectJob !== null && !this.watcher[0]){
+						console.log('computed expectJob')
 						this.chartdata_inc(20)
 						this.watcher[0] = true
 					}
 				}
 			},
-			'resume.experiencelist':{
+			'resume.workExperienceList':{
 				handler(){
-					if(this.resume.experiencelist !== undefined && this.resume.experiencelist !== null && this.resume.experiencelist.length !== 0 && !this.watcher[1]){
+//					console.log('computed workExperienceList')
+					if(this.resume.workExperienceList !== undefined && this.resume.workExperienceList !== null && this.resume.workExperienceList.length !== 0 && !this.watcher[1]){
 						this.chartdata_inc(30)
 						this.watcher[1] = true
 					}
-					else if((this.resume.experiencelist === undefined || this.resume.experiencelist === null || this.resume.experiencelist.length === 0) && this.watcher[1]){
+					else if((this.resume.workExperienceList === undefined || this.resume.workExperienceList === null || this.resume.workExperienceList.length === 0) && this.watcher[1]){
 						this.chartdata_dec(30)
 						this.watcher[1] = false
 					}
 				}
 			},
-			'resume.projectlist':{
+			'resume.projectExperienceList':{
 				handler(){
-					if(this.resume.projectlist !== undefined && this.resume.projectlist !== null && this.resume.projectlist.length !== 0 && !this.watcher[2]){
+//					console.log('computed projectExperienceList')
+					if(this.resume.projectExperienceList !== undefined && this.resume.projectExperienceList !== null && this.resume.projectExperienceList.length !== 0 && !this.watcher[2]){
 						this.chartdata_inc(20)
 						this.watcher[2] = true
 					}
-					else if((this.resume.projectlist === undefined || this.resume.projectlist === null || this.resume.projectlist.length === 0) && this.watcher[2]){
+					else if((this.resume.projectExperienceList === undefined || this.resume.projectExperienceList === null || this.resume.projectExperienceList.length === 0) && this.watcher[2]){
 						this.chartdata_dec(20)
 						this.watcher[2] = false
 					}
 				}
 			},
-			'resume.educationlist':{
+			'resume.educationList':{
 				handler(){
-					if(this.resume.educationlist !== undefined && this.resume.educationlist !== null && this.resume.educationlist.length !== 0 && !this.watcher[3]){
+//					console.log('computed educationList')
+					if(this.resume.educationList !== undefined && this.resume.educationList !== null && this.resume.educationList.length !== 0 && !this.watcher[3]){
 						this.chartdata_inc(10)
 						this.watcher[3] = true
 					}
-					else if((this.resume.educationlist === undefined || this.resume.educationlist === null || this.resume.educationlist.length === 0) && this.watcher[3]){
+					else if((this.resume.educationList === undefined || this.resume.educationList === null || this.resume.educationList.length === 0) && this.watcher[3]){
 						this.chartdata_dec(10)
 						this.watcher[3] = false
 					}
@@ -2200,6 +2195,7 @@
 			},
 			'resume.selfdescription':{
 				handler(){
+//					console.log('computed selfdescription')
 					if(this.resume.selfdescription !== undefined && this.resume.selfdescription !== null && !this.watcher[4]){
 						this.chartdata_inc(5)
 						this.watcher[4] = true

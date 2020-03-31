@@ -1,4 +1,6 @@
 import axios from 'axios';
+import ElementUI from 'element-ui'
+import {Message} from 'element-ui'
 export default{
 	namespaced:true,
 	state:{
@@ -18,7 +20,7 @@ export default{
 		}
 	},
 	actions:{
-		getCompany(context,{loginedUserId}){
+		getCompany(context,{loginedUserId,router}){
 			console.log('enter getCompany')
 			axios({
 				method:'post',
@@ -30,6 +32,20 @@ export default{
 				console.log(res)
 				if(res.data.code == 200){
 					context.commit('setCompany',{companyId:res.data.object.companyId})
+					if(!res.data.object.companyDetail||res.data.object.companyDetail.shortname==undefined||res.data.object.companyDetail.shortname==null){
+						router.push({
+							path:'/companyinfofillin'
+						})
+						Message({
+							type:'warn',
+							message:'请先完善您的信息！'
+						})
+					}
+					else{
+						router.push({
+							path:'/'
+						})
+					}
 				}
 			}).catch(err => {
 				console.log(err)

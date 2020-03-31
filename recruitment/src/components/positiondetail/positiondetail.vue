@@ -135,7 +135,7 @@
 						if(res.data.code == 500){
 							this.$message({
 								type:'warn',
-								message:'您已投递该职位！请勿重复投递'
+								message:res.data.msg
 							})
 						}
 						else if(res.data.code == 200){

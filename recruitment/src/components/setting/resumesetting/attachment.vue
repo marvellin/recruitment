@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-show="!resumefilelist||resumefilelist.length===0" style="text-align: center;font-weight: 600;line-height:40px;margin: 20px 10px;padding: 20px 10px;">
+		<div v-if="!resumefilelist||resumefilelist.length===0" style="text-align: center;font-weight: 600;line-height:40px;margin: 20px 10px;padding: 20px 10px;">
 			您还没有简历附件，
 			<a style="position: relative;cursor:pointer" href="javascript:void(0);">
 				<span>请上传您的简历附件（不多于3个）</span>
@@ -10,10 +10,10 @@
 				<img width="100px" height="100px" src="../../../../static/images/u=1065457796,2310451731&fm=26&gp=0.jpg"/>
 			</div>
 		</div>
-		<div lass="resumeUploadDiv" v-if="resumefilelist.length !== 0">
+		<div lass="resumeUploadDiv" v-if="resumefilelist&&resumefilelist.length !== 0">
 			<ul class="reset resumelist_s">
 				<li style="line-height: 30px;background-color: white;margin: 20px 20px;padding: 5px 10px;border-bottom: 1px black solid;" v-for="(item,index) in resumefilelist" :key="index">
-					<a class="resumename" @click.prevent="downloadresumefile">{{item.name}}</a>
+					<a class="resumename" @click.prevent="downloadresumefile(index)">{{item.name}}</a>
 					<p class="fr" style="margin: 0 5px;color: #019875;">默认简历</p>
 					<a class="fr deleteresume" @click.prevent="deleteresumefile(index)">删除</a>
 					<a class="fr resetresume" @click.prevent="resetresumefile(index)">设为默认简历</a>
@@ -38,9 +38,56 @@
 				resumefilelist:[]
 			}
 		},
+		computed:{
+			myPersonId(){
+				return this.$store.state.person.personId()
+			}
+		},
+		created(){
+			this.dataInit()
+		},
 		methods:{
-			downloadresumefile(){
+			dataInit(){
+				this.$axios({
+					method:'get',
+					url:'/api/attachmentResume/getByPersonId',
+					params:{
+						personId:this.myPersonId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.resumefilelist = res.data.object
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			downloadresumefile(index){
 				//传递文件对象给后台，返回字节流，创建下载url下载文件
+				this.$axios({
+					method:'get',
+					url:'/api/attachmentResume/download',
+					params:{
+						attachmentResumeId:this.resumefilelist[index].attachMentResumeId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					const blob = new Blob([res.data])
+		            const fileName = this.resumefilelist[index].name
+		            if ('download' in document.createElement('a')) { // 非IE下载
+		              const elink = document.createElement('a')
+		              elink.download = fileName
+		              elink.style.display = 'none'
+		              elink.href = URL.createObjectURL(blob)
+		              document.body.appendChild(elink)
+		              elink.click()
+		              URL.revokeObjectURL(elink.href) // 释放URL 对象
+		              document.body.removeChild(elink)
+		            } else { // IE10+下载
+		              navigator.msSaveBlob(blob, fileName)
+		          	}
+				}).catch(err=>{
+					console.log(err)
+				})
 			},
 			getresumefile(e){
 				//上传选中的简历附件

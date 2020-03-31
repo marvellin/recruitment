@@ -6,7 +6,7 @@
             </dt>
             <dd>
             	<div class="basicEdit">
-		            			<form id="profileForm">
+		            			<form id="profileForm" v-if="basicinfotmp">
 								  	<table>
 								    	<tbody>
 								    		<tr>
@@ -120,7 +120,8 @@
 								      	<span>上传自己的头像</span>
 								  	</div>
 								  	<div class="portraitShow " id="portraitShow">
-								    	<img width="120" height="120" :src="basicinfotmp.img">
+								    	<img v-if="basicinfotmp&&basicinfotmp.img" width="120" height="120" :src="basicinfotmp.img">
+								    	<img v-else width="120" height="120" src="../../../../static/images/default_headpic.png">
 								    	<span>更换头像</span>
 								  	</div>
 								  	<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
@@ -151,6 +152,11 @@
 				currentstatelistshow:false
 			}
 		},
+		computed:{
+			myPersonId(){
+				return this.$store.state.person.personId()
+			}
+		},
 		created(){
 			this.getdatas()
 			this.dataInit()
@@ -164,6 +170,30 @@
 					      	// 保存个人基本信息
 					      	if(this.basicinfotmp){
 					      		//把basicinfo数据根据用户id提交到后台保存
+					      		this.$axios({
+					      			method:'post',
+					      			url:'/api/personDetail/update',
+					      			data:this.basicinfotmp,
+					      			headers:{
+					      				'Content-Type':'application/json'
+					      			}
+					      		}).then(res=>{
+					      			console.log(res)
+					      			if(res.data.code==500){
+					      				this.$message({
+					      					type:"warn",
+					      					message:res.data.msg		
+					      				})
+					      			}
+					      			else{
+					      				this.$message({
+					      					message:'保存成功！'		
+					      				})
+					      				this.dataInit()
+					      			}
+					      		}).catch(err=>{
+					      			console.log(err)
+					      		})
 					      		console.log(this.basicinfotmp)
 					      	}
 					      	else{
@@ -212,7 +242,19 @@
 			},
 			dataInit(){
 				//从后台获取basicinfo数据赋给basicinfotmp，这里模拟最终获取数据并展示出来
-				this.basicinfotmp = {
+				this.$axios({
+					method:'get',
+					url:'/api/personDetail/getByPersonId',
+					params:{
+						personId:this.myPersonId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.basicinfotmp = res.data.object
+				}).catch(err=>{
+					console.log(err)
+				})
+				/*this.basicinfotmp = {
 						username:'person',
 						tel:'15813359',
 						email:'1021478@qq.com',
@@ -221,7 +263,7 @@
 						workyear:'3年',
 						currentstate:'我是应届毕业生',
 						img:'../../../../static/images/default_headpic.png'
-				}
+				}*/
 			},
 			getdatas(){
 				this.$axios({

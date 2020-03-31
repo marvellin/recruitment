@@ -18,6 +18,9 @@ export default new Vuex.Store({
 		userId(){
 			return localStorage.getItem("userId")
 		},
+		email(){
+			return localStorage.getItem("email")
+		},
 		isCompany(){
 			return localStorage.getItem("isCompany")
 		},
@@ -42,9 +45,10 @@ export default new Vuex.Store({
 		
 	},
 	mutations:{
-		setUser(state,{userId,role}){
+		setUser(state,{userId,email,role}){
 			localStorage.clear()
 			localStorage.setItem("userId",userId)
+			localStorage.setItem("email",email)
 			localStorage.setItem("role",role)
 			localStorage.setItem("isCompany",role=='company'?true:false)
 			localStorage.setItem("isLogined",true)
@@ -73,15 +77,15 @@ export default new Vuex.Store({
 			}).then(res => {
 				console.log(res)
 				if(res.data.code==200){
-					context.commit('setUser',{userId:res.data.object.userId,role:res.data.object.role},{root:true})					
+					context.commit('setUser',{userId:res.data.object.userId,email:res.data.object.email,role:res.data.object.role},{root:true})					
 					if(res.data.object.role == 'person'){
-						context.dispatch('person/getPerson',{loginedUserId:res.data.object.userId})
+						context.dispatch('person/getPerson',{loginedUserId:res.data.object.userId,router:router})
 					}
 					else if(res.data.object.role == 'company'){
-						context.dispatch('company/getCompany',{loginedUserId:res.data.object.userId})
+						context.dispatch('company/getCompany',{loginedUserId:res.data.object.userId,router:router})
 					}
 					//然后执行页面跳转
-					router.push({path:'/'})
+					//router.push({path:'/'})
 				}
 				else{
 					context.commit('setWrongMsg',{isFalse:true,flaseMsg:res.data.msg})

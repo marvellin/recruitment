@@ -9,13 +9,13 @@
 		</div>
 		<ul v-if="resume" style="list-style: none;" class="reset resumeLists">
 		<li class="onlineResume">
-		<div class="resumeShow" style="height: 106px;">
+		<div class="resumeShow" style="height: 106px;" v-if="resume">
 			<router-link title="编辑在线简历" class="resumeImg" to="/myresume">
 			    <!--<img src="../../../../../static/images/default_headpic.png">-->
 			    <!--<img :src="resume.basicinfo.img">-->
 			    <img src="../../../../static/images/default_headpic.png"/>
 			</router-link>
-			<div class="resumeIntro">
+			<div class="resumeIntro" v-if="resume">
 			    <h3 class="unread">
 					<router-link title="编辑在线简历" to="/myresume">
 			            {{resume.basicinfo.username}}
@@ -26,9 +26,15 @@
 			    	<i></i>
 			    	默认简历
 			    </span>
-			    <div> 
-			        {{resume.basicinfo.username}} / {{resume.basicinfo.gender}} / {{resume.basicinfo.degree}} / {{resume.basicinfo.workyear}}<br>
-			        {{resume.experiencelist[0].post}} . {{resume.experiencelist[0].comname}} <br /> {{resume.educationlist[0].degree}} . {{resume.educationlist[0].school}}
+			    <div v-if="resume.basicinfo"> 
+			        {{resume.basicinfo.username}} / {{resume.basicinfo.gender}} / {{resume.basicinfo.degree}} / {{resume.basicinfo.workyear}}
+			        <!--{{resume.workExperienceList[0].post}} . {{resume.workExperienceList[0].comname}} <br /> {{resume.educationList[0].degree}} . {{resume.educationList[0].school}}-->
+			    </div>
+			    <div v-if="resume.workExperienceList&&resume.workExperienceList.length>0">
+			    	{{resume.workExperienceList[0].post}} . {{resume.workExperienceList[0].comname}}<!-- {{resume.educationList[0].degree}} . {{resume.educationList[0].school}}-->
+			    </div>
+			    <div v-if="resume.educationList&&resume.educationList.length>0">
+			    	{{resume.educationList[0].degree}} . {{resume.educationList[0].school}}
 			    </div>
 			</div>
 			<div class="links">
@@ -52,18 +58,29 @@
 				resume:null,
 			}
 		},
+		computed:{
+			myPersonId(){
+				return this.$store.state.person.personId()
+			}
+		},
+		methods:{
+			dataInit(){
+				this.$axios({
+					method:'get',
+					url:'/api/resume/getByPersonId',
+					params:{
+						personId:this.myPersonId
+					}
+				}).then(res=>{
+					console.log(res)
+					this.resume = res.data.object
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
+		},
 		created(){
-			this.$axios({
-				method:"get",
-				url:"http://127.0.0.1:3000/resume",
-				params:{
-					
-				},
-			}).then(res => {
-				this.resume = res.data[0]
-			}).catch(err => {
-				console.log(err)
-			})
+			this.dataInit()
 		}
 	}
 </script>

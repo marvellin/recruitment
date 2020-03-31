@@ -345,6 +345,27 @@
 				}).then(res => {
 					console.log(res)
 					this.company = res.data.object
+					if(!this.company.companyStage || this.company.companyStage == {}){
+						this.company.companyStage = {
+							currentstage:null,
+							org:null
+						}
+					}
+					if(!this.company.companyDetail || this.company.companyDetail == {}){
+						this.company.companyDetail = {
+							fullname:null,
+							shortname:null,
+							feature:null,
+							city:null,
+							field:null,
+							scale:null,
+							comurl:null,
+							scale:null,
+							img:'../../../../static/images/logo_default.png',
+	//						img:null,
+							labelList:[]
+						}
+					}
 				}).catch(err => {
 					console.log(err)
 				})

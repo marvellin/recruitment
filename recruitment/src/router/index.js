@@ -43,6 +43,7 @@ import attachment from '@/components/setting/resumesetting/attachment'
 import online from '@/components/setting/resumesetting/online'
 import infosetting from '@/components/setting/infosetting/infosetting'
 import errorpage from '@/components/error/error'
+import personinfofillin from '@/components/personinfofillin/personinfofillin'
 
 import ElementUI from 'element-ui'
 import {Message} from 'element-ui'
@@ -383,7 +384,7 @@ const router = new Router({
 	      	requiresUser:true,
 //	      	requiresCompany:true
 	     },
-    	redirect:'/setting/pwdsetting',
+    	redirect:'/setting/infosetting',
     	children:[
     		{
     			path:'pwdsetting',
@@ -414,6 +415,14 @@ const router = new Router({
     			component:infosetting
     		}
     	]
+    },
+    {
+    	path:'/personinfofillin',
+    	name:'personinfofillin',
+    	component:personinfofillin,
+    	requiresLogin:true,
+	    requiresUser:true,
+//	    requiresCompany:true
     }
   ]
 })
