@@ -25,7 +25,7 @@
 			                        <img width="380" height="220" :src="product.img">
 			                        <span>更换产品图片<br>380*220px 小于5M</span>
 			                    </div>
-			                    <input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getproductimg($event,index)" name="myfiles">
+			                    <input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M" accept="image/jpeg,image/png,image/jp2,image/gif" @change="setProductImg($event,index)" name="myfiles">
 			                </div>
 			                <!--<span style="display:none;" id="myfiles0_error" class="error"></span>-->
 			                    
@@ -75,6 +75,58 @@
 //			console.log('from index4 mounted' + JSON.stringify(this.company))
 		},
 		methods:{
+			getProductImg(index){
+				this.$axios({
+					method:'get',
+					url:'/api/productImg/download',
+					params:{
+						companyProductId:this.company.productList[index].companyProductId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.company.productList[index].img = url
+							console.log(this.company.productList[index].img)
+						}
+						else{
+							this.company.productList[index].img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setProductImg(e,index){
+				var productImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',productImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('companyProductId',this.company.productList[index].companyProductId)
+				this.$axios({
+					method:'post',
+					url:'/api/productImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.company.productList[index].img = url
+							console.log(this.company.productList[index].img)
+						}
+						else{
+							this.company.productList[index].img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			pickcurrentproduct(index){
 				this.currentproduct = index
 			},
@@ -177,6 +229,11 @@
 								info:null,
 							}
 						)
+					}
+					else{
+						for(var i = this.company.productList.length-1;i>=0;i--){
+							this.getProductImg(i)
+						}
 					}
 				}).catch(err => {
 					console.log(err)

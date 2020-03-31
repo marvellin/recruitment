@@ -17,7 +17,7 @@
             		</span>
            			<div class="m_portrait">
                     	<div></div>
-                    	<img v-if="resume.basicinfo.personImg&&resume.basicinfo.personImg.img" width="120" height="120" :alt="resume.basicinfo.username" :src="resume.basicinfo.personImg.img">
+                    	<img v-if="resume.basicinfo.img" width="120" height="120" :alt="resume.basicinfo.username" :src="resume.basicinfo.img">
                     	<img v-else width="120" height="120" :alt="resume.basicinfo.username" src="../../../static/images/default_headpic.png">
                     </div>
                 </div><!--end .basicShow-->
@@ -115,6 +115,30 @@
 			this.dataInit()
 		},
 		methods:{
+			getCompanyImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/personImg/download',
+					params:{
+						personDetailId:this.resume.basicinfo.personDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						console.log(blob)
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.resume.basicinfo.img = url
+							console.log(this.resume.basicinfo.img)
+						}
+						else{
+							this.resume.basicinfo.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			goback(){
 				this.$router.go(-1)
 			},
@@ -138,6 +162,7 @@
 					}
 					else{
 						this.resume = res.data.object
+						this.getCompanyImg()
 					}
 				}).catch(err=>{
 					console.log(err)

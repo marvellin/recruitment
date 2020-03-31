@@ -52,7 +52,7 @@
 		                    <dt style="height: 109px;">
 		                    	<a target="_blank" href="c/19607.html">
 		                            <!--<img width="84" height="84" alt="广东国馆酒业有限公司" src="../../../static/images/ff80808145ae05750145b0467a1c7ddd.png" class="b2">-->
-		                            <img v-if="company.companyDetail.companyImg&&company.companyDetail.companyImg.img" width="84" height="84" :alt="company.companyDetail.shortname" :src="company.companyDetail.companyImg.img" class="b2">
+		                            <img v-if="company.companyDetail.img" width="84" height="84" :alt="company.companyDetail.shortname" :src="company.companyDetail.img" class="b2">
 		                            <img v-else width="84" height="84" alt="公司LOGO" src="../../../static/images/logo_default.png" class="b2">
 		                            <img class="fr" @mouseover="approveshow=true" @mouseout="approveshow=false" width="15" height="19" alt="拉勾认证企业" src="../../../static/images/valid.png"> 
 		                            <span style="position: relative;" class="fr" :style="{'display':approveshow?'inline':'none'}">认证企业</span>
@@ -106,6 +106,29 @@
 			totop
 		},
 		methods:{
+			getCompanyImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/companyImg/download',
+					params:{
+						companyDetailId:this.company.companyDetail.companyDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyDetail.img = url
+							console.log(this.company.companyDetail.img)
+						}
+						else{
+							this.company.companyDetail.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			toCompany(companyId){
 				this.$router.push({
 					path:'/companydetail',
@@ -174,6 +197,7 @@
 				}).then(res=>{
 					console.log(res)
 					this.company = res.data.object
+					this.getCompanyImg()
 				}).catch(err=>{
 					console.log(err)
 				})

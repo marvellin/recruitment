@@ -8,10 +8,10 @@
 					<div class="c_detail" :class="[editlabel?'c_detail_bg':'']">
 						<div style="background-color: #fff;" class="c_logo">
 							<a title="上传公司LOGO" id="logoShow" class="inline cboxElement" >
-								<img v-if="company.companyDetail&&company.companyDetail.img" width="190" height="190" alt="公司logo" :src="company.companyDetail.img"/>
+								<img v-if="company.companyDetail.img" width="190" height="190" alt="公司logo" :src="company.companyDetail.img"/>
 								<img v-else width="190" height="190" alt="公司logo" src="../../../static/images/logo_default.png"/>
 								<span>更换公司图片<br />190px*190px 小于5M</span>
-								<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg"/>
+								<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="setcompanyImg"/>
 							</a>
 						</div>
 						
@@ -631,6 +631,111 @@
 			}
 		},
 		methods:{
+			getMemberImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/memberImg/download',
+					params:{
+						companyMemberId:this.company.companyMember.companyMemberId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyMember.img = url
+							console.log(this.company.companyMember.img)
+						}
+						else{
+							this.company.companyMember.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setMemberImg(e){
+				var memberImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',memberImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('companyMemberId',this.company.companyMember.companyMemberId)
+				this.$axios({
+					method:'post',
+					url:'/api/memberImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.company.img = url
+							console.log(this.company.img)
+						}
+						else{
+							this.company.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+//				this.uploadimg(memberimg)
+			},
+			getCompanyImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/companyImg/download',
+					params:{
+						companyDetailId:this.company.companyDetail.companyDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyDetail.img = url
+							console.log(this.company.companyDetail.img)
+						}
+						else{
+							this.company.companyDetail.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setcompanyImg(e){
+				var companyImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',companyImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('companyDetailId',this.company.companyDetail.companyDetailId)
+				this.$axios({
+					method:'post',
+					url:'/api/companyImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyDetail.img = url
+							console.log(this.company.companyDetail.img)
+						}
+						else{
+							this.company.companyDetail.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			dataInit(){
 				this.$axios({
 					method:'get',
@@ -641,6 +746,8 @@
 				}).then(res => {
 					console.log(res)
 					this.company = res.data.object
+					this.getCompanyImg()
+					this.getMemberImg()
 				}).catch(err => {
 					console.log(err)
 				})

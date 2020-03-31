@@ -3,8 +3,8 @@
 		<a target="_blank">
 			<h3 title="CCIC">{{company.companyDetail.shortname}}</h3>
 			<div class="comLogo">
-				<img v-if="company.companyDetail.img" :src="company.img" width="190" height="190" alt="CCIC"/>
-				<img v-else src="../../../static/images/logo_default.png" width="190" height="190" alt="CCIC"/>
+				<img v-if="company.img" :src="company.img" width="190" height="190" alt="CCIC"/>
+				<img v-if="!company.img" src="../../../static/images/logo_default.png" width="190" height="190" alt="CCIC"/>
 				<ul>
 					<li>{{company.companyDetail.field}}</li>
 					<li>{{company.companyDetail.city}}，{{company.companyStage.currentstage}}</li>
@@ -44,7 +44,32 @@
 				else{
 					return false;
 				}
+			},
+			getCompanyImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/companyImg/download',
+					params:{
+						companyDetailId:this.company.companyDetail.companyDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.company.img = url
+							console.log(this.company.img)
+						}
+						else{
+							this.company.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
 			}
+		},
+		created(){
+			this.getCompanyImg()
 		}
 	}
 </script>

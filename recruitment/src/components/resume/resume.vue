@@ -48,8 +48,8 @@
 		            			</span>
 		            			<div class="m_portrait">
 			                    	<div></div>
-			                    	<img v-if="resume.basicinfo.personImg&&resume.basicinfo.personImg.img" width="120" height="120" :alt="resume.basicinfo.username" :src="resume.basicinfo.personImg.img">
-			                    	<img v-else width="120" height="120" :alt="resume.basicinfo.username" src="../../../static/images/leader_default.png">
+			                    	<img v-if="resume.basicinfo.img" width="120" height="120" :alt="resume.basicinfo.username" :src="resume.basicinfo.img">
+			                    	<img v-if="!resume.basicinfo.img" width="120" height="120" :alt="resume.basicinfo.username" src="../../../static/images/leader_default.png">
 			                    </div>
 		            		</div><!--end .basicShow-->
 		
@@ -168,11 +168,11 @@
 								      	<span>上传自己的头像</span>
 								  	</div>
 								  	<div class="portraitShow " id="portraitShow">
-								    	<img v-if="basicinfotmp.personImg&&basicinfotmp.personImg.img" width="120" height="120" :src="basicinfotmp.personImg.img">
+								    	<img v-if="basicinfotmp&&basicinfotmp.img" width="120" height="120" :src="basicinfotmp.img">
 								    	<img v-else width="120" height="120" src="../../../static/images/default_headpic.png">
 								    	<span>更换头像</span>
 								  	</div>
-								  	<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="getresumeimg" name="headPic" id="headPic" class="myfiles">
+								  	<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" title="支持jpg、jpeg、gif、png格式，文件小于5M" @change="setcompanyImg" name="headPic" id="headPic" class="myfiles">
 									<!-- <input type="hidden" id="headPicHidden" /> -->
 								  	<em>
 								                  尺寸：120*120px <br>   
@@ -1253,6 +1253,59 @@
 			}
 		},
 		methods:{
+			getCompanyImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/personImg/download',
+					params:{
+						personDetailId:this.resume.basicinfo.personDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						console.log(blob)
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.resume.basicinfo.img = url
+							console.log(this.resume.basicinfo.img)
+						}
+						else{
+							this.resume.basicinfo.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setcompanyImg(e){
+				var personImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',personImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('personDetailId',this.resume.basicinfo.personDetailId)
+				this.$axios({
+					method:'post',
+					url:'/api/personImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.resume.basicinfo.img = url
+							console.log(this.resume.basicinfo.img)
+						}
+						else{
+							this.resume.basicinfo.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			dataInit(){
 				this.$axios({
 					method:'get',
@@ -1263,7 +1316,7 @@
 				}).then(res=>{
 					console.log(res)
 					this.resume = res.data.object
-//					this.initchartdata()
+					this.getCompanyImg()
 				}).catch(err=>{
 					console.log(err)
 				})

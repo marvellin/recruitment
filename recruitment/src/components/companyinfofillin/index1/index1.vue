@@ -35,7 +35,7 @@
 									<img v-if="company.companyDetail.img" width="190" height="190" alt="公司logo" :src="company.companyDetail.img">
 									<img v-else width="190" height="190" alt="公司logo" src="../../../../static/images/logo_default.png"/>
 	                        		<span style="width: 190px;height: 60px;">
-	                        			<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getimg">
+	                        			<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="setcompanyImg">
 	                        			上传公司LOGO<br>190px*190px 小于5M
 	                        		</span>
 		                        </div>
@@ -234,6 +234,58 @@
 			console.log('from index1 mounted' + JSON.stringify(this.company))
 		},
 		methods:{
+			getCompanyImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/companyImg/download',
+					params:{
+						companyDetailId:this.company.companyDetail.companyDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyDetail.img = url
+							console.log(this.company.companyDetail.img)
+						}
+						else{
+							this.company.companyDetail.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setcompanyImg(e){
+				var companyImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',companyImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('companyDetailId',this.company.companyDetail.companyDetailId)
+				this.$axios({
+					method:'post',
+					url:'/api/companyImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyDetail.img = url
+							console.log(this.company.companyDetail.img)
+						}
+						else{
+							this.company.companyDetail.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			showerror(){
 //				console.log(this.$validator)
 			},
@@ -345,6 +397,7 @@
 				}).then(res => {
 					console.log(res)
 					this.company = res.data.object
+					this.getCompanyImg()
 					if(!this.company.companyStage || this.company.companyStage == {}){
 						this.company.companyStage = {
 							currentstage:null,

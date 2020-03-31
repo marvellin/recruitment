@@ -149,7 +149,7 @@
 		                </dl>
 		                
 		               	<ul class="hc_list reset">
-		               		<li v-if="!isEmpty(item)" v-for="(item,index) in currentlist" :style="{'clear':index % 3 === 0?'both':''}" :key='index'>
+		               		<li @click="toCompanyDetail(index)" v-if="!isEmpty(item)" v-for="(item,index) in currentlist" :style="{'clear':index % 3 === 0?'both':''}" :key='index'>
 		               			<companybox :company='item'></companybox>
 		               		</li>
 			            </ul>
@@ -248,6 +248,14 @@
 			}
 		},
 		methods:{
+			toCompanyDetail(index){
+				this.$router.push({
+					path:'/companydetail',
+					query:{
+						companyId:this.currentlist[index].companyId
+					}
+				})
+			},
 			isEmpty(item){
 				if(item.companyDetail==null||item.companyStage==null){
 					return true

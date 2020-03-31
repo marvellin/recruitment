@@ -21,7 +21,7 @@
 							                    <img v-else width="380" height="240" alt="产品图片" src="../../../../static/images/product_default.png"/>
 								                <span>更换产品图片<br>380*220px 小于5M</span>
 								            </div>
-							                <input type="file" @change="getFile" accept="image/jpg,image/jpeg,image/gif,image/png" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" :id="index"><!--:id="'myfiles0'+index"-->
+							                <input type="file" @change="setProductImg" accept="image/jpg,image/jpeg,image/gif,image/png" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" :id="index"><!--:id="'myfiles0'+index"-->
 							            </div>
 					                    <div class="cp_intro">
 					                        <input :data-vv-scope="productscope(index)" v-validate="'required|max:20'" type="text" placeholder="请输入产品名称" v-model:value="product.name" :name="productname(index)">	
@@ -81,15 +81,62 @@
 				}*/
 			}
 		},
-		/*computed:{
-			productname(index){
-				return '产品'+(index+1)+'的名称'
-			},
-			productintro(index){
-				return '产品'+(index+1)+'的介绍'
-			}
-		},*/
+		created(){
+			this.getProductImg()
+		},
 		methods:{
+			getProductImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/productImg/download',
+					params:{
+						companyProductId:this.product.companyProductId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.product.img = url
+							console.log(this.product.img)
+						}
+						else{
+							this.product.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setProductImg(e){
+				var productImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',productImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('companyProductId',this.product.companyProductId)
+				this.$axios({
+					method:'post',
+					url:'/api/productImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.product.img = url
+							console.log(this.product.img)
+						}
+						else{
+							this.product.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			productscope(index){
 				return 'product'+index
 			},

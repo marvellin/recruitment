@@ -47,6 +47,35 @@
 				type:Object
 			},
 			time:{}
+		},
+		created(){
+			this.getPersonImg()
+		},
+		methods:{
+			getPersonImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/personImg/download',
+					params:{
+						personDetailId:this.resume.basicinfo.personDetailId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						console.log(blob)
+						if(blob.size>0){
+//							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.resume.basicinfo.img = url
+							console.log(this.resume.basicinfo.img)
+						}
+						else{
+							this.resume.basicinfo.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 		}
 	}
 </script>

@@ -23,7 +23,7 @@
 			                        <span>上传负责人头像</span>
 			                    </div>
 			                    <!--<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M" onchange="img_check(this,'http://www.lagou.com/c/upload.json',120,120,5,'myfiles0','myfiles0_error','portraitNo0','portraitShow0','type0','leaderInfos0');" name="myfiles" id="myfiles0" class="myfiles">-->
-			                    <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getmemberimg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="myfiles0" class="myfiles">
+			                    <input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="setMemberImg" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="myfiles" id="myfiles0" class="myfiles">
 		                        <em>
 								         尺寸：120*120px <br> 	
 								         大小：小于5M
@@ -94,8 +94,57 @@
 			this.dataInit()
 		},
 		methods:{
-			getmemberimg(e){
-				this.company.companyMember.imgfile = e.target.files[0]
+			getMemberImg(){
+				this.$axios({
+					method:'get',
+					url:'/api/memberImg/download',
+					params:{
+						companyMemberId:this.company.companyMember.companyMemberId
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+						let blob = new Blob([res.data])
+						if(blob.size>0){
+							console.log(blob)
+							let url = window.URL.createObjectURL(blob)
+							this.company.companyMember.img = url
+							console.log(this.company.companyMember.img)
+						}
+						else{
+							this.company.companyMember.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			setMemberImg(e){
+				var memberImg = e.target.files[0]
+				var formData = new FormData()
+				formData.append('file',memberImg)
+				formData.append('userId',this.$store.state.userId())
+				formData.append('companyMemberId',this.company.companyMember.companyMemberId)
+				this.$axios({
+					method:'post',
+					url:'/api/memberImg/upload',
+					data:formData,
+					headers:{
+						'Content-Type':'multipart/form-data'
+					},
+					responseType:'arraybuffer'
+				}).then(res=>{
+					console.log(res)
+					let blob = new Blob([res.data])
+						if(blob.size>0){
+							let url = window.URL.createObjectURL(blob)
+							this.company.img = url
+							console.log(this.company.img)
+						}
+						else{
+							this.company.img = null
+						}
+				}).catch(err=>{
+					console.log(err)
+				})
 //				this.uploadimg(memberimg)
 			},
 			uploadimg(file){
@@ -178,6 +227,7 @@
 				}).then(res => {
 					console.log(res)
 					this.company = res.data.object
+					this.getMemberImg()
 					if(this.company.companyMember==undefined||this.company.companyMember==null){
 						this.company.companyMember={
 							name:null,
