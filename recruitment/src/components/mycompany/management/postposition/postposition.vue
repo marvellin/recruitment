@@ -333,6 +333,9 @@
 		computed:{
 			getjobdetail(){
 				return this.job.detail
+			},
+			myCompanyId(){
+				return this.$store.state.company.companyId()
 			}
 		},
 		watch:{
@@ -347,13 +350,6 @@
 			}
 		},
 		methods:{
-			/*checkdetail(){
-				if(this.job.detail === null || this.job.detail === ''){
-					this.hasdetailError = true
-					return
-				}
-				this.hasdetailError = false
-			},*/
 			checksalary(){
 				if(this.job.salarymax === undefined || this.job.salarymax === null || this.job.salarymax === ''){
 					this.hassalaryError = false
@@ -364,6 +360,8 @@
 				}
 			},
 			postposition(){
+				console.log(this.job)
+				var me = this
 				this.$validator.validate().then((result) => {
 			        if (result) {
 			        	//判断detail是否为空
@@ -377,9 +375,26 @@
 			        	}
 			        	else{
 			        		//不为空时，提交职位数据到后台，提交成功则跳转到发布成功界面
-				        	this.$axios.post('http://127.0.0.1:3000/position',this.job).then(res => {
+				        	/*this.$axios.post('http://127.0.0.1:3000/position',this.job).then(res => {
 								this.$router.push({path:'/management/success'})
 							}).catch(err => {
+								console.log(err)
+							})*/
+							this.$axios({
+								method:'post',
+								url:'/api/position/insert',
+								data:this.job,
+								params:{
+									companyId:me.myCompanyId
+								},
+								headers:{
+									'Content-Type':'application/json'
+								},
+							}).then(res=>{
+								if(res.data.code==200){
+									this.$router.push({path:'/management/success'})
+								}
+							}).catch(err=>{
 								console.log(err)
 							})
 			        	}

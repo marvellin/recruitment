@@ -17,19 +17,19 @@
 		                </label>
 		                <span>全选</span>
 		                <a id="resumeRefuseAll" @click.prevent="inform" href="javascript:void(0);">通知面试</a>
-		                <a id="resumeRefuseAll" href="javascript:void(0);">待定</a>
-		                <a id="resumeRefuseAll" href="javascript:void(0);">不合适</a>
+		                <a id="resumeRefuseAll" href="javascript:void(0);" @click.prevent="unDetermin(-1)">待定</a>
+		                <a id="resumeRefuseAll" href="javascript:void(0);" @click.prevent="unSuitable(-1)">不合适</a>
 		            </div><!-- end .filter_actions -->
                     <ul class="reset resumeLists">
 		                <li class="onlineResume" v-for="(item,index) in resume2positionlist" :key='item.deliveryId'>
 			                <label class="checkbox">
-			                    <input type="checkbox" :value="index" v-model="checkmodel">
-			                    <i :style="{'display':showlabel(index)?'inline':'none'}"></i>
+			                    <input type="checkbox" :value="item.deliveryId" v-model="checkmodel">
+			                    <i :style="{'display':showlabel(item.deliveryId)?'inline':'none'}"></i>
 			                </label>
 			                <resumebox :resume='item.resume' :time='item.deliverytime' :position='item.position'>
-			                	<a class="resume_notice" @click.prevent="informperson(item)" href="javascript:void(0)" slot='slot1'>通知面试</a>
-			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1'>待定</a>
-			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2'>不合适</a>	
+			                	<a class="resume_notice" @click.prevent="informperson(item.deliveryId)" href="javascript:void(0)" slot='slot1'>通知面试</a>
+			                	<a class="resume_notice" href="javascript:void(0)" slot='slot1' @click.prevent="unDetermin(item.deliveryId)">待定</a>
+			    				<a class="resume_refuse" href="javascript:void(0)" slot='slot2' @click.prevent="unSuitable(item.deliveryId)">不合适</a>	
 			                </resumebox>
 			            </li>
 		            </ul><!-- end .resumeLists -->
@@ -54,18 +54,48 @@
 			}
 		},
 		methods:{
-			/*async getPositionIdList(){
-				var positionList = new Array()
-				await this.$axios({
+			unSuitable(index){
+				var deliveryIdList = new Array()
+				if(index<0){
+					deliveryIdList = this.checkmodel
+				}
+				else{
+					deliveryIdList.push(index)
+				}
+				this.$axios({
 					method:'get',
-					url:'api/position/getPositionListBycompanyId',
+					url:'/api/delivery/toUnsuitable',
 					params:{
-						companyId:this.myCompanyId
+						deliveryIdList:deliveryIdList+''
 					}
 				}).then(res=>{
-					console.log()
+					console.log(res)
+					this.dataInit()
+				}).catch(err=>{
+					console.log(err)
 				})
-			},*/
+			},
+			unDetermin(index){
+				var deliveryIdList = new Array()
+				if(index<0){
+					deliveryIdList = this.checkmodel
+				}
+				else{
+					deliveryIdList.push(index)
+				}
+				this.$axios({
+					method:'get',
+					url:'/api/delivery/toUnDetermin',
+					params:{
+						deliveryIdList:deliveryIdList+''
+					}
+				}).then(res=>{
+					console.log(res)
+					this.dataInit()
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
 			dataInit(){
 				this.$axios({
 					method:'get',
@@ -81,7 +111,9 @@
 				})
 			},
 			informperson(item){
-				this.$emit("informperson",item)
+				var list = new Array()
+				list.push(item)
+				this.$emit("informperson",list)
 			},
 			inform(){
 				let informlist = []
@@ -91,15 +123,15 @@
 						informlist.push(this.resume2positionlist[index])
 					}
 				}
-				this.$emit("inform",informlist)
+				this.$emit("inform",this.checkmodel)
 			},
 			checkall(){
 				if(this.allcheck){
 					this.checkmodel = []
 				}else{
 					this.resume2positionlist.forEach((item,index) => {
-						if(this.checkmodel.indexOf(index) === -1){
-							this.checkmodel.push(index)
+						if(this.checkmodel.indexOf(item.deliveryId) === -1){
+							this.checkmodel.push(item.deliveryId)
 						}
 					})
 				}

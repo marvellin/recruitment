@@ -96,7 +96,6 @@
 				datepickeroptions:{
 					disabledDate (date) {
                         return date && date.valueOf() < Date.now() - 86400000;
-//						return date && date.valueOf() < Date.now()
                     }
 				}
 			}
@@ -113,16 +112,38 @@
 				this.hasinterviewtimeError = false
 			},
 			inform(){
+				var me = this
 				this.$validator.validate().then((result) => {
 			        if (result) {
 			        	//判断面试事件是否报错
 			        	if(!this.hasinterviewtimeError){
 			        		//如不报错，则根据seekers的idlist访问后台并提交保存面试数据，并关闭colorbox
 			        		this.colorboxshow = false
-			        		//打印面试信息
+			        		var deliveryIdList = new Array()
+			        		for(var i = me.seekers.length-1;i>=0;i--){
+//			        			console.log('in inform '+item)
+			        			deliveryIdList.push(me.seekers[i])
+			        		}
+			        		this.$axios({
+			        			method:'post',
+			        			url:'/api/delivery/toInterview',
+			        			data:me.feedbackdetail,
+			        			params:{
+			        				deliveryIdList:me.seekers + ''
+			        			},
+			        			headers:{
+			        				'Content-Type':'application/json'
+			        			}
+			        		}).then(res=>{
+			        			console.log(res)
+			        			this.$router.go(0)
+			        		}).catch(err=>{
+			        			console.log(err)
+			        		})
+			        		/*//打印面试信息
 			        		console.log(this.feedbackdetail)
 			        		//打印通知的求职者
-			        		console.log(this.seekers)
+			        		console.log(this.seekers)*/
 			        	}
 			        	else{
 			        		//提示报错并停留在colorbox，并且不提交数据
@@ -154,8 +175,8 @@
 				/*//关闭colorbox
 				this.colorboxshow = false*/
 			},
-			informperson(person){
-				this.seekers = person
+			informperson(list){
+				this.seekers = list
 				this.feedbackdetail = {
 					address:null,
 					tel:null,
