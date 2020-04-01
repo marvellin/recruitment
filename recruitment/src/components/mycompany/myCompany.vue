@@ -973,7 +973,7 @@
 									console.log(err)
 								})
 					      	}
-					      	else{
+					      	else if(this.company.companyDetail.labelList.length >= 10){
 					      		this.$message({
 									type:'info',
 									message:'已选择10个标签，无法再添加新的标签！'
@@ -1027,7 +1027,7 @@
 								})
 								this.labeltmp = null
 					      	}
-					      	else{
+					      	else if(this.company.companyDetail.labelList.length >= 10){
 					      		this.$message({
 									type:'info',
 									message:'已选择10个标签，无法再添加新的标签！'

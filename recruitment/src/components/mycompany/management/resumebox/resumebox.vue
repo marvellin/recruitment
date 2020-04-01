@@ -6,9 +6,9 @@
 			    <img v-if="resume.basicinfo.img" :src="resume.basicinfo.img">
 			    <img v-else src="../../../../../static/images/default_headpic.png"/>
 			</a>
-			<div class="resumeIntro">
+			<div class="resumeIntro" v-if="resume">
 			    <h3 class="unread">
-					<a target="_blank" :title="'预览'+resume.basicinfo.username+'的简历'" href="javascript:void(0)">
+					<a target="_blank" @click.prevent="toPreview" :title="'预览'+resume.basicinfo.username+'的简历'" href="javascript:void(0)">
 			            {{resume.basicinfo.username}}的简历
 			        </a>
 			        <em></em>
@@ -16,7 +16,7 @@
 			    <span class="fr">投递时间：{{time}}</span>
 			    <div> 
 			        {{resume.basicinfo.username}} / {{resume.basicinfo.gender}} / {{resume.basicinfo.degree}} / {{resume.basicinfo.workyear}}<br>
-			        {{resume.workExperienceList[0].post}} . {{resume.workExperienceList[0].comname}} | {{resume.educationList[0].degree}} . {{resume.educationList[0].schoole}}
+			        {{resume.workExperienceList[0].post}} . {{resume.workExperienceList[0].comname}} | {{resume.educationList[0].degree}} . {{resume.educationList[0].school}}
 			    </div>
 			    <div class="jdpublisher">
 					<span>
@@ -52,6 +52,14 @@
 			this.getPersonImg()
 		},
 		methods:{
+			toPreview(){
+				this.$router.push({
+					path:'/resumepreview',
+					query:{
+						resumeId:this.resume.resumeId
+					}
+				})
+			},
 			getPersonImg(){
 				this.$axios({
 					method:'get',

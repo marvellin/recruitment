@@ -18,7 +18,20 @@
 		                </li>
 	                </ul>
 			    </form>
-		    </dd>
+			    
+			    <form v-if="!position2resumelist||position2resumelist.length==0">
+			    	<div style="text-align: center;font-weight: 600;line-height:40px;margin: 20px 10px;padding: 20px 10px;">
+						您没有下线职位！
+						<a style="position: relative;cursor:pointer" href="javascript:void(0);">
+							<!--<span>请上传您的简历附件（不多于3个）</span>-->
+							<!--<input type="file" @change="getresumefile" style="{display:block;position:absolute;top:0;left:0;width:219px;height:19px;font-size:100px;opacity:0;filter:alpha(opacity=0);cursor:pointer}" accept="application/msword,application/pdf,application/vnd.ms-powerpoint,application/vnd.ms-works,text/plain"/>-->
+						</a>
+						<div>
+							<img width="150px" height="150px" src="../../../../../static/images/u=1065457796,2310451731&fm=26&gp=0.jpg"/>
+						</div>
+					</div>
+			    </form>
+			</dd>
         </dl>
     </div>
 </template>

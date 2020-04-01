@@ -205,7 +205,14 @@
 					      				this.$message({
 					      					message:'保存成功！'		
 					      				})
-					      				this.dataInit()
+//					      				this.dataInit()
+										this.$router.push({
+											path:'/myresume'
+										})
+										this.$message({
+											type:'warn',
+											message:"请完善您的简历！"
+										})
 					      			}
 					      		}).catch(err=>{
 					      			console.log(err)

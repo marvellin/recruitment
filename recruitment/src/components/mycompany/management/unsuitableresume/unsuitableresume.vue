@@ -5,13 +5,13 @@
                 <h1 @click='show'>
                     <em></em>
                         	不适合简历 
-                        	<span>
+                        	<span v-if="resume2positionlist">
                         		（共{{resume2positionlist.length}}份）
                     		</span>                        
                 </h1>
             </dt>
             <dd>
-                <form action="canInterviewResumes.html" method="get" id="filterForm">
+                <form v-if="resume2positionlist" id="filterForm">
 	                <div class="filter_actions">
 		                <label class="checkbox">
 		                    <input type="checkbox" @click="checkall" v-model="allcheck">
@@ -34,6 +34,19 @@
 			            </li>
 		            </ul><!-- end .resumeLists -->
 		        </form>
+		        
+		        <form v-if="!resume2positionlist||resume2positionlist.length==0">
+			    	<div style="text-align: center;font-weight: 600;line-height:40px;margin: 20px 10px;padding: 20px 10px;">
+						您还没有待定简历！
+						<a style="position: relative;cursor:pointer" href="javascript:void(0);">
+							<!--<span>请上传您的简历附件（不多于3个）</span>-->
+							<!--<input type="file" @change="getresumefile" style="{display:block;position:absolute;top:0;left:0;width:219px;height:19px;font-size:100px;opacity:0;filter:alpha(opacity=0);cursor:pointer}" accept="application/msword,application/pdf,application/vnd.ms-powerpoint,application/vnd.ms-works,text/plain"/>-->
+						</a>
+						<div>
+							<img width="150px" height="150px" src="../../../../../static/images/u=1065457796,2310451731&fm=26&gp=0.jpg"/>
+						</div>
+					</div>
+			    </form>
             </dd>
         </dl><!-- end .company_center_content -->
     </div>
@@ -67,18 +80,34 @@
 				else{
 					deliveryIdList.push(index)
 				}
-				this.$axios({
-					method:'get',
-					url:'/api/delivery/updateListByCompany',
-					params:{
-						deliveryIdList:deliveryIdList+''
-					}
-				}).then(res=>{
-					console.log(res)
-					this.dataInit()
-				}).catch(err=>{
-					console.log(err)
-				})
+				this.$confirm('是否删除选中的投递简历？', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+//			        	  this.company.companyDetail.labelList.splice(index,1)
+							this.$axios({
+								method:'get',
+								url:'/api/delivery/updateListByCompany',
+								params:{
+									deliveryIdList:deliveryIdList+''
+								}
+							}).then(res=>{
+								console.log(res)
+								this.dataInit()
+							}).catch(err=>{
+								console.log(err)
+							})
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
 			},
 			dataInit(){
 				this.$axios({

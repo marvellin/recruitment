@@ -83,19 +83,35 @@
 				})
 			},
 			deletedelivery(){
-				this.$axios({
-					method:'get',
-					url:'/api/delivery/updateByPerson',
-					params:{
-						deliveryId:this.delivery.deliveryId
-					}
-				}).then(res => {
-					console.log(res)
-					this.$emit("refresh",'')
-//					this.$emit('refresh',this.$route.query.type)
-				}).catch(err => {
-					console.log(err)
-				})
+				this.$confirm('是否删除这条投递记录？', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+			        }).then(() => {
+//			        	  this.company.companyDetail.labelList.splice(index,1)
+							this.$axios({
+								method:'get',
+								url:'/api/delivery/updateByPerson',
+								params:{
+									deliveryId:this.delivery.deliveryId
+								}
+							}).then(res => {
+								console.log(res)
+								this.$emit("refresh",'')
+			//					this.$emit('refresh',this.$route.query.type)
+							}).catch(err => {
+								console.log(err)
+							})
+				          this.$message({
+				            type: 'success',
+				            message: '删除成功!'
+				          });
+			        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+			        })
 			},
 			showstatusbox(){
 //				console.log(this.status)

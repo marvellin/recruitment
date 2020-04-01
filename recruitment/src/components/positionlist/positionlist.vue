@@ -218,6 +218,15 @@
 		methods:{
 			delivery(positionId){
 				var myPersonId = this.$store.state.person.personId()
+				if(!this.$store.state.isLogined()){
+					this.$router.push({
+						path:'/login'
+					})
+					this.$message({
+						type:'warn',
+						message:"请先登陆！"
+					})
+				}
 				if(eval(this.$store.state.isCompany())){
 					this.$message({
 						type:'warn',

@@ -28,8 +28,8 @@
 					                        <el-alert style="width: 240px;height: 30px;" :closable="false" :title="errors.first(productscope(index)+'.'+productname(index))" type="error" v-show="errors.has(productscope(index)+'.'+productname(index))"></el-alert>
 					                        
 					                        <textarea :data-vv-scope="productscope(index)" v-validate="'required|max:500'" placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="500" v-model:value="product.info" class="s_textarea" :name="productintro(index)">{{product.info}}</textarea>	
-					                        <div class="word_count fr" v-show="product.info.length==0">总长不超过 <span>500</span> 字</div>
-					                        <div class="word_count fr" v-show="product.info.length!=0">还可以输入 <span>{{500-product.info.length}}</span> 字</div>
+					                        <div class="word_count fr" v-if="product.info&&product.info.length==0">总长不超过 <span>500</span> 字</div>
+					                        <div class="word_count fr" v-if="!product.info||product.info.length!=0">还可以输入 <span>{{500-product.info.length}}</span> 字</div>
 					                        <el-alert style="width: 240px;height: 30px;" :closable="false" :title="errors.first(productscope(index)+'.'+productintro(index))" type="error" v-show="errors.has(productscope(index)+'.'+productintro(index))"></el-alert>
 					                        
 					                        <div class="clear"></div>

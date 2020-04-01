@@ -18,8 +18,8 @@
 		                            <span>上传负责人头像</span>
 		                        </div>-->
 		                        <div class="portraitShow" id="portraitShow0">
-			                        <img v-if="company.companyMember.img" width="120" height="120" :src="company.companyMember.img">
-			                        <img v-if="!company.companyMember.img" width="120" height="120" src="../../../../static/images/leader_default.png"/>
+			                        <img v-if="company.companyMember&&company.companyMember.img" width="120" height="120" :src="company.companyMember.img">
+			                        <img v-if="!company.companyMember||!company.companyMember.img" width="120" height="120" src="../../../../static/images/leader_default.png"/>
 			                        <span>上传负责人头像</span>
 			                    </div>
 			                    <!--<input type="file" accept="image/jpeg,image/png,image/jp2,image/gif" @change="getcomimg" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M" onchange="img_check(this,'http://www.lagou.com/c/upload.json',120,120,5,'myfiles0','myfiles0_error','portraitNo0','portraitShow0','type0','leaderInfos0');" name="myfiles" id="myfiles0" class="myfiles">-->
@@ -118,6 +118,9 @@
 				})
 			},
 			setMemberImg(e){
+				if(!this.company.companyMember.companyMemberId){
+					this.company.companyMember.companyMemberId = -1
+				}
 				var memberImg = e.target.files[0]
 				var formData = new FormData()
 				formData.append('file',memberImg)
@@ -138,6 +141,10 @@
 							let url = window.URL.createObjectURL(blob)
 							this.company.img = url
 							console.log(this.company.img)
+							this.$message({
+								type:'warn',
+								message:'上传成功！'
+							})
 						}
 						else{
 							this.company.img = null
@@ -227,14 +234,17 @@
 				}).then(res => {
 					console.log(res)
 					this.company = res.data.object
-					this.getMemberImg()
-					if(this.company.companyMember==undefined||this.company.companyMember==null){
+					
+					if(this.company.companyMember==undefined||this.company.companyMember==null||this.company.companyMember.name){
 						this.company.companyMember={
 							name:null,
 							img:null,
 							post:null,
 							intro:null
 						}
+					}
+					else{
+						this.getMemberImg()
 					}
 				}).catch(err => {
 					console.log(err)

@@ -99,6 +99,9 @@
 				})
 			},
 			setProductImg(e,index){
+				if(!this.company.productList[index].companyProductId){
+					this.company.productList[index].companyProductId=-1
+				}
 				var productImg = e.target.files[0]
 				var formData = new FormData()
 				formData.append('file',productImg)

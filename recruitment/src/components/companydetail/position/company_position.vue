@@ -8,7 +8,7 @@
 					    <span>[{{item.city}}]</span>
 					</h3>
 					<div class="apply" style="width: 80px;text-align: center;top: 0;">
-						<router-link to="" target="_blank" style="color: #fff;">投个简历</router-link>
+						<a @click.prevent="delivery(item.positionId)" target="_blank" style="color: #fff;">投个简历</a>
 					</div>
 					<div>{{item.type}} / {{item.salarymin}}k-{{item.salarymax}}k / {{item.experience}} / {{item.degree}}及以上</div>
 					<div class="c9">发布时间： {{item.deliverytime}}</div>
@@ -52,6 +52,50 @@
 			}
 		},
 		methods:{
+			delivery(positionId){
+				var myPersonId = this.$store.state.person.personId()
+				if(!this.$store.state.isLogined()){
+					this.$router.push({
+						path:'/login'
+					})
+					this.$message({
+						type:'warn',
+						message:"请先登陆！"
+					})
+				}
+				if(eval(this.$store.state.isCompany())){
+					this.$message({
+						type:'warn',
+						message:'您无法投递简历！'
+					})
+				}
+				else if(!eval(this.$store.state.isCompany()) && myPersonId){
+					this.$axios({
+						method:'get',
+						url:'/api/delivery/insert',
+						params:{
+							positionId:positionId,
+							personId:myPersonId
+						}
+					}).then(res => {
+						console.log(res)
+						if(res.data.code == 500){
+							this.$message({
+								type:'warn',
+								message:res.data.msg
+							})
+						}
+						else if(res.data.code == 200){
+							this.$message({
+								type:'info',
+								message:'您已成功投递该职位！'
+							})
+						}
+					}).catch(err => {
+						console.log(err)
+					})
+				}
+			},
 			change(index){
 				this.currentpage = index
 				this.getcurrentlist()
